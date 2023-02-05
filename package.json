@@ -9,6 +9,9 @@
     "type-check": "tsc"
   },
   "dependencies": {
+    "@metamask/providers": "^10.2.1",
+    "alchemy-sdk": "^2.4.1",
+    "ethers": "^5.5.3",
     "next": "^12.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
