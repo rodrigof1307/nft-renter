@@ -40,6 +40,8 @@ contract RentHolder {
         uint currRentEndDate;
     }
 
+    event ValuesChecker(uint value1, uint value2, uint value3, uint value4);
+
     constructor(address _nftAddress, uint _nftID, uint _pricePerDay, uint _ownerPenalty, uint _renterPenalty, uint _expirationDate) payable {
         require(msg.value >= 0.05 ether, 'You must pay at least 0.05 ETH to pay potential gas fees');
         require(block.timestamp < _expirationDate, 'The expiration date must be in the future');
@@ -120,7 +122,7 @@ contract RentHolder {
         require(msg.value == pricePerDay * _days, 'You must pay the price per day times the number of days you want to rent for');
         require(block.timestamp + _days * 1 days < expirationDate, 'This contract will expire before your rental ends');
         require(block.timestamp > currRentEndDate, 'This contract is currently rented');
-        withdrawFunds();
+        withdrawFunds(pricePerDay * _days);
         currRenter = msg.sender;
         currRentEndDate = block.timestamp + _days * 1 days;
     }
@@ -130,30 +132,34 @@ contract RentHolder {
     // It then sends the remaining funds to the renter, calls the withdrawFunds function to send the funds to the owner and resets the rent properties.
     function stopRentEarly() public onlyCurrRenter {
         require(block.timestamp < currRentEndDate, 'You have already paid for the full rental period');
-        uint daysLeft = (currRentEndDate - block.timestamp) / 1 days;
+        // The 10000 is made since otherwise the division would be rounded to the number of integers
+        uint daysLeft = 10000 * (currRentEndDate - block.timestamp) / (1 days);
         // renterPenalty is the integer percentage of the pricePerDay that the renter doesnt get back if he stops the rent early
-        uint penalty = daysLeft * pricePerDay * renterPenalty / 100;
-        if(pricePerDay * daysLeft - penalty > 0) {
-            payable(currRenter).transfer(pricePerDay * daysLeft - penalty);
+        // The 10000 divison is made to correct the 10000 multiplication done before
+        uint penalty = daysLeft * pricePerDay * renterPenalty / 100 / 10000;
+        // The 10000 divison is made to correct the 10000 multiplication done before
+        if(pricePerDay * daysLeft / 10000 - penalty > 0) {
+            // The 10000 divison is made to correct the 10000 multiplication done before
+            payable(currRenter).transfer(pricePerDay * daysLeft / 10000 - penalty);
         }
         // sends the funds back to the owner
-        withdrawFunds();
+        withdrawFunds(0);
         currRenter = address(0);
         currRentEndDate = 0;
     }
 
     // This function sends the funds to the owner. It checks that the contract has more than 0.05 ETH in order to leave enough to conver potential gas fees 
     // It then sends the remaining funds to the owner.
-    function withdrawFunds() public {
-        require(address(this).balance > 0.05 ether, 'At least 0.05 ETH must remain in the contract to pay potential gas fees');
-        payFeeCollector();
-        payable(nftOwner).transfer(address(this).balance - 0.05 ether);
+    function withdrawFunds(uint valueToKeep) public {
+        require(address(this).balance - valueToKeep >= 0.05 ether, 'At least 0.05 ETH must remain in the contract to pay potential gas fees');
+        payFeeCollector(valueToKeep);
+        payable(nftOwner).transfer(address(this).balance - valueToKeep - 0.05 ether);
     }
 
     // This function sends the fees to the fee collector. It checks that the contract has more than 0.05 ETH in order to leave enough to conver potential gas fees
-    function payFeeCollector() internal {
-        if(address(this).balance > 0.05 ether) {
-            payable(feeCollector).transfer((address(this).balance - 0.05 ether) * feeValue / 100);
+    function payFeeCollector(uint valueToKeep) internal {
+        if(address(this).balance - valueToKeep > 0.05 ether) {
+            payable(feeCollector).transfer((address(this).balance - valueToKeep - 0.05 ether) * feeValue / 100);
         }
     }
 
@@ -162,14 +168,19 @@ contract RentHolder {
     // It then transfers the NFT to the owner and sends the remaining funds to the owner.
     function withdrawNFT() external onlyOwner {
         if(block.timestamp < currRentEndDate) {
-            uint daysLeft = (currRentEndDate - block.timestamp) / 1 days;
+            uint daysLeft = 10000 * (currRentEndDate - block.timestamp) / 1 days;
             // ownerPenalty is the integer percentage of the pricePerDay that the owner doesnt get from the days that have pased if he withdraws the NFT during a rental
-            uint refundValue = daysLeft * pricePerDay + (address(this).balance - 0.05 ether) * ownerPenalty / 100;
-            payable(currRenter).transfer(refundValue);
+            uint penaltyVal = (address(this).balance - 0.05 ether) * ownerPenalty / 100;
+            uint initialRefund = daysLeft * pricePerDay / 10000;
+            uint finalRefund = initialRefund + penaltyVal;
+            if(finalRefund > (address(this).balance - 0.05 ether)) {
+                finalRefund = address(this).balance - 0.05 ether;
+            }
+            payable(currRenter).transfer(finalRefund);
         }
         ERC721 token = ERC721(nftAddress); 
         token.transferFrom(address(this), nftOwner, nftId); 
-        payFeeCollector();
+        payFeeCollector(0);
         IMarketplaceTracker marketplace = IMarketplaceTracker(marketplaceAddress);
         marketplace.removeRentSC();
         selfdestruct(payable(nftOwner));

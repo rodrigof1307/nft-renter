@@ -11,7 +11,7 @@ module.exports = {
   networks: {
     goerli: {
       url: process.env.GOERLI_URL,
-      accounts: [process.env.PRIVATE_KEY_NFT_1]
+      accounts: [process.env.PRIVATE_KEY_NFT_1, process.env.PRIVATE_KEY_NFT_2]
     }
   },
 };

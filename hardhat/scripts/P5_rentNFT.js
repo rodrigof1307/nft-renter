@@ -7,10 +7,10 @@ const hre = require("hardhat");
 const { ethers } = require("hardhat");
 
 async function main() {
-  const contract = await ethers.getContractAt("RentHolder", '0x1Ba819bb02CF7aF72Ea356E55547cd83d7E050a7')
-  const response  = await contract.withdrawNFT()
+  const accounts = await hre.ethers.getSigners();
 
-  console.log(response)
+  const contract = await (await ethers.getContractAt("RentHolder", '0x1Ba819bb02CF7aF72Ea356E55547cd83d7E050a7')).connect(accounts[1])
+  const response  = await contract.rent(3, {value: ethers.utils.parseEther("0.09")})
 }
 
 // We recommend this pattern to be able to use async/await everywhere
