@@ -1,0 +1,76 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IRentHolder",
+  "sourceName": "contracts/MarketplaceTracker.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "returnRentInfo",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "rentHolderSC",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "nftOwner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "nftAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nftId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "pricePerDay",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "ownerPenalty",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "renterPenalty",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "expirationDate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "currRenter",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "currRentEndDate",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IRentHolder.relevantRentInfo",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

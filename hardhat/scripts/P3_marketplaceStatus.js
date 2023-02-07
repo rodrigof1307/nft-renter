@@ -7,17 +7,17 @@ const hre = require("hardhat");
 const { ethers } = require("hardhat");
 
 async function main() {
-  const contract = await ethers.getContractAt("RentHolder", '0x97da31015E165792C475E167Bcb20b84057C8F38')
-  const response  = await contract.withdrawNFT()
-
-  console.log(response)
+    const marketplace = await hre.ethers.getContractAt("MarketplaceTracker", '0xC6166805035cAF58523F2e62A6E8d9469Ef70064');
+    const rentSCs = await marketplace.getRentSCs();
+    console.log("Marketplace rentSCs:", rentSCs)
+    console.log("---")
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+});

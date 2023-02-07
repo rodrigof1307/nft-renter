@@ -7,8 +7,9 @@ const hre = require("hardhat");
 const { ethers } = require("hardhat");
 
 async function main() {
-  const contract = await ethers.getContractAt("ERC721", '0x049c52922e5de3b0b26a7bcd2e565d52b540c7c9')
-  const response  = await contract.transferFrom('0xA6f3778c0024AC3C82D8B678eA57AB7a278EEccb', '0x97da31015E165792C475E167Bcb20b84057C8F38', 3)
+  const contract = await ethers.getContractAt("RentHolder", '0xA9F0Ce8A3e19D4A6F9260D16893d55Df9000c56d')
+  const response  = await contract.withdrawNFT()
+
   console.log(response)
 }
 
