@@ -1,5 +1,44 @@
+* {
+    scrollbar-color: rgb(31 41 55) rgb(17 24 39)
+}
+
+.loading:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(3,end) 1500ms infinite;      
+    animation: ellipsis steps(3,end) 1500ms infinite;
+    content: "\2026"; /* ascii code for the ellipsis character */
+    width: 0px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+@keyframes ellipsis {
+to {
+    width: 1.25em;    
+}
+}
+
+@-webkit-keyframes ellipsis {
+to {
+    width: 1.25em;    
+}
+}
+
 /* purgecss start ignore */
 @tailwind base;
 @tailwind components;
 /* purgecss end ignore */
 @tailwind utilities;
+

@@ -12,12 +12,12 @@ async function main() {
     // console.log("---")
 
     const RentHolder = await hre.ethers.getContractFactory("RentHolder");
-    const rentHolder = await RentHolder.deploy('0x049c52922e5de3b0b26a7bcd2e565d52b540c7c9', 9,  ethers.utils.parseEther('0.03'), 10, 10, 1683475160, { value: ethers.utils.parseEther('0.05') });
+    const rentHolder = await RentHolder.deploy('0x049c52922e5de3b0b26a7bcd2e565d52b540c7c9', 4,  ethers.utils.parseEther('0.05'), 20, 20, 1683475160, { value: ethers.utils.parseEther('0.05') });
     await rentHolder.deployed();
     console.log("RentHolder SC deployed to:", rentHolder.address);
     console.log("---")
     const nftContract = await ethers.getContractAt("ERC721", '0x049c52922e5de3b0b26a7bcd2e565d52b540c7c9')
-    await nftContract.approve(rentHolder.address, 9)
+    await nftContract.approve(rentHolder.address, 4)
     await rentHolder.transferNFT();
     console.log("NFT Transfered");
     console.log("---")

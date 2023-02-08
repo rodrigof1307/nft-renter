@@ -1,18 +1,39 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 
 import { Alchemy, Network, Nft } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 
 import Layout from '@/components/layout'
+import NFTCard from '@/components/nftCard'
+import LendCard from '@/components/lendCard';
+
+import SignerContext from '@/context/signerContext'
+
+import marketplaceTrackerJSON from '../artifacts/contracts/MarketplaceTracker.sol/MarketplaceTracker.json'
+import MarketplaceCard from '@/components/marketplaceCard';
+import RentedByYouCard from '@/components/rentedByYouCard';
 
 export default function Collection() {
+  const { signer } = useContext(SignerContext)!;
 
-  const [tokenDataObjects, setTokenDataObjects] = useState<Nft[]>([]);
+  const [nonPublishedNFTs, setNonPublishedNFTs] = useState<NFTInfo[]>([]);
+
+  const [publishedNFTs, setPublishedNFTs] = useState<FinalRentInfo[]>([]);
+  const [rentedNFTs, setRentedNFTs] = useState<FinalRentInfo[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setNonPublishedNFTs([])
+    setPublishedNFTs([])
+    setRentedNFTs([])
+    handleConnect()
+  }, [signer])
   
-  async function handleConnect() {
-    if(window.ethereum) {
-      const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner();
-      const address = await signer.getAddress();
+  const handleConnect = async () => {
+    if(signer) {
+      setLoading(true)
+      const signerAddress = await signer.getAddress();
     
       const config = {
         apiKey: 't5NI7d-VTVUnXqInKpwXjqUTTeZmyZ4_',
@@ -20,7 +41,7 @@ export default function Collection() {
       };
   
       const alchemy = new Alchemy(config);
-      const data = await alchemy.nft.getNftsForOwner(address);
+      const data = await alchemy.nft.getNftsForOwner(signerAddress);
   
       const tokenDataPromises = [];
   
@@ -33,47 +54,174 @@ export default function Collection() {
       }
   
       const response = await Promise.all(tokenDataPromises)
+      const filteredResponse = response.map((tokenData: Nft) => (
+        {
+          address: tokenData.contract.address,
+          collectionName: tokenData.contract.name ?? '',
+          tokenID: parseFloat(tokenData.tokenId),
+          title: tokenData.rawMetadata?.name,
+          description: tokenData.rawMetadata?.description,
+          image: tokenData.media[0].thumbnail,
+          attributes: tokenData.rawMetadata?.attributes,
+        } as NFTInfo
+      ))
   
-      setTokenDataObjects(response);
+      setNonPublishedNFTs(filteredResponse);
+
+      const marketplaceTrackerAddress = '0xC6166805035cAF58523F2e62A6E8d9469Ef70064'
+
+      const marketplaceTracker = new ethers.Contract( marketplaceTrackerAddress , marketplaceTrackerJSON.abi, signer )
+      const responseMarketplaceTracker = await marketplaceTracker.getRentSCs();
+
+      const rawPublishedNFTsSCs = []
+      const rawRentedNFTsSCs = []
+
+      for(let response of responseMarketplaceTracker) {
+        if(response[1] === signerAddress) {
+          rawPublishedNFTsSCs.push(response)
+        } else if(response[8] === signerAddress) {
+          rawRentedNFTsSCs.push(response)
+        }
+      }
+
+      const finalPublishedNFTs = await fetchRentNFTs(rawPublishedNFTsSCs)
+      const finalRentedNFTs = await fetchRentNFTs(rawRentedNFTsSCs)
+
+      setPublishedNFTs(finalPublishedNFTs)
+      setRentedNFTs(finalRentedNFTs)
+      setLoading(false)
     }
+  }
+
+  const fetchRentNFTs = async (rawSCs: any[]) => {
+
+    const config = {
+      apiKey: 't5NI7d-VTVUnXqInKpwXjqUTTeZmyZ4_',
+      network: Network.ETH_GOERLI,
+    };
+
+    const alchemy = new Alchemy(config);
+
+    const filteredSCs = rawSCs.map((rawRentSC: any) => 
+      ({
+        rentHolderSC: rawRentSC[0], 
+        nftOwner: rawRentSC[1], 
+        nftAddress: rawRentSC[2], 
+        nftId: rawRentSC[3].toNumber(), 
+        pricePerDay: parseFloat(ethers.utils.formatEther(rawRentSC[4])), 
+        ownerPenalty: rawRentSC[5].toNumber(), 
+        renterPenalty: rawRentSC[6].toNumber(), 
+        expirationDate: rawRentSC[7].toNumber(), 
+        currRenter: rawRentSC[8], 
+        currRentEndDate: rawRentSC[9].toNumber() 
+      } as MarketplaceTrackerRentInfo)
+    )
+
+    const getNFTPromises = []
+
+    for (let SC of filteredSCs) {
+      getNFTPromises.push(alchemy.nft.getNftsForOwner(SC.rentHolderSC))
+    }
+  
+    const responseGetNFTPromises = await Promise.all(getNFTPromises)
+
+    const tokenDataPromises = []
+
+    for (let responseGetNFT of responseGetNFTPromises) {
+        const tokenData = alchemy.nft.getNftMetadata(
+          responseGetNFT.ownedNfts[0].contract.address,
+          responseGetNFT.ownedNfts[0].tokenId
+        );
+        tokenDataPromises.push(tokenData);
+    }
+
+    const responseTokenDataPromises = await Promise.all(tokenDataPromises)
+
+    const finalNFTs: FinalRentInfo[] = []
+
+    for(let i=0; i < responseTokenDataPromises.length; i++){
+      finalNFTs.push({
+        rentHolderSC: filteredSCs[i].rentHolderSC,
+        nftOwner: filteredSCs[i].nftOwner,
+        nft: {
+          address: responseTokenDataPromises[i].contract.address,
+          collectionName: responseTokenDataPromises[i].contract.name,
+          tokenID: parseFloat(responseTokenDataPromises[i].tokenId),
+          title: responseTokenDataPromises[i].title,
+          description: responseTokenDataPromises[i].description,
+          image: responseTokenDataPromises[i].rawMetadata?.image,
+          attributes: responseTokenDataPromises[i].rawMetadata?.attributes,
+        },
+        pricePerDay: filteredSCs[i].pricePerDay,
+        ownerPenalty: filteredSCs[i].ownerPenalty,
+        renterPenalty: filteredSCs[i].renterPenalty,
+        expirationDate: new Date(filteredSCs[i].expirationDate * 1000).toISOString(),
+        currRenter: filteredSCs[i].currRenter,
+        currRentEndDate: new Date(filteredSCs[i].currRentEndDate * 1000).toISOString(),
+      })
+    }
+
+    return finalNFTs
+  }
+
+  if(!signer) {
+    return(
+      <Layout title="Collection">
+        <main className="flex w-full flex-col items-center justify-center text-center">
+          <h1 className='text-white text-3xl font-semibold'>Connect your Wallet to see your collection!</h1>
+        </main>
+      </Layout>
+    )
+  }
+
+  if(loading) {
+    return(
+      <Layout title="Collection">
+        <main className="flex w-full flex-col items-center justify-center text-center">
+          <h1 className='text-white text-3xl italic'>Loading ...</h1>
+        </main>
+      </Layout>
+    )
   }
 
   return (
     <Layout title="Collection">
-      <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center text-center">
-        <div className='flex flex-row items-center justify-center text-center'>
-          <h1 className="text-2xl text-white mr-10">{"Collection"}</h1>
-          <button className='bg-sky-400 rounded-md border-2 px-5 py-3 my-3 text-white hover:bg-sky-500' onClick={handleConnect}>
-            Connect Wallet
-          </button>
-        </div>
+      <main className="flex w-full flex-col items-center justify-start text-center">
+        <h2 className='text-sky-400 text-3xl font-semibold text-left w-full mt-5 pl-8'>Your NFTs</h2>
         <div className='w-100 grid grid-cols-4 gap-x-8 gap-y-2'>
-          {tokenDataObjects.map((tokenData, index) => (
-            <div key={index} className="bg-slate-800 rounded-xl p-8 my-5 w-80 h-96 flex flex-col items-center justify-between">
-              <img className='w-11/12 h-1/2 mx-auto object-contain' src={tokenData.media[0].thumbnail}/>
-              <ImprovedHeading className='text-white text-lg font-bold' improvedText={tokenData.rawMetadata?.name}/>
-              <ImprovedHeading className='text-white text-sm my-2' improvedText={tokenData.rawMetadata?.description}/>
-              <div className='flex flex-row justify-around items-center mt-3 w-full'>
-                {tokenData.rawMetadata?.attributes?.map((attribute, index) => (
-                  <ImprovedHeading key={index} className='text-white text-sm bg-slate-500 rounded-md px-3 py-1' improvedText={attribute.value}/>
-                ))}
-              </div>
-              <button className='w-11/12 bg-sky-400 rounded-md border-2 border-transparent px-5 py-2 mt-5 text-white hover:bg-sky-500'>Lend</button>
+        { nonPublishedNFTs.map((tokenData, index) => (
+          <div key={index}>
+            <LendCard tokenData={tokenData}/>
+          </div>
+        ))}
+        </div>
+        { nonPublishedNFTs.length === 0 &&
+          <h1 className='text-white text-xl my-8'>You don't have any NFTs yet!</h1>
+        }
+        <h2 className='text-sky-400 text-3xl font-semibold text-left w-full pl-8'>Already on the Marketplace</h2>
+        <div className='w-100 grid grid-cols-4 gap-x-8 gap-y-2'>
+        {publishedNFTs.map((rentInfo, index) => (
+          <div key={index}>
+            <MarketplaceCard rentInfo={rentInfo} isOwner/>
+          </div>
+        ))}
+        </div>
+        { publishedNFTs.length === 0 &&
+          <h1 className='text-white text-xl my-8'>You don't have any NFTs on the marketplace yet!</h1>
+        }
+        <h2 className='text-sky-400 text-3xl font-semibold text-left w-full pl-8'>Rented by you</h2>
+        <div className='w-100 grid grid-cols-4 gap-x-8 gap-y-2'>
+          {rentedNFTs.map((rentInfo, index) => (
+            <div key={index}>
+              <RentedByYouCard rentInfo={rentInfo}/>
             </div>
           ))}
         </div>
+        { rentedNFTs.length === 0 &&
+          <h1 className='text-white text-xl my-8'>You don't haven't rented any NFT yet!</h1>
+        }
       </main>
     </Layout>
   )
-}
-
-const ImprovedHeading = (props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement> & {improvedText? : string}) => {
-  const {improvedText, children, ...rest} = props;
-  
-  if(props.improvedText !== undefined){
-    return <h6 {...rest}>{props.improvedText}</h6>
-  } else {
-    return null
-  }
 }
 
