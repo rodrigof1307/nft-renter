@@ -4,7 +4,6 @@ import { Alchemy, Network, Nft } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 
 import Layout from '@/components/layout'
-import NFTCard from '@/components/nftCard'
 import LendCard from '@/components/lendCard';
 
 import SignerContext from '@/context/signerContext'
