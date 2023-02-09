@@ -20,8 +20,12 @@ export default function Navbar() {
 
     const connectWallet = async () => {
         if (window.ethereum) {
-            const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner();
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send('eth_requestAccounts', [])
+            const signer = provider.getSigner();
             setSigner(signer)
+        } else {
+            alert("Please install MetaMask to use this application.");
         }
     }
 
