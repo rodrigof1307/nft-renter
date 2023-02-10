@@ -45,7 +45,8 @@ export default function MarketplaceCard({rentInfo, isOwner}: {rentInfo: FinalRen
   }
 
   return(
-    <div className="bg-gray-900 rounded-xl p-7 my-5 w-80 flex flex-col items-center justify-between" style={{height: '28.5rem'}}>
+    <div className={`bg-gray-900 rounded-xl p-7 w-80 flex flex-col items-center justify-between hover-shadow box-gradient`}
+      style={{height: '28.5rem'}}>
       <NFTCard tokenData={rentInfo.nft} />
       <p className="text-white">Daily Rate: <b>{rentInfo.pricePerDay} ETH</b></p>
       <div className="flex flex-row w-80 px-5 box-border items-center justify-between">
@@ -55,46 +56,48 @@ export default function MarketplaceCard({rentInfo, isOwner}: {rentInfo: FinalRen
       { generateDate(rentInfo.currRentEndDate) !== 'N/A' ?
         <p className="text-white italic font-semibold" suppressHydrationWarning>Rented until {generateDate(rentInfo.currRentEndDate)}</p>
         :
-        <>
+        <p className="text-white italic font-semibold">
           { isOwner ?
-          <p className="text-white italic font-semibold">Not Rented</p>
+            "Not Rented"
           :
-          <p className="text-white italic font-semibold">
-            Rent for <input type={'number'} className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center' onChange={(e) => setRentDays(parseFloat(e.target.value))}/> days
-          </p>
+            <>
+            <span>Rent for </span>
+            <input type={'number'} className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center' onChange={(e) => setRentDays(parseFloat(e.target.value))}/> 
+            <span> days</span>
+            </>
           }
-        </>
+        </p>
       }
       { isOwner ?
-        <button className='w-3/4 bg-sky-400 rounded-md border-2 border-transparent px-5 py-2 mt-2 text-white hover:bg-sky-500'
+        <button className='w-52 h-12 button-gradient rounded-md border-2 border-transparent mt-2'
           onClick={() => withdrawNFT(rentInfo.rentHolderSC)}>
           { (buttonText !== 'Withdraw NFT' && buttonText !== 'Done!') ?
           <>
-            <span className="ml-1 mr-0.5 loading">{buttonText}</span>
+            <span className="ml-1 mr-0.5 w-52 h-12 loading text-gradient" style={{paddingBottom: 4}}>{buttonText}</span>
           </>
           :
-          buttonText
+          <p className="w-52 h-12 text-gradient" style={{paddingBottom: 4}}>{buttonText}</p>
           }
         </button>
       :
-        <>
-          { generateDate(rentInfo.currRentEndDate) !== 'N/A' ?
-            <button className='w-3/4  bg-sky-400 rounded-md border-2 border-transparent px-5 py-2 mt-2 text-white opacity-70' disabled>
-              <span>Available Soon</span>
-            </button>
+      <>
+        { generateDate(rentInfo.currRentEndDate) !== 'N/A' ?
+          <button className='w-52 h-12 button-gradient rounded-md border-2 border-transparent mt-2 opacity-70' disabled>
+            <span className="w-52 text-gradient" style={{paddingBottom: 4}}>Available Soon</span>
+          </button>
+          :
+          <button className='w-52 h-12 button-gradient rounded-md border-2 border-transparent mt-2'
+            onClick={() => startRent(rentInfo.rentHolderSC, rentInfo.pricePerDay)}>
+            { (buttonText !== 'Rent Now!' && buttonText !== 'Done!') ?
+            <>
+              <span className="w-52 h-12 ml-1 mr-0.5 loading text-gradient" style={{paddingBottom: 4}}>{buttonText}</span>
+            </>
             :
-            <button className='w-3/4 bg-sky-400 rounded-md border-2 border-transparent px-5 py-2 mt-2 text-white hover:bg-sky-500'
-              onClick={() => startRent(rentInfo.rentHolderSC, rentInfo.pricePerDay)}>
-              { (buttonText !== 'Rent Now!' && buttonText !== 'Done!') ?
-              <>
-                <span className="ml-1 mr-0.5 loading">{buttonText}</span>
-              </>
-              :
-              buttonText
-              }
-            </button>
-          }
-        </>
+            <p className="w-52 h-12 text-gradient" style={{paddingBottom: 4}}>{buttonText}</p>
+            }
+          </button>
+        }
+      </>
       }
     </div>
   )

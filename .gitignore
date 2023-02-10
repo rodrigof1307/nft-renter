@@ -38,5 +38,6 @@ jspm_packages
 .next
 .DS_Store
 
-# Hardhat
+# Environment variables
 hardhat/.env
+.env

@@ -2,6 +2,7 @@ import SignerContext from "@/context/signerContext";
 import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Link from "next/link";
+import Image from "next/image";
 import { FiLogOut } from "react-icons/fi";
 
 
@@ -34,23 +35,31 @@ export default function Navbar() {
     }
     
     return (
-        <div className="flex justify-between items-center py-6 px-4 bg-gray-900">
-            <Link href={'/'}>
-                <div className="flex items-center">
-                    <h1 className="text-2xl ml-2 text-white font-bold cursor-pointer">NFT Renter</h1>
-                </div>
-            </Link>
+        <div className="flex justify-between items-center rounded-b-2xl p-4 md:p-5 lg:p-6 bg-gray-900 navbar-gradient">
+            <div className="w-36 md:w-52 lg:w-72 relative">
+                <Link href={'/'}>
+                    <Image src="/images/logo.png" alt="NFT Renter" width={250} height={40} layout="responsive"/>
+                </Link>
+            </div>
             { signerAddress ?
-            <div className="flex flex-row justify-end items-center">
-                <p className="text-emerald-400">{"Welcome " + signerAddress + "!"}</p>
-                <button className='w-12 h-12 ml-4 bg-emerald-300 rounded-md flex justify-center items-center text-white hover:bg-emerald-400' onClick={disconnectWallet}>
-                    <FiLogOut className="text-lg"/>
+            <div className="flex flex-row justify-end items-center h-10 md:h-11 lg:h-14">
+                <p className="text-gradient text-xs md:text-lg">{"Welcome " + signerAddress.substring(0,6) + "..." + signerAddress.slice(-4) + "!"}</p>
+                <button className='button-gradient w-9 h-9 md:w-12 md:h-12 ml-2 md:ml-3 lg:md-4 rounded-md flex justify-center items-center' onClick={disconnectWallet}>
+                    <svg width="0" height="0">
+                        <linearGradient id="gradient" x1="100%" y1="100%" x2="0%" y2="0%">
+                            <stop stopColor="#E879F9" offset="0%" />
+                            <stop stopColor="#00A8FF" offset="100%" />
+                        </linearGradient>
+                    </svg>
+                    <FiLogOut style={{ stroke: "url(#gradient)" }} />
                 </button>
             </div>
             :
-            <button className='w-48 h-12 bg-emerald-300 rounded-md border-2 border-transparent px-5 py-2 text-white hover:bg-emerald-400'
+            <button className='button-gradient w-36 md:w-40 lg:w-52 h-10 md:h-11 lg:h-14 lg:text-lg rounded-md lg:rounded-lg'
                 onClick={connectWallet}>
-                Connect Wallet
+                <p className="text-gradient text-sm md:text-md lg:text-lg font-medium w-36 md:w-40 lg:w-52 h-10 md:h-11 lg:h-14" style={{paddingBottom: 4}}>
+                    Connect Wallet
+                </p>
             </button>
             }
         </div>

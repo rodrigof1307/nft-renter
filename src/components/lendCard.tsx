@@ -33,7 +33,7 @@ export default function LendCard({tokenData}: {tokenData: NFTInfo}) {
     }
     
     return(
-    <div className="bg-gray-900 rounded-xl p-7 my-5 w-80 flex flex-col items-center justify-between" style={{height: '28.5rem'}}>
+    <div className="bg-gray-900 rounded-xl p-7 w-80 flex flex-col items-center justify-between hover-shadow box-gradient" style={{height: '28.5rem'}}>
       <NFTCard tokenData={tokenData} />
       <p className="text-white mt-2">
         Daily Rate:<input type={'number'} className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center' onChange={(e) => setDailyRate(parseFloat(e.target.value))}/>ETH
@@ -44,13 +44,15 @@ export default function LendCard({tokenData}: {tokenData: NFTInfo}) {
       <p className="text-white">
         Renter Penalty:<input type={'number'} className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center' onChange={(e) => setRenterPenalty(parseFloat(e.target.value))}/>%
       </p>
-      <button className='w-3/4 bg-sky-400 rounded-md border-2 border-transparent px-3 py-2 mt-2 text-white hover:bg-sky-500' onClick={() => lendNFT(tokenData)}>
+      <button className='w-52 h-12 button-gradient rounded-md border-2 border-transparent mt-2' onClick={() => lendNFT(tokenData)}>
         { (buttonText !== 'Lend' && buttonText !== 'Done!') ?
         <>
-          <span className="ml-1 mr-0.5 loading">{buttonText}</span>
+          <span className="ml-1 mr-0.5 w-52 h-12 text-gradient loading" style={{paddingBottom: 4}}>{buttonText}</span>
         </>
         :
-        buttonText
+        <p className="w-52 h-12 text-gradient" style={{paddingBottom: 4}}>
+          {buttonText}
+        </p>
         }
       </button>
     </div>

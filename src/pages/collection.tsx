@@ -35,7 +35,7 @@ export default function Collection() {
       const signerAddress = await signer.getAddress();
     
       const config = {
-        apiKey: 't5NI7d-VTVUnXqInKpwXjqUTTeZmyZ4_',
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
         network: Network.ETH_GOERLI,
       };
   
@@ -75,10 +75,12 @@ export default function Collection() {
       const rawPublishedNFTsSCs = []
       const rawRentedNFTsSCs = []
 
+      const currentDate = new Date().getTime() / 1000
+
       for(let response of responseMarketplaceTracker) {
         if(response[1] === signerAddress) {
           rawPublishedNFTsSCs.push(response)
-        } else if(response[8] === signerAddress) {
+        } else if(response[8] === signerAddress && response[9].toNumber() > currentDate) {
           rawRentedNFTsSCs.push(response)
         }
       }
@@ -167,7 +169,7 @@ export default function Collection() {
     return(
       <Layout title="Collection">
         <main className="flex w-full flex-col items-center justify-center text-center">
-          <h1 className='text-white text-3xl font-semibold'>Connect your Wallet to see your collection!</h1>
+          <h1 className='text-white text-4xl font-chakra font-semibold'>Connect your Wallet to see your collection!</h1>
         </main>
       </Layout>
     )
@@ -177,7 +179,7 @@ export default function Collection() {
     return(
       <Layout title="Collection">
         <main className="flex w-full flex-col items-center justify-center text-center">
-          <h1 className='text-white text-3xl italic'>Loading ...</h1>
+          <h1 className='text-white text-4xl font-chakra'>Loading ...</h1>
         </main>
       </Layout>
     )
@@ -186,8 +188,8 @@ export default function Collection() {
   return (
     <Layout title="Collection">
       <main className="flex w-full flex-col items-center justify-start text-center">
-        <h2 className='text-sky-400 text-3xl font-semibold text-left w-full mt-5 pl-8'>Your NFTs</h2>
-        <div className='w-100 grid grid-cols-4 gap-x-8 gap-y-2'>
+        <h2 className='text-sky-400 text-4xl font-chakra font-semibold text-left w-full my-4 pl-8'>Your NFTs</h2>
+        <div className='w-100 grid my-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-6 gap-y-6'>
         { nonPublishedNFTs.map((tokenData, index) => (
           <div key={index}>
             <LendCard tokenData={tokenData}/>
@@ -195,10 +197,10 @@ export default function Collection() {
         ))}
         </div>
         { nonPublishedNFTs.length === 0 &&
-          <h1 className='text-white text-xl my-8'>You don't have any NFTs yet!</h1>
+          <h1 className='text-white text-xl my-8'>You currently don't have any NFTs</h1>
         }
-        <h2 className='text-sky-400 text-3xl font-semibold text-left w-full pl-8'>Already on the Marketplace</h2>
-        <div className='w-100 grid grid-cols-4 gap-x-8 gap-y-2'>
+        <h2 className='text-sky-400 text-4xl font-chakra font-semibold text-left w-full my-4 pl-8'>Already on the Marketplace</h2>
+        <div className='w-100 grid my-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-6 gap-y-6'>
         {publishedNFTs.map((rentInfo, index) => (
           <div key={index}>
             <MarketplaceCard rentInfo={rentInfo} isOwner/>
@@ -206,10 +208,10 @@ export default function Collection() {
         ))}
         </div>
         { publishedNFTs.length === 0 &&
-          <h1 className='text-white text-xl my-8'>You don't have any NFTs on the marketplace yet!</h1>
+          <h1 className='text-white text-xl my-8'>You currently don't have any NFTs on the marketplace</h1>
         }
-        <h2 className='text-sky-400 text-3xl font-semibold text-left w-full pl-8'>Rented by you</h2>
-        <div className='w-100 grid grid-cols-4 gap-x-8 gap-y-2'>
+        <h2 className='text-sky-400 text-4xl font-chakra font-semibold text-left w-full my-4 pl-8'>Rented by you</h2>
+        <div className='w-100 grid my-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-6 gap-y-6'>
           {rentedNFTs.map((rentInfo, index) => (
             <div key={index}>
               <RentedByYouCard rentInfo={rentInfo}/>
@@ -217,7 +219,7 @@ export default function Collection() {
           ))}
         </div>
         { rentedNFTs.length === 0 &&
-          <h1 className='text-white text-xl my-8'>You don't haven't rented any NFT yet!</h1>
+          <h1 className='text-white text-xl my-8'>You currently don't haven't rented any NFT</h1>
         }
       </main>
     </Layout>

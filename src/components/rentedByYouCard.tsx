@@ -25,7 +25,7 @@ export default function RentedByYouCard({rentInfo}: {rentInfo: FinalRentInfo}) {
   }
 
   return(
-    <div className="bg-gray-900 rounded-xl p-7 my-5 w-80 flex flex-col items-center justify-between" style={{height: '28.5rem'}}>
+    <div className="bg-gray-900 rounded-xl p-7 w-80 flex flex-col items-center justify-between box-gradient hover-shadow" style={{height: '28.5rem'}}>
       <NFTCard tokenData={rentInfo.nft} />
       <p className="text-white">Daily Rate: <b>{rentInfo.pricePerDay} ETH</b></p>
       <div className="flex flex-row w-80 px-5 box-border items-center justify-between">
@@ -37,14 +37,14 @@ export default function RentedByYouCard({rentInfo}: {rentInfo: FinalRentInfo}) {
         :
         <p className="text-white italic font-semibold">Not Rented</p>
       }
-      <button className='w-3/4 bg-sky-400 rounded-md border-2 border-transparent px-5 py-2 mt-2 text-white hover:bg-sky-500'
+      <button className='w-52 h-12 button-gradient rounded-md border-2 border-transparent mt-2'
         onClick={() => stopRentEarly(rentInfo.rentHolderSC)}>
         { (buttonText !== 'Stop Rent' && buttonText !== 'Done!') ?
         <>
-          <span className="ml-1 mr-0.5 loading">{buttonText}</span>
+          <span className="ml-1 mr-0.5 loading w-52 h-12 text-gradient" style={{paddingBottom: 4}}>{buttonText}</span>
         </>
         :
-        buttonText
+        <span className="text-gradient w-52 h-12" style={{paddingBottom: 4}}>{buttonText}</span>
         }
       </button>
     </div>

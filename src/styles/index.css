@@ -1,3 +1,7 @@
+body {
+  background-color: #1f2937;
+}
+
 * {
     scrollbar-color: rgb(31 41 55) rgb(17 24 39)
 }
@@ -34,6 +38,64 @@ to {
 to {
     width: 1.25em;    
 }
+}
+
+
+.box-gradient {
+  background: linear-gradient(#111827, #111827) padding-box,
+              linear-gradient(180deg, rgba(232,121,249,1) 0%, rgba(0,168,255,1) 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.box-gradient:hover {
+  background: linear-gradient(#111827, #111827) padding-box,
+              linear-gradient(180deg, #d946ef 0%, #0ea5e9 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.button-gradient {
+  background: linear-gradient(#111827, #111827) padding-box,
+              linear-gradient(90deg, rgba(232,121,249,1) 0%, rgba(0,168,255,1) 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.button-gradient:hover {
+  background: linear-gradient(#111827, #111827) padding-box,
+              linear-gradient(90deg, #c026d3 0%, #0284c7 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, rgba(232,121,249,1) 0%, rgba(0,168,255,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.text-gradient:hover {
+  background: linear-gradient(90deg, #c026d3 0%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navbar-gradient {
+  width: calc(100vw);
+
+  margin-top: -2px;
+
+  border-right-color: #111827 !important;
+  border-left-color: #111827 !important;
+
+  background: linear-gradient(#111827, #111827) padding-box,
+              linear-gradient(90deg, rgba(232,121,249,1) 0%, rgba(0,168,255,1) 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.hover-shadow:hover {
+  -webkit-box-shadow: 0px 2px 20px -8px #e5e7eb;
+  -moz-box-shadow: 0px 2px 20px -8px #e5e7eb;
+  box-shadow: 0px 2px 20px -8px #e5e7eb;
 }
 
 /* purgecss start ignore */
