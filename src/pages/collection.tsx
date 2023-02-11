@@ -169,7 +169,7 @@ export default function Collection() {
     return(
       <Layout title="Collection">
         <main className="flex w-full flex-col items-center justify-center text-center">
-          <h1 className='text-white text-4xl font-chakra font-semibold'>Connect your Wallet to see your collection!</h1>
+          <h1 className='text-gradient text-4xl font-chakra font-semibold'>Connect your Wallet to see your collection!</h1>
         </main>
       </Layout>
     )
@@ -179,7 +179,9 @@ export default function Collection() {
     return(
       <Layout title="Collection">
         <main className="flex w-full flex-col items-center justify-center text-center">
-          <h1 className='text-white text-4xl font-chakra'>Loading ...</h1>
+            <div className="relative w-24 h-24 animate-spin rounded-full bg-gradient-to-r from-fuchsia-500 to-sky-500 ">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-[#192038] rounded-full"></div>
+            </div>
         </main>
       </Layout>
     )
@@ -187,8 +189,8 @@ export default function Collection() {
 
   return (
     <Layout title="Collection">
-      <main className="flex w-full flex-col items-center justify-start text-center">
-        <h2 className='text-sky-400 text-4xl font-chakra font-semibold text-left w-full my-4 pl-8'>Your NFTs</h2>
+      <main className="flex w-full flex-col items-center justify-start text-center pb-6">
+        <h2 className='blue-stroke text-[#192038] text-4xl font-chakra font-bold ml-0 mr-auto my-4 pl-8'>Your NFTs</h2>
         <div className='w-100 grid my-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-6 gap-y-6'>
         { nonPublishedNFTs.map((tokenData, index) => (
           <div key={index}>
@@ -197,9 +199,9 @@ export default function Collection() {
         ))}
         </div>
         { nonPublishedNFTs.length === 0 &&
-          <h1 className='text-white text-xl my-8'>You currently don't have any NFTs</h1>
+          <h1 className='text-sky-400 font-light text-xl my-10'>You currently don't have any NFTs</h1>
         }
-        <h2 className='text-sky-400 text-4xl font-chakra font-semibold text-left w-full my-4 pl-8'>Already on the Marketplace</h2>
+        <h2 className='blue-stroke text-[#192038] text-4xl font-chakra font-bold ml-0 mr-auto my-4 pl-8'>On the Marketplace</h2>
         <div className='w-100 grid my-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-6 gap-y-6'>
         {publishedNFTs.map((rentInfo, index) => (
           <div key={index}>
@@ -208,9 +210,9 @@ export default function Collection() {
         ))}
         </div>
         { publishedNFTs.length === 0 &&
-          <h1 className='text-white text-xl my-8'>You currently don't have any NFTs on the marketplace</h1>
+          <h1 className='text-sky-400 font-light text-xl my-10'>You currently don't have any NFTs on the marketplace</h1>
         }
-        <h2 className='text-sky-400 text-4xl font-chakra font-semibold text-left w-full my-4 pl-8'>Rented by you</h2>
+        <h2 className='blue-stroke text-[#192038] text-4xl font-chakra font-bold my-4 ml-0 mr-auto pl-8'>Your rentals</h2>
         <div className='w-100 grid my-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-6 gap-y-6'>
           {rentedNFTs.map((rentInfo, index) => (
             <div key={index}>
@@ -219,7 +221,7 @@ export default function Collection() {
           ))}
         </div>
         { rentedNFTs.length === 0 &&
-          <h1 className='text-white text-xl my-8'>You currently don't haven't rented any NFT</h1>
+          <h1 className='text-sky-400 font-light text-xl my-10'>You currently don't have any rented NFT</h1>
         }
       </main>
     </Layout>

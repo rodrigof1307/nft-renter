@@ -26,7 +26,8 @@ export default function Marketplace({finalRentableNFTs} : {finalRentableNFTs: Fi
   return (
     <Layout title="Marketplace">
       <main className="w-full flex flex-col items-center justify-start text-center">
-        <div className='grid my-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-8 gap-y-8'>
+        <h2 className='pink-stroke text-[#192038] text-4xl font-chakra font-bold ml-0 mr-auto my-4 pl-8'>Available NFTs</h2>
+        <div className='grid mt-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-8 gap-y-8'>
         {finalRentableNFTs.map((finalRentableNFT, index) => (
           <div key={index}>
             <MarketplaceCard rentInfo={finalRentableNFT} isOwner={signerAddress === finalRentableNFT.nftOwner} />

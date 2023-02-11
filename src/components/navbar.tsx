@@ -43,8 +43,8 @@ export default function Navbar() {
             </div>
             { signerAddress ?
             <div className="flex flex-row justify-end items-center h-10 md:h-11 lg:h-14">
-                <p className="text-gradient text-xs md:text-lg">{"Welcome " + signerAddress.substring(0,6) + "..." + signerAddress.slice(-4) + "!"}</p>
-                <button className='button-gradient w-9 h-9 md:w-12 md:h-12 ml-2 md:ml-3 lg:md-4 rounded-md flex justify-center items-center' onClick={disconnectWallet}>
+                <p className="text-gradient text-xs md:text-sm lg:text-md xl:text-lg">{"Welcome " + signerAddress.substring(0,6) + "..." + signerAddress.slice(-4) + "!"}</p>
+                <button className='button-gradient w-9 h-9 md:w-11 md:h-11 xl:w-12 xl:h-12 ml-2 md:ml-3 lg:md-4 rounded-md flex justify-center items-center' onClick={disconnectWallet}>
                     <svg width="0" height="0">
                         <linearGradient id="gradient" x1="100%" y1="100%" x2="0%" y2="0%">
                             <stop stopColor="#E879F9" offset="0%" />
@@ -57,7 +57,7 @@ export default function Navbar() {
             :
             <button className='button-gradient w-36 md:w-40 lg:w-52 h-10 md:h-11 lg:h-14 lg:text-lg rounded-md lg:rounded-lg'
                 onClick={connectWallet}>
-                <p className="text-gradient text-sm md:text-md lg:text-lg font-medium w-36 md:w-40 lg:w-52 h-10 md:h-11 lg:h-14" style={{paddingBottom: 4}}>
+                <p className="font-chakra font-semibold text-gradient text-sm md:text-md lg:text-lg font-medium w-36 md:w-40 lg:w-52 h-10 md:h-11 lg:h-14" style={{paddingBottom: 4}}>
                     Connect Wallet
                 </p>
             </button>

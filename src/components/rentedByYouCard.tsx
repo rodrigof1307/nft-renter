@@ -2,6 +2,7 @@ import NFTCard from "./nftCard";
 import { ethers } from 'ethers';
 import rentHolderJSON from '../artifacts/contracts/RentHolder.sol/RentHolder.json'
 import { useState } from "react";
+import GradientButton from "./gradientButton";
 
 export default function RentedByYouCard({rentInfo}: {rentInfo: FinalRentInfo}) {
 
@@ -37,16 +38,7 @@ export default function RentedByYouCard({rentInfo}: {rentInfo: FinalRentInfo}) {
         :
         <p className="text-white italic font-semibold">Not Rented</p>
       }
-      <button className='w-52 h-12 button-gradient rounded-md border-2 border-transparent mt-2'
-        onClick={() => stopRentEarly(rentInfo.rentHolderSC)}>
-        { (buttonText !== 'Stop Rent' && buttonText !== 'Done!') ?
-        <>
-          <span className="ml-1 mr-0.5 loading w-52 h-12 text-gradient" style={{paddingBottom: 4}}>{buttonText}</span>
-        </>
-        :
-        <span className="text-gradient w-52 h-12" style={{paddingBottom: 4}}>{buttonText}</span>
-        }
-      </button>
+      <GradientButton buttonText={buttonText} nonLoadingText={['Stop Rent', 'Done!']} onClick={() => stopRentEarly(rentInfo.rentHolderSC)} />
     </div>
   )
 }

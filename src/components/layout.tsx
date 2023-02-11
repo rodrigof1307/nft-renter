@@ -11,7 +11,7 @@ export default function Layout({
 }: LayoutProps) {
 
   return (
-    <div className='flex flex-1 bg-gray-800'>
+    <div className='flex flex-1 bg-[#192038]'>
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />

@@ -5,6 +5,7 @@ import NFTCard from "./nftCard";
 import { ethers, ContractFactory } from 'ethers';
 import rentHolderJSON from '../artifacts/contracts/RentHolder.sol/RentHolder.json'
 import ERC721JSON from '../artifacts/@openzeppelin/contracts/token/ERC721/ERC721.sol/ERC721.json'
+import GradientButton from "./gradientButton";
 
 export default function LendCard({tokenData}: {tokenData: NFTInfo}) {
 
@@ -36,25 +37,31 @@ export default function LendCard({tokenData}: {tokenData: NFTInfo}) {
     <div className="bg-gray-900 rounded-xl p-7 w-80 flex flex-col items-center justify-between hover-shadow box-gradient" style={{height: '28.5rem'}}>
       <NFTCard tokenData={tokenData} />
       <p className="text-white mt-2">
-        Daily Rate:<input type={'number'} className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center' onChange={(e) => setDailyRate(parseFloat(e.target.value))}/>ETH
+        Daily Rate:
+        <input 
+          type={'number'} 
+          className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center font-chakra font-semibold' 
+          onChange={(e) => setDailyRate(parseFloat(e.target.value))}
+        />
+        <span className="font-chakra font-semibold">ETH</span> 
       </p>
       <p className="text-white">
-        Owner Penalty:<input type={'number'} className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center' onChange={(e) => setOwnerPenalty(parseFloat(e.target.value))}/>%  
+        Owner Penalty:
+        <input 
+          type={'number'}
+          className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center font-chakra font-semibold'
+          onChange={(e) => setOwnerPenalty(parseFloat(e.target.value))}/>
+        <span className="font-chakra font-semibold">%</span> 
       </p>
       <p className="text-white">
-        Renter Penalty:<input type={'number'} className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center' onChange={(e) => setRenterPenalty(parseFloat(e.target.value))}/>%
+        Renter Penalty:
+        <input 
+          type={'number'}
+          className='w-10 bg-gray-900 border-0 border-b-2 mx-1 text-center font-chakra font-semibold'
+          onChange={(e) => setRenterPenalty(parseFloat(e.target.value))}/>
+        <span className="font-chakra font-semibold">%</span> 
       </p>
-      <button className='w-52 h-12 button-gradient rounded-md border-2 border-transparent mt-2' onClick={() => lendNFT(tokenData)}>
-        { (buttonText !== 'Lend' && buttonText !== 'Done!') ?
-        <>
-          <span className="ml-1 mr-0.5 w-52 h-12 text-gradient loading" style={{paddingBottom: 4}}>{buttonText}</span>
-        </>
-        :
-        <p className="w-52 h-12 text-gradient" style={{paddingBottom: 4}}>
-          {buttonText}
-        </p>
-        }
-      </button>
+      <GradientButton buttonText={buttonText} nonLoadingText={['Lend', 'Done!']} onClick={() => lendNFT(tokenData)}/>
     </div>
     )
 }
