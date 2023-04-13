@@ -1,27 +1,38 @@
-# NFT Renter
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-This project was done as the final project of the "Ethereum Developer Bootcamp" from Alchemy University ( https://university.alchemy.com/overview/ethereum ). It's goal was to develop a decentralized application that allowed users to rent NFTs from other users.
+## Getting Started
 
-The rental service works as follows:
-- The NFT owner deploys a Rent Smart Contract and transfers his NFT to said Smart Contract.
-- When a user want to rent that NFT, he will send to the smart contract the daily rental rate times the days he wishes to rent the NFT for. Afterwards, the user will be associated to the Smart Contract, proving that he can rightfully use the NFT.
-- Once the rental ends the NFT owner is able to withdraw the funds from the Smart Contract.
-- The owner is able to withdraw his NFT at any time however a penalty will be applied on the value he will receive from the elapsed rental period if someone his currently renting the NFT. This penalty is defined by the owner on the contract deployment through the owner penalty parameter which is a percentage. Thus if the owner withdraws the NFT in the middle of a rental he will receive (100 - ownerPenalty)/100 * (dailyRate * elapsedRentalTime).
-- The renter is able to stop the rent at any time however a penalty will be applied and he will have to overpay for the days he used the NFT. This penalty is defined by the owner on the contract deployment through the renter penalty parameter which is a percentage. Thus if the renter stops the rental early, he will receive the following fraction from the total deposit he made: totalDeposit - (dailyRate * (100 + renterPenalty)/100)) * (elapsedRentalTime). If the renter stops the rent near the deadline, the mentioned equation might return a negative value which is discarded and instead the renter doesn't receive anything even though he stopped the rental early.
+First, run the development server:
 
-There is also a MarketplaceTracker Smart Contract that only stores an array with all the deployed Rent Smart Contracts addresses. It is possible to fetch all the Rent Smart Contracts relevant information through this contract's `getRentSCs` function. 
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-With this implementation all the information and implementation of the marketplace becomes decentralized!
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-The dApp's frontend was built using Next.js, TypeScript and Tailwind CSS
-### Execution Instructions
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-1. Run `npm install` to install all the dependencies
-2. Create a .env file on the root of the project
-3. Add your Alchemy Goerli SDK Key with the following format `NEXT_PUBLIC_ALCHEMY_API_KEY=123456789abc`
-4. Run `npm run dev` to run the dApp
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-You can use the following Goerli account to lent and rent NFTs
-Public Key: 0xC666Bea89CaeaF34599285B63F1b1b1b6E484227
-Private Key: 98422bf9aab6bc0abb8dfda3492d184543e9c9c13ad1085f7a08274e31ccad27
-Don't use it for anything else since these keys are now public!
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
