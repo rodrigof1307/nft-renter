@@ -2,26 +2,178 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.hover-shadow-sm:hover {
+  -webkit-box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
+  -moz-box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
+  box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+.hover-shadow-md:hover {
+  -webkit-box-shadow: 0px 0.15vw 2.8vw -0.55vw var(--tw-shadow-color);
+  -moz-box-shadow: 0px 0.15vw 2.8vw -0.55vw var(--tw-shadow-color);
+  box-shadow: 0px 0.15vw 2.8vw -0.55vw var(--tw-shadow-color);
+}
+
+.hover-shadow-lg:hover {
+  -webkit-box-shadow: 0px 0.18vw 5.4vw -0.96vw var(--tw-shadow-color);
+  -moz-box-shadow: 0px 0.18vw 5.4vw -0.96vw var(--tw-shadow-color);
+  box-shadow: 0px 0.18vw 5.4vw -0.96vw var(--tw-shadow-color);
+}
+
+.hover-line {
+  position: relative;
+}
+
+.hover-line::after {
+  content: '';
+  position: absolute;
+  bottom: -0.2vw;
+  left: 0;
+  width: 0;
+  height: 0.1vw;
+  background-color: #fff;
+  transition: width 0.3s ease-in-out;
+}
+
+.hover-line:hover::after {
+  width: 100%;
+}
+
+.forced-opacity, .forced-opacity div, .forced-opacity div * {
+  opacity: 1 !important;
+}
+
+.initial-animation * {
+  opacity: 0;
+  animation: opacity-anim 1s ease-in-out forwards;
+  animation-delay: 2.7s;
+}
+
+@keyframes opacity-anim {
+  100% {
+      opacity: 1;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* .lines path {
+  stroke: theme('colors.darkPurple');
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.8;
 }
+
+.lines_svg__line1 {
+  animation: stroke-soft 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.lines_svg__line2 {
+  animation: stroke-long 6s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.lines_svg__line3 {
+  animation: stroke-normal 5s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.lines_svg__line4 {
+  animation: stroke-soft 5s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+
+.lines_svg__line5 {
+  animation: stroke-soft 6s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+.lines_svg__line6 {
+  animation: stroke-long 8s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+
+.lines_svg__line7 {
+  animation: stroke-normal 4s ease-in-out infinite;
+  animation-delay: 1.3s;
+}
+
+.lines_svg__line8 {
+  animation: stroke-soft 4s ease-in-out infinite;
+  animation-delay: 0.3s;
+}
+
+.lines_svg__line9 {
+  animation: stroke-normal 5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.lines_svg__line10 {
+  animation: stroke-soft 3s ease-in-out infinite;
+  animation-delay: 0.7s;
+}
+
+.lines_svg__line11 {
+  animation: stroke-normal 4s ease-in-out infinite;
+  animation-delay: 1.8s;
+}
+
+.lines_svg__line12 {
+  animation: stroke-normal 7s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+
+.lines_svg__line13 {
+  animation: stroke-soft 6s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.lines_svg__line14 {
+  animation: stroke-normal 5s ease-in-out infinite;
+  animation-delay: 1.7s;
+}
+
+
+@keyframes stroke-short {
+  0% {
+    stroke-width: 0;
+    opacity: 0.8;
+  }
+  50% {
+    stroke-width: 3;
+    opacity: 1;
+  }
+  100% {
+    stroke-width: 0;
+    opacity: 0.8;
+  }
+}
+
+@keyframes stroke-normal {
+  0% {
+    stroke-width: 0;
+    opacity: 0.8;
+  }
+  50% {
+    stroke-width: 5;
+    opacity: 1;
+  }
+  100% {
+    stroke-width: 0;
+    opacity: 0.8;
+  }
+}
+
+@keyframes stroke-long {
+  0% {
+    stroke-width: 0;
+    opacity: 0.8;
+  }
+  50% {
+    stroke-width: 7;
+    opacity: 1;
+  }
+  100% {
+    stroke-width: 0;
+    opacity: 0.8;
+  }
+} */

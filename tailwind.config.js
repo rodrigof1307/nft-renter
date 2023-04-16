@@ -7,10 +7,27 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      colors: {
+        brightBlue: '#00BFFF',
+        brightPink: '#C026D3',
+        darkPurple: '#580A88',
+        backgroundPurple1: '#110929',
+        backgroundPurple2: '#290049',
+        backgroundPurple3: '#1D0E49',
+      },
+      fontFamily: {
+        highlight: ['var(--font-monumentExtended)'],
+        sans: ['var(--font-lora)'],
+      },
+      fontSize: {
+        'sm': ['1vw'],
+        'md': ['1.1vw'],
+        'lg': ['1.25vw'],
+        'xl': ['1.4vw'],
+        '2xl': ['1.7vw'],
+        '3xl': ['2.1vw'],
+        '4xl': ['2.5vw'],
+        '5xl': ['3vw'],
       },
     },
   },
