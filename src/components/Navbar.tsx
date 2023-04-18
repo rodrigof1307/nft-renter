@@ -1,9 +1,9 @@
-import { Button } from './Button'
-import Link from 'next/link'
+import { Button } from "./utils/Button";
+import Link from "next/link";
 
 const Navbar = () => (
-  <nav className="flex flex-row justify-between items-center h-[7vw] px-[4vw] z-20 relative initial-animation">
-    <ul className="text-white text-xl flex flex-row w-1/4 justify-between">
+  <nav className="initial-animation relative z-20 flex h-[7vw] flex-row items-center justify-between px-[4vw]">
+    <ul className="flex w-1/4 flex-row justify-between text-xl text-white">
       <li className="hover-line">
         <Link href="/marketplace">Marketplace</Link>
       </li>
@@ -15,6 +15,6 @@ const Navbar = () => (
       Connect to Wallet
     </Button>
   </nav>
-)
+);
 
-export default Navbar
+export default Navbar;
