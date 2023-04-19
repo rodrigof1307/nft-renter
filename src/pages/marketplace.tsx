@@ -1,12 +1,12 @@
 import Title from "@/components/utils/Title";
-import SubTitle from "@/components/utils/SubTitle";
+import Subtitle from "@/components/utils/Subtitle";
 
 const Marketplace = () => {
   return (
     <div className="px-[4vw]">
       <Title>Marketplace</Title>
-      <SubTitle crossed="pink">Collateralized</SubTitle>
-      <SubTitle crossed="pink">Non-collateralized</SubTitle>
+      <Subtitle crossed="pink">Collateralized</Subtitle>
+      <Subtitle crossed="pink">Non-collateralized</Subtitle>
     </div>
   );
 };

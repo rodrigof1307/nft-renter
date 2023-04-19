@@ -2,7 +2,8 @@ import { useState } from "react";
 import Carousel, { ControlProps } from "nuka-carousel";
 import NavigationButton from "../utils/NavigationButton";
 import Title from "../utils/Title";
-import SubTitle from "../utils/SubTitle";
+import Subtitle from "../utils/Subtitle";
+import ShadedBackground from "../utils/ShadedBackground";
 
 const RentalMethods = () => {
   const [title, setTitle] = useState("Collateralized");
@@ -65,10 +66,8 @@ const RentalMethods = () => {
 
   return (
     <div>
-      <Title className="ml-[4vw] mt-[3vw]">How It Works</Title>
-      <h4 className="mb-[1vw] ml-[4vw] mt-[1.5vw] font-highlight text-4xl text-white">
-        {title}
-      </h4>
+      <Title className="mb-[1vw] ml-[4vw] mt-[3vw]">How It Works</Title>
+      <Subtitle className="mb-[1vw] ml-[4vw]">{title}</Subtitle>
       <Carousel
         wrapAround
         renderCenterLeftControls={null}
@@ -96,7 +95,7 @@ const RentalMethod = ({
   advantages,
   disadvantages,
 }: RentalMethodProps) => (
-  <div className="mx-auto flex w-[92vw] flex-col justify-start rounded-[1.5vw] border-2 border-darkPurple bg-black/25 p-[2.25vw]">
+  <ShadedBackground className="mx-auto flex w-[92vw] flex-col justify-start p-[2.25vw]">
     <p className="mb-[1.5vw] text-lg font-medium text-white">{description}</p>
     {steps.map((step, index) => (
       <div key={step}>
@@ -110,7 +109,7 @@ const RentalMethod = ({
       <Characteristics title="Advantages" items={advantages} />
       <Characteristics title="Disadvantages" items={disadvantages} />
     </div>
-  </div>
+  </ShadedBackground>
 );
 
 interface CharacteristicsProps {
@@ -120,7 +119,9 @@ interface CharacteristicsProps {
 
 const Characteristics = ({ title, items }: CharacteristicsProps) => (
   <div className="w-[37.5vw]">
-    <SubTitle className="mb-[0.5vw]">{title}</SubTitle>
+    <h4 className="mb-[0.25vw] text-center font-highlight text-2xl text-white">
+      {title}
+    </h4>
     {items.map((item) => (
       <p className="mb-[1vw] text-lg font-medium text-white" key={item}>
         {item}

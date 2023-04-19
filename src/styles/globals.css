@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.body-min-height {
+  min-height: max(100vh, 80vw);
+}
+
 .hover-shadow-sm:hover {
   -webkit-box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
   -moz-box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
@@ -39,11 +54,11 @@
   width: 100%;
 }
 
-.crossed-subtitle {
+.crossed-Subtitle {
   z-index: 0;
 }
 
-.crossed-subtitle::before {
+.crossed-Subtitle::before {
   content: '';
   position: absolute;
   bottom: calc(50% - 0.25vw);
@@ -53,11 +68,11 @@
   z-index: -1;
 }
 
-.crossed-subtitle--pink::before {
+.crossed-Subtitle--pink::before {
   background-color: theme('colors.brightPink');
 }
 
-.crossed-subtitle--blue::before {
+.crossed-Subtitle--blue::before {
   background-color: theme('colors.brightBlue');
 }
 

@@ -1,5 +1,5 @@
 const Footer = () => (
-  <footer className="w-full py-[1.5vw]">
+  <footer className="absolute bottom-0 flex h-[5vw] w-full items-center justify-center">
     <p className="text-center text-md text-white">
       {
         "This is an educational project and shouldn't be used with valuable assets"

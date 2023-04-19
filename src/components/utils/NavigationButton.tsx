@@ -16,7 +16,7 @@ interface NavigationButtonProps
 const NavigationButton = ({ direction, ...rest }: NavigationButtonProps) => (
   <button
     {...rest}
-    className="flex h-[3vw] w-[3vw] items-center justify-center rounded-[0.6vw] border-[0.14vw] border-darkPurple bg-black/25"
+    className="flex h-[3vw] w-[3vw] items-center justify-center rounded-[0.6vw] border-[0.15vw] border-darkPurple bg-black/25"
   >
     <Chevron direction={direction} size={"2.2vw"} color="white" />
   </button>
