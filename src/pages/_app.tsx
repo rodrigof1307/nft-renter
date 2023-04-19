@@ -30,7 +30,7 @@ const lora = Lora({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <main
-      className={`${monumentExtended.variable} ${lora.variable} bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 font-sans`}
+      className={`${monumentExtended.variable} ${lora.variable} initial-animation bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 font-sans`}
     >
       <Navbar />
       <Component {...pageProps} />

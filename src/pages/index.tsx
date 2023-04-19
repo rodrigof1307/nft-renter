@@ -6,7 +6,7 @@ import RentLendButtonsPanel from "@/components/landing-page/RentLendButtonsPanel
 
 export default function Home() {
   return (
-    <div className="initial-animation relative mt-[-7vw] pt-[7vw]">
+    <div className="relative mt-[-7vw] pt-[7vw]">
       <Lines
         className="absolute right-0 top-0"
         width={"28.34vw"}

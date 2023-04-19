@@ -39,11 +39,33 @@
   width: 100%;
 }
 
+.crossed-subtitle {
+  z-index: 0;
+}
+
+.crossed-subtitle::before {
+  content: '';
+  position: absolute;
+  bottom: calc(50% - 0.25vw);
+  left: -0.8vw;
+  width: calc(100% + 1.6vw);
+  height: 0.5vw;
+  z-index: -1;
+}
+
+.crossed-subtitle--pink::before {
+  background-color: theme('colors.brightPink');
+}
+
+.crossed-subtitle--blue::before {
+  background-color: theme('colors.brightBlue');
+}
+
 .forced-opacity, .forced-opacity div, .forced-opacity div * {
   opacity: 1 !important;
 }
 
-.initial-animation * {
+.initial-animation:has(.title-typing) * * {
   opacity: 0;
   animation: opacity-anim 1s ease-in-out forwards;
   animation-delay: 2.7s;

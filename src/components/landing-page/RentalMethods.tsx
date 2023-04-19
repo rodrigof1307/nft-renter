@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Carousel, { ControlProps } from "nuka-carousel";
 import NavigationButton from "../utils/NavigationButton";
+import Title from "../utils/Title";
+import SubTitle from "../utils/SubTitle";
 
 const RentalMethods = () => {
   const [title, setTitle] = useState("Collateralized");
@@ -63,9 +65,7 @@ const RentalMethods = () => {
 
   return (
     <div>
-      <h2 className="ml-[4vw] mt-[3vw] font-highlight text-5xl font-extrabold text-white">
-        How It Works
-      </h2>
+      <Title className="ml-[4vw] mt-[3vw]">How It Works</Title>
       <h4 className="mb-[1vw] ml-[4vw] mt-[1.5vw] font-highlight text-4xl text-white">
         {title}
       </h4>
@@ -120,9 +120,7 @@ interface CharacteristicsProps {
 
 const Characteristics = ({ title, items }: CharacteristicsProps) => (
   <div className="w-[37.5vw]">
-    <h5 className="mb-[0.5vw] text-center font-highlight text-xl text-white">
-      {title}
-    </h5>
+    <SubTitle className="mb-[0.5vw]">{title}</SubTitle>
     {items.map((item) => (
       <p className="mb-[1vw] text-lg font-medium text-white" key={item}>
         {item}
