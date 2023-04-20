@@ -11,6 +11,7 @@ const buttonVariants = cva(
         blue: "bg-brightBlue shadow-brightBlue",
         pink: "bg-brightPink shadow-brightPink",
         purple: "bg-darkPurple shadow-darkPurple",
+        red: "bg-darkPurple shadow-darkPurple",
       },
       roundness: {
         full: "rounded-full",

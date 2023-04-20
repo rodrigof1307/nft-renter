@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/font": "^13.3.0",
+    "@rainbow-me/rainbowkit": "^0.12.9",
     "@svgr/webpack": "^7.0.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
@@ -17,6 +18,7 @@
     "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.5.2",
     "clsx": "^1.2.1",
+    "ethers": "^5",
     "lucide-react": "^0.160.0",
     "next": "13.3.0",
     "nuka-carousel": "^6.0.1",
@@ -27,7 +29,8 @@
     "tailwindcss": "3.3.1",
     "tailwindcss-animate": "^1.0.5",
     "typescript": "5.0.4",
-    "typewriter-effect": "^2.19.0"
+    "typewriter-effect": "^2.19.0",
+    "wagmi": "^0.12.12"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.56.0",

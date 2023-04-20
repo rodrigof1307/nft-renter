@@ -1,5 +1,5 @@
-import { Button } from "./utils/Button";
 import Link from "next/link";
+import CustomConnectButton from "./CustomConnectButton";
 
 const Navbar = () => (
   <nav className="relative z-20 flex h-[7vw] flex-row items-center justify-between px-[4vw]">
@@ -11,9 +11,7 @@ const Navbar = () => (
         <Link href="/my-collection">My collection</Link>
       </li>
     </ul>
-    <Button tone="purple" roundness="full" size="medium">
-      Connect to Wallet
-    </Button>
+    <CustomConnectButton />
   </nav>
 );
 
