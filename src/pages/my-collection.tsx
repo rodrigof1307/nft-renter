@@ -1,13 +1,18 @@
-import Title from "@/components/utils/Title";
-import Subtitle from "@/components/utils/Subtitle";
+import { Header1, Header2 } from "@/components/utils/Headers";
 
 const MyCollection = () => {
   return (
     <div className="px-[4vw]">
-      <Title>My Collection</Title>
-      <Subtitle crossed="blue">Your NFTs</Subtitle>
-      <Subtitle crossed="blue">On The Marketplace</Subtitle>
-      <Subtitle crossed="pink">Your Rentals</Subtitle>
+      <Header1 className="mb-[2vw]">My Collection</Header1>
+      <Header2 className="mb-[1.5vw]" crossed="blue">
+        Your NFTs
+      </Header2>
+      <Header2 className="mb-[1.5vw]" crossed="blue">
+        On The Marketplace
+      </Header2>
+      <Header2 className="mb-[1.5vw]" crossed="pink">
+        Your Rentals
+      </Header2>
     </div>
   );
 };

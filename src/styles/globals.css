@@ -42,7 +42,7 @@ body {
 .hover-line::after {
   content: '';
   position: absolute;
-  bottom: -0.2vw;
+  bottom: -0.5vw;
   left: 0;
   width: 0;
   height: 0.1vw;

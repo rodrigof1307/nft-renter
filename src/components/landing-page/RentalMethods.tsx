@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Carousel, { ControlProps } from "nuka-carousel";
-import NavigationButton from "../utils/NavigationButton";
-import Title from "../utils/Title";
-import Subtitle from "../utils/Subtitle";
+import { NavigationButton } from "../utils/Buttons";
+import { Header1, Header2 } from "../utils/Headers";
 import ShadedBackground from "../utils/ShadedBackground";
 
 const RentalMethods = () => {
@@ -66,8 +65,8 @@ const RentalMethods = () => {
 
   return (
     <div>
-      <Title className="mb-[1vw] ml-[4vw] mt-[3vw]">How It Works</Title>
-      <Subtitle className="mb-[1vw] ml-[4vw]">{title}</Subtitle>
+      <Header1 className="mb-[1.5vw] ml-[4vw] mt-[4vw]">How It Works</Header1>
+      <Header2 className="mb-[1.5vw] ml-[4vw]">{title}</Header2>
       <Carousel
         wrapAround
         renderCenterLeftControls={null}
@@ -96,13 +95,13 @@ const RentalMethod = ({
   disadvantages,
 }: RentalMethodProps) => (
   <ShadedBackground className="mx-auto flex w-[92vw] flex-col justify-start p-[2.25vw]">
-    <p className="mb-[1.5vw] text-lg font-medium text-white">{description}</p>
+    <p className="mb-[1.5vw] text-lg font-medium ">{description}</p>
     {steps.map((step, index) => (
       <div key={step}>
-        <h5 className="mb-[0.25vw] font-highlight text-xl text-white">{`Step ${
+        <h5 className="mb-[0.75vw] font-highlight text-xl ">{`Step ${
           index + 1
         }`}</h5>
-        <p className="mb-[1.5vw] text-lg font-medium text-white">{step}</p>
+        <p className="mb-[1.5vw] text-lg font-medium ">{step}</p>
       </div>
     ))}
     <div className="flex flex-row items-start justify-around">
@@ -119,11 +118,11 @@ interface CharacteristicsProps {
 
 const Characteristics = ({ title, items }: CharacteristicsProps) => (
   <div className="w-[37.5vw]">
-    <h4 className="mb-[0.25vw] text-center font-highlight text-2xl text-white">
+    <h4 className="mb-[0.75vw] text-center font-highlight text-2xl ">
       {title}
     </h4>
     {items.map((item) => (
-      <p className="mb-[1vw] text-lg font-medium text-white" key={item}>
+      <p className="mb-[1vw] text-lg font-medium " key={item}>
         {item}
       </p>
     ))}

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/utils/Button";
+import { Button } from "@/components/utils/Buttons";
 import Link from "next/link";
 
 const RentLendButtonsPanel = () => (

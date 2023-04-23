@@ -55,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <main
-          className={`${monumentExtended.variable} ${lora.variable} initial-animation body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw] font-sans`}
+          className={`${monumentExtended.variable} ${lora.variable} initial-animation body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw] font-sans text-white`}
         >
           <Navbar />
           <Lines

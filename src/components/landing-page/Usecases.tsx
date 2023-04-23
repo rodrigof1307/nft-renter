@@ -3,7 +3,7 @@ const Usecases = () => (
     <h2 className="font-highlight text-3xl font-extrabold text-brightPink">
       UTILITY AT A FRACTION OF THE COST
     </h2>
-    <div className="flex w-[55vw] flex-row justify-between py-[2vw]">
+    <div className="flex w-[55vw] flex-row justify-between py-[2.5vw]">
       <Usecase title="Gaming Assets" emoji="🎮" />
       <Usecase title="Digital art" emoji="🖼" />
       <Usecase title="Tickets" emoji="🎟" />
@@ -24,7 +24,7 @@ interface UsecaseProps {
 const Usecase = ({ title, emoji }: UsecaseProps) => (
   <div className="flex flex-col items-center justify-between">
     <h3 className="text-5xl">{emoji}</h3>
-    <h4 className="mt-[0.25vw] text-md text-white">{title}</h4>
+    <h4 className="mt-[0.25vw] text-md ">{title}</h4>
   </div>
 );
 

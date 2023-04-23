@@ -1,12 +1,15 @@
-import Title from "@/components/utils/Title";
-import Subtitle from "@/components/utils/Subtitle";
+import { Header1, Header2 } from "@/components/utils/Headers";
 
 const Marketplace = () => {
   return (
     <div className="px-[4vw]">
-      <Title>Marketplace</Title>
-      <Subtitle crossed="pink">Collateralized</Subtitle>
-      <Subtitle crossed="pink">Non-collateralized</Subtitle>
+      <Header1 className="mb-[2vw]">Marketplace</Header1>
+      <Header2 className="my-[1.5vw]" crossed="pink">
+        Collateralized
+      </Header2>
+      <Header2 className="my-[1.5vw]" crossed="pink">
+        Non-collateralized
+      </Header2>
     </div>
   );
 };
