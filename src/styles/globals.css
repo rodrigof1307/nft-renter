@@ -80,7 +80,7 @@ body {
   opacity: 1 !important;
 }
 
-.initial-animation:has(.title-typing) * * {
+.initial-animation * * {
   opacity: 0;
   animation: opacity-anim 1s ease-in-out forwards;
   animation-delay: 2.7s;

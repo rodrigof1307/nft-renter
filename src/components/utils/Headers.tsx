@@ -40,7 +40,7 @@ const Header3 = ({ children, className, crossed, ...rest }: HeaderProps) => {
   return (
     <h3
       className={cn(
-        "relative w-fit text-left font-highlight text-2xl ",
+        "relative w-fit max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-highlight text-2xl leading-[1.8vw]",
         crossed && "crossed-Subtitle",
         crossed === "pink" && "crossed-Subtitle--pink",
         crossed === "blue" && "crossed-Subtitle--blue",

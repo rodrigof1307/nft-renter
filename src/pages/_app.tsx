@@ -14,6 +14,8 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 
+import { cn } from "@/utils/utils";
+
 const monumentExtended = localFont({
   src: [
     {
@@ -36,7 +38,7 @@ const lora = Lora({
 
 const { chains, provider } = configureChains(
   [goerli],
-  [alchemyProvider({ apiKey: "llfowvw9cROhh7XIUWAmK7Jcy5RmJ_n_" })]
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" })]
 );
 
 const { connectors } = getDefaultWallets({
@@ -51,11 +53,18 @@ const wagmiClient = createClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  console.log(Component.name);
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <main
-          className={`${monumentExtended.variable} ${lora.variable} initial-animation body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw] font-sans text-white`}
+          className={cn(
+            "body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw] font-sans text-white",
+            monumentExtended.variable,
+            lora.variable,
+            Component.name === "Home" && "initial-animation"
+          )}
         >
           <Navbar />
           <Lines

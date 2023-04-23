@@ -65,7 +65,7 @@ const ButtonNFTCard = ({
 }: ButtonNFTCardProps) => (
   <button
     className={cn(
-      "hover-shadow-sm flex w-[17.6vw] items-center justify-center rounded-[0.6vw] py-[0.8vw] font-highlight text-[1.2vw] transition-colors disabled:pointer-events-none disabled:opacity-50",
+      "hover-shadow-sm absolute bottom-[1vw] left-[1vw] flex w-[17.6vw] items-center justify-center rounded-[0.6vw] py-[0.8vw] font-highlight text-[1.2vw] transition-colors disabled:pointer-events-none disabled:opacity-50",
       tone === "pink" && "bg-brightPink shadow-brightPink",
       tone === "blue" && "bg-brightBlue shadow-brightBlue",
       className
