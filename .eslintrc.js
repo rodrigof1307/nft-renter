@@ -15,6 +15,24 @@ module.exports = {
       version: "detect",
     },
   },
+  rules: {
+    "prettier/prettier": [
+      "error",
+      {
+        singleQuote: false,
+        printWidth: 120,
+      },
+    ],
+    "max-len": [
+      "error",
+      {
+        code: 120,
+        ignoreUrls: true,
+        ignoreRegExpLiterals: true,
+        ignoreStrings: true,
+      },
+    ],
+  },
   env: {
     browser: true,
     node: true,

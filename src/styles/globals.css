@@ -9,8 +9,8 @@ body::-webkit-scrollbar {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .body-min-height {
@@ -40,7 +40,7 @@ body {
 }
 
 .hover-line::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -0.5vw;
   left: 0;
@@ -59,7 +59,7 @@ body {
 }
 
 .crossed-Subtitle::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: calc(50% - 0.25vw);
   left: -0.8vw;
@@ -69,14 +69,16 @@ body {
 }
 
 .crossed-Subtitle--pink::before {
-  background-color: theme('colors.brightPink');
+  background-color: theme("colors.brightPink");
 }
 
 .crossed-Subtitle--blue::before {
-  background-color: theme('colors.brightBlue');
+  background-color: theme("colors.brightBlue");
 }
 
-.forced-opacity, .forced-opacity div, .forced-opacity div * {
+.forced-opacity,
+.forced-opacity div,
+.forced-opacity div * {
   opacity: 1 !important;
 }
 
@@ -88,6 +90,6 @@ body {
 
 @keyframes opacity-anim {
   100% {
-      opacity: 1;
+    opacity: 1;
   }
 }

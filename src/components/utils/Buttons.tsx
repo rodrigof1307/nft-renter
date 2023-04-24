@@ -1,12 +1,6 @@
 import * as React from "react";
 import { VariantProps, cva } from "class-variance-authority";
-import {
-  ChevronRight,
-  ChevronLeft,
-  ChevronDown,
-  ChevronUp,
-  LucideProps,
-} from "lucide-react";
+import { ChevronRight, ChevronLeft, ChevronDown, ChevronUp, LucideProps } from "lucide-react";
 
 import { cn } from "../../utils/utils";
 
@@ -44,28 +38,22 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, tone, roundness, size, ...props }, ref) => (
-    <button
-      className={cn(buttonVariants({ tone, roundness, className, size }))}
-      ref={ref}
-      {...props}
-    />
+    <button className={cn(buttonVariants({ tone, roundness, className, size }))} ref={ref} {...props} />
   )
 );
 Button.displayName = "Button";
 
 interface ButtonNFTCardProps extends React.HTMLAttributes<HTMLButtonElement> {
   tone: "blue" | "pink";
+  mode: "card" | "dialog";
 }
 
-const ButtonNFTCard = ({
-  children,
-  className,
-  tone,
-  ...rest
-}: ButtonNFTCardProps) => (
+const ButtonNFT = ({ children, className, tone, mode, ...rest }: ButtonNFTCardProps) => (
   <button
     className={cn(
-      "hover-shadow-sm absolute bottom-[1vw] left-[1vw] flex w-[17.6vw] items-center justify-center rounded-[0.6vw] py-[0.8vw] font-highlight text-[1.2vw] transition-colors disabled:pointer-events-none disabled:opacity-50",
+      "hover-shadow-sm flex items-center justify-center font-highlight transition-colors disabled:pointer-events-none disabled:opacity-50",
+      mode === "card" && "absolute bottom-[1vw] left-[1vw] w-[17.6vw] rounded-[0.6vw] py-[0.8vw] text-lg",
+      mode === "dialog" && "mx-auto w-[22vw] rounded-[0.7vw] py-[0.9vw] text-2xl",
       tone === "pink" && "bg-brightPink shadow-brightPink",
       tone === "blue" && "bg-brightBlue shadow-brightBlue",
       className
@@ -78,8 +66,7 @@ const ButtonNFTCard = ({
 
 type Directions = "left" | "right" | "up" | "down";
 
-interface NavigationButtonProps
-  extends React.HTMLAttributes<HTMLButtonElement> {
+interface NavigationButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   direction: Directions;
 }
 
@@ -111,4 +98,4 @@ const Chevron = ({ direction, ...rest }: ChevronProps) => {
   }
 };
 
-export { Button, ButtonNFTCard, NavigationButton };
+export { Button, ButtonNFT, NavigationButton };

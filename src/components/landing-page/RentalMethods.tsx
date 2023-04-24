@@ -36,9 +36,7 @@ const RentalMethods = () => {
       "The lenter remains in control of the NFT",
       "The renter becomes automatically unable to use the NFT once the rental period ends",
     ],
-    disadvantages: [
-      "The ecosystem will have to adopt the standard in order to become usable",
-    ],
+    disadvantages: ["The ecosystem will have to adopt the standard in order to become usable"],
   };
 
   const toggleTitle = (titleState: string) =>
@@ -88,19 +86,12 @@ interface RentalMethodProps {
   disadvantages: string[];
 }
 
-const RentalMethod = ({
-  description,
-  steps,
-  advantages,
-  disadvantages,
-}: RentalMethodProps) => (
+const RentalMethod = ({ description, steps, advantages, disadvantages }: RentalMethodProps) => (
   <ShadedBackground className="mx-auto flex w-[92vw] flex-col justify-start p-[2.25vw]">
     <p className="mb-[1.5vw] text-lg font-medium ">{description}</p>
     {steps.map((step, index) => (
       <div key={step}>
-        <h5 className="mb-[0.75vw] font-highlight text-xl ">{`Step ${
-          index + 1
-        }`}</h5>
+        <h5 className="mb-[0.75vw] font-highlight text-xl ">{`Step ${index + 1}`}</h5>
         <p className="mb-[1.5vw] text-lg font-medium ">{step}</p>
       </div>
     ))}
@@ -118,9 +109,7 @@ interface CharacteristicsProps {
 
 const Characteristics = ({ title, items }: CharacteristicsProps) => (
   <div className="w-[37.5vw]">
-    <h4 className="mb-[0.75vw] text-center font-highlight text-2xl ">
-      {title}
-    </h4>
+    <h4 className="mb-[0.75vw] text-center font-highlight text-2xl ">{title}</h4>
     {items.map((item) => (
       <p className="mb-[1vw] text-lg font-medium " key={item}>
         {item}

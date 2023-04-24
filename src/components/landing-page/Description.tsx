@@ -19,8 +19,7 @@ const Description = () => {
   const typewriterOptions = {
     delay: 65,
     cursorClassName: "hidden",
-    wrapperClassName:
-      " font-highlight font-extrabold text-[6vw] leading-[6vw] py-[1.5vh]",
+    wrapperClassName: "font-highlight font-extrabold text-[6vw] leading-[6vw] py-[1.5vh]",
   };
 
   return (
@@ -32,12 +31,10 @@ const Description = () => {
     >
       <Typewriter onInit={renderTypewriter} options={typewriterOptions} />
       <h4 className="mt-[2.5vh] text-xl leading-[1.4vw] ">
-        The NFT Renter Protocol provides a rental solution for every renter and
-        lenter.
+        The NFT Renter Protocol provides a rental solution for every renter and lenter.
         <br />
         <br />
-        Explore our collateralized and non collaterlized options and find what
-        fits you!
+        Explore our collateralized and non collaterlized options and find what fits you!
       </h4>
     </div>
   );

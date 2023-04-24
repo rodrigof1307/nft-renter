@@ -7,10 +7,7 @@ type Data = {
   error?: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { address } = req.query;
 
   if (!address || typeof address !== "string") {
@@ -24,17 +21,12 @@ export default async function handler(
     };
 
     const alchemy = new Alchemy(config);
-    const ownedNFTsBasis = (await alchemy.nft.getNftsForOwner(address))
-      .ownedNfts;
+    const ownedNFTsBasis = (await alchemy.nft.getNftsForOwner(address)).ownedNfts;
 
     const ownedNFTsMetadataPromises: Promise<Nft>[] = [];
 
     ownedNFTsBasis.forEach(({ contract, tokenId }) => {
-      const tokenData = alchemy.nft.getNftMetadata(
-        contract.address,
-        tokenId,
-        {}
-      );
+      const tokenData = alchemy.nft.getNftMetadata(contract.address, tokenId, {});
       ownedNFTsMetadataPromises.push(tokenData);
     });
 

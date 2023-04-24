@@ -40,7 +40,7 @@ const Header3 = ({ children, className, crossed, ...rest }: HeaderProps) => {
   return (
     <h3
       className={cn(
-        "relative w-fit max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-highlight text-2xl leading-[1.8vw]",
+        "relative w-fit max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-highlight text-3xl leading-[2.3vw]",
         crossed && "crossed-Subtitle",
         crossed === "pink" && "crossed-Subtitle--pink",
         crossed === "blue" && "crossed-Subtitle--blue",
@@ -53,4 +53,21 @@ const Header3 = ({ children, className, crossed, ...rest }: HeaderProps) => {
   );
 };
 
-export { Header1, Header2, Header3 };
+const Header4 = ({ children, className, crossed, ...rest }: HeaderProps) => {
+  return (
+    <h4
+      className={cn(
+        "relative w-fit max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-highlight text-2xl leading-[1.8vw]",
+        crossed && "crossed-Subtitle",
+        crossed === "pink" && "crossed-Subtitle--pink",
+        crossed === "blue" && "crossed-Subtitle--blue",
+        className
+      )}
+      {...rest}
+    >
+      {children}
+    </h4>
+  );
+};
+
+export { Header1, Header2, Header3, Header4 };

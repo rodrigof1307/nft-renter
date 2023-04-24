@@ -15,11 +15,12 @@ import { goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 
 import { cn } from "@/utils/utils";
+import { useEffect } from "react";
 
 const monumentExtended = localFont({
   src: [
     {
-      path: "./../fonts/MonumentExtended/MonumentExtended-UltraBold.otf",
+      path: "./../fonts/MonumentExtended/MonumentExtended-Ultrabold.otf",
       weight: "800",
     },
     {
@@ -53,26 +54,25 @@ const wagmiClient = createClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  console.log(Component.name);
+  // We need to add the fonts to the body so that certain Radix Primitives can use them
+  useEffect(() => {
+    document.body.classList.add(monumentExtended.variable);
+    document.body.classList.add(lora.variable);
+    document.body.classList.add("font-sans");
+    document.body.classList.add("text-white");
+  }, []);
 
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <main
           className={cn(
-            "body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw] font-sans text-white",
-            monumentExtended.variable,
-            lora.variable,
+            "body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw]",
             Component.name === "Home" && "initial-animation"
           )}
         >
           <Navbar />
-          <Lines
-            className="absolute right-0 top-0"
-            width={"28.34vw"}
-            height={"80vw"}
-            viewBox="0 0 524 1482"
-          />
+          <Lines className="absolute right-0 top-0" width={"28.34vw"} height={"80vw"} viewBox="0 0 524 1482" />
           <Component {...pageProps} />
           <Footer />
         </main>

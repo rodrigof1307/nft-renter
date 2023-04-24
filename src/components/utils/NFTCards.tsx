@@ -1,7 +1,9 @@
 import ShadedBackground from "./ShadedBackground";
-import { Header3 } from "./Headers";
-import { ButtonNFTCard } from "./Buttons";
+import { Header4 } from "./Headers";
+import { ButtonNFT } from "./Buttons";
 import Image from "next/image";
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import { NFTDialogOwned } from "../NFTDialog";
 
 import { ReactNode } from "react";
 
@@ -10,10 +12,7 @@ interface NFTLoadingCardProps {
 }
 
 const NFTLoadingCard = ({ borderTone }: NFTLoadingCardProps) => (
-  <ShadedBackground
-    borderTone={borderTone}
-    className="relative box-border h-[32vw] w-[20vw] animate-pulse p-[1vw]"
-  >
+  <ShadedBackground borderTone={borderTone} className="relative box-border h-[32vw] w-[20vw] animate-pulse p-[1vw]">
     <div className="relative h-[17.6vw] w-[17.6vw] rounded-[1vw] bg-black/25" />
     <div className="relative mb-[0.4vw] mt-[0.9vw] h-[1.7vw] w-[17.6vw] rounded-[0.25vw] bg-black/25" />
     <div className="relative h-[1vw] w-[17.6vw] rounded-[0.25vw] bg-black/25" />
@@ -28,10 +27,7 @@ interface NFTCardBasisProps {
 }
 
 const NFTCardBasis = ({ NFT, borderTone, children }: NFTCardBasisProps) => (
-  <ShadedBackground
-    borderTone={borderTone}
-    className="relative box-border h-[32vw] w-[20vw] p-[1vw]"
-  >
+  <ShadedBackground borderTone={borderTone} className="relative box-border h-[32vw] w-[20vw] p-[1vw]">
     <div className="relative h-[17.6vw] w-[17.6vw]">
       <Image
         fill
@@ -43,7 +39,7 @@ const NFTCardBasis = ({ NFT, borderTone, children }: NFTCardBasisProps) => (
         className="rounded-[1vw]"
       />
     </div>
-    <Header3 className="mb-[0.4vw] mt-[0.9vw]">{NFT.title}</Header3>
+    <Header4 className="mb-[0.4vw] mt-[0.9vw]">{NFT.title}</Header4>
     <p className="text-sm italic">{NFT.collectionName}</p>
     {children}
   </ShadedBackground>
@@ -55,15 +51,18 @@ interface NFTCardOwnedProps {
 
 const NFTCardOwned = ({ NFT }: NFTCardOwnedProps) => (
   <NFTCardBasis NFT={NFT} borderTone="blue">
-    <ButtonNFTCard tone="blue">LENT</ButtonNFTCard>
+    <AlertDialog.Root>
+      <AlertDialog.Trigger asChild>
+        <ButtonNFT tone="blue" mode="card">
+          LENT
+        </ButtonNFT>
+      </AlertDialog.Trigger>
+      <NFTDialogOwned NFT={NFT} />
+    </AlertDialog.Root>
   </NFTCardBasis>
 );
 
-type NFTsType =
-  | "myCollectionOwned"
-  | "myCollectionLented"
-  | "myCollectionRented"
-  | "marketplace";
+type NFTsType = "myCollectionOwned" | "myCollectionLented" | "myCollectionRented" | "marketplace";
 
 enum NFTsTypeColor {
   myCollectionOwned = "blue",
@@ -95,9 +94,7 @@ interface NFTsContainerProps {
 }
 
 const NFTsContainer = ({ children }: NFTsContainerProps) => (
-  <div className="mb-[3vw] mt-[2vw] grid w-full grid-cols-4 gap-y-[2.5vw]">
-    {children}
-  </div>
+  <div className="mb-[3vw] mt-[2vw] grid w-full grid-cols-4 gap-y-[2.5vw]">{children}</div>
 );
 
 interface NFTsDisplayerProps {
@@ -125,11 +122,7 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading }: NFTsDisplayerProps) => {
       ) : (
         <>
           {NFTs.map((NFT) => (
-            <NFTCard
-              NFT={NFT}
-              NFTsType={NFTsType}
-              key={NFT.address + NFT.tokenID}
-            />
+            <NFTCard NFT={NFT} NFTsType={NFTsType} key={NFT.address + NFT.tokenID} />
           ))}
         </>
       )}

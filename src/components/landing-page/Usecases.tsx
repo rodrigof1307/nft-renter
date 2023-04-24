@@ -1,8 +1,6 @@
 const Usecases = () => (
   <div className="mx-auto flex w-[55vw] flex-col items-center justify-between">
-    <h2 className="font-highlight text-3xl font-extrabold text-brightPink">
-      UTILITY AT A FRACTION OF THE COST
-    </h2>
+    <h2 className="font-highlight text-3xl font-extrabold text-brightPink">UTILITY AT A FRACTION OF THE COST</h2>
     <div className="flex w-[55vw] flex-row justify-between py-[2.5vw]">
       <Usecase title="Gaming Assets" emoji="🎮" />
       <Usecase title="Digital art" emoji="🖼" />
@@ -10,9 +8,7 @@ const Usecases = () => (
       <Usecase title="Profile Pictures" emoji="📷" />
       <Usecase title="Memberships" emoji="🗝" />
     </div>
-    <h2 className="font-highlight text-3xl font-extrabold text-brightBlue">
-      EARN PASSIVELY WHILE YOU HOLD
-    </h2>
+    <h2 className="font-highlight text-3xl font-extrabold text-brightBlue">EARN PASSIVELY WHILE YOU HOLD</h2>
   </div>
 );
 

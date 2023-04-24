@@ -27,11 +27,7 @@ const MyCollection = () => {
     <div className="px-[4vw]">
       <Header1 className="mb-[2vw]">My Collection</Header1>
       <Header2 crossed="blue">Your NFTs</Header2>
-      <NFTsDisplayer
-        NFTs={ownedNFTs.NFTs}
-        NFTsType="myCollectionOwned"
-        loading={ownedNFTs.loading}
-      />
+      <NFTsDisplayer NFTs={ownedNFTs.NFTs} NFTsType="myCollectionOwned" loading={ownedNFTs.loading} />
       <Header2 crossed="blue">On The Marketplace</Header2>
       <NFTsDisplayer NFTs={[]} NFTsType="myCollectionLented" loading={true} />
       <Header2 crossed="pink">Your Rentals</Header2>
