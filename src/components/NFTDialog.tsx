@@ -1,11 +1,18 @@
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import Image from "next/image";
 import { Header3, Header4 } from "./utils/Headers";
-import { cn } from "@/utils/utils";
+import { cn, dateFormater } from "@/utils/utils";
 import { X, ChevronLeft } from "lucide-react";
 import { ReactNode, useState } from "react";
-import { ButtonNFT } from "./utils/Buttons";
-import { NumericInput } from "./utils/Input";
+import { ButtonNFT, IconButton } from "./utils/Buttons";
+import { FilledInput, NumericInput } from "./utils/Input";
+import ShadedBackground from "./utils/ShadedBackground";
+
+const collateralizedRentDescription =
+  "On Collaterlized Rentals, the renter pays the rental value but also deposits a collateral value on an escrow smart contract in order to become the NFT owner. At the end of the rental period you are able to collect the rental value. If the renter doesn’t return the NFT before the expiration date you will be able to also collect the collateral.";
+
+const nonCollateralizedRentDescription =
+  "On Non-collaterlized Rentals, the renter pays the rental value and receives a wrapped token with the NFT properties. Your NFT remains on an escrow smart contract. Once the rental period ends you can collect the rental value and optionally also withdraw the NFT.";
 
 interface NFTDialogBasisProps {
   children: ReactNode;
@@ -59,6 +66,30 @@ const NFTDialogBasis = ({ NFT, borderTone, children }: NFTDialogBasisProps) => (
   </AlertDialog.Portal>
 );
 
+const NFTRentalKeyInformation = ({ NFT }: NFTDialogProps) => {
+  const isWithdrawable = !NFT.expirationDate || new Date().toISOString() > NFT.expirationDate;
+  const isCollateralized = NFT.collateral !== undefined;
+
+  return (
+    <>
+      <Header4 className="mx-auto mb-[1.5vw]">
+        {isCollateralized ? "Collateralized Rental" : "Non-Collateralized Rental"}
+      </Header4>
+      <p className="mb-[1.5vw]">
+        {isCollateralized ? collateralizedRentDescription : nonCollateralizedRentDescription}
+      </p>
+      <FilledInput label="Rent Rate:" value={NFT.rentRate?.toString()} unit="ETH/HOUR" />
+      <FilledInput label="Collateral:" value={NFT.collateral?.toString()} unit="ETH" />
+      {!isWithdrawable && (
+        <FilledInput label="Expires on:" value={dateFormater(NFT.expirationDate)} unit="" size="sm" />
+      )}
+      {!isWithdrawable && (
+        <FilledInput label="Total rent period:" value={NFT.rentPeriod?.toString()} unit="DAYS" size="sm" />
+      )}
+    </>
+  );
+};
+
 interface NFTDialogProps {
   NFT: NFTInfo;
 }
@@ -75,12 +106,7 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
           <Header4 className="mx-auto mb-[1.5vw]">Choose your option</Header4>
           <div className="flex flex-1 flex-col justify-between">
             <Header4 className="mx-auto">Collateralized Rental</Header4>
-            <p>
-              On Collaterlized Rentals, the renter pays the rental value but also deposits a collateral value on an
-              escrow smart contract in order to become the NFT owner. At the end of the rental period you are able to
-              collect the rental value. If the renter doesn’t return the NFT before the expiration date you will be able
-              to also collect the collateral.
-            </p>
+            <p>{collateralizedRentDescription}</p>
             <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("collateralized")}>
               SELECT
             </ButtonNFT>
@@ -88,11 +114,7 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
           <div className="my-[1.5vw] h-[0.1vw] w-full bg-brightBlue" />
           <div className="flex flex-1 flex-col justify-between">
             <Header4 className="mx-auto">Non-Collateralized Rental</Header4>
-            <p>
-              On Non-collaterlized Rentals, the renter pays the rental value and receives a wrapped token with the NFT
-              properties. Your NFT remains on an escrow smart contract. Once the rental period ends you can collect the
-              rental value and optionally also withdraw the NFT.
-            </p>
+            <p>{nonCollateralizedRentDescription}</p>
             <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("nonCollateralized")}>
               SELECT
             </ButtonNFT>
@@ -105,13 +127,8 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
             <ChevronLeft size={"2.2vw"} color="white" className="absolute left-0 top-0 hover:cursor-pointer" />
           </button>
           <Header4 className="mx-auto mb-[1.5vw]">Collateralized Rental</Header4>
-          <p className="mb-[1.5vw]">
-            On Collaterlized Rentals, the renter pays the rental value but also deposits a collateral value on an escrow
-            smart contract in order to become the NFT owner. At the end of the rental period you are able to collect the
-            rental value. If the renter doesn’t return the NFT before the expiration date you will be able to also
-            collect the collateral.
-          </p>
-          <NumericInput label="Rent Rate:" unit="ETH/DAY" value={rentRate} setterFunction={setRentRate} />
+          <p className="mb-[1.5vw]">{collateralizedRentDescription}</p>
+          <NumericInput label="Rent Rate:" unit="ETH/HOUR" value={rentRate} setterFunction={setRentRate} />
           <NumericInput label="Collateral:" unit="ETH" value={collateral} setterFunction={setCollateral} />
           <ButtonNFT
             tone={"blue"}
@@ -129,12 +146,8 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
             <ChevronLeft size={"2.2vw"} color="white" className="absolute left-0 top-0 hover:cursor-pointer" />
           </button>
           <Header4 className="mx-auto mb-[1.5vw]">Non-Collateralized Rental</Header4>
-          <p className="mb-[1.5vw]">
-            On Non-collaterlized Rentals, the renter pays the rental value and receives a wrapped token with the NFT
-            properties. Your NFT remains on an escrow smart contract. Once the rental period ends you can collect the
-            rental value and optionally also withdraw the NFT.
-          </p>
-          <NumericInput label="Rent Rate:" unit="ETH/DAY" value={rentRate} setterFunction={setRentRate} />
+          <p className="mb-[1.5vw]">{nonCollateralizedRentDescription}</p>
+          <NumericInput label="Rent Rate:" unit="ETH/HOUR" value={rentRate} setterFunction={setRentRate} />
           <ButtonNFT
             tone={"blue"}
             mode="dialog"
@@ -149,4 +162,103 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
   );
 };
 
-export { NFTDialogOwned };
+const NFTDialogLented = ({ NFT }: NFTDialogProps) => {
+  const isWithdrawable = !NFT.expirationDate || new Date().toISOString() > NFT.expirationDate;
+
+  return (
+    <NFTDialogBasis NFT={NFT} borderTone="blue">
+      <NFTRentalKeyInformation NFT={NFT} />
+      {isWithdrawable ? (
+        <ButtonNFT tone={"blue"} mode="dialog" className="absolute bottom-0 left-[50%] translate-x-[-50%]">
+          WITHDRAW
+        </ButtonNFT>
+      ) : (
+        <p className="absolute bottom-[1.5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+          Since this NFT is currently rented you are unable to withdraw it
+        </p>
+      )}
+    </NFTDialogBasis>
+  );
+};
+
+const NFTDialogRented = ({ NFT }: NFTDialogProps) => {
+  return (
+    <NFTDialogBasis NFT={NFT} borderTone="pink">
+      <NFTRentalKeyInformation NFT={NFT} />
+      {!NFT.collateral ? (
+        <ButtonNFT tone={"pink"} mode="dialog" className="absolute bottom-0 left-[50%] translate-x-[-50%]">
+          RETURN
+        </ButtonNFT>
+      ) : (
+        <p className="absolute bottom-[1.5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+          Once the rental period is over your wrapped token will become automatically invalid
+        </p>
+      )}
+    </NFTDialogBasis>
+  );
+};
+
+const NFTDialogMarketplace = ({ NFT }: NFTDialogProps) => {
+  const [rentHours, setRentHours] = useState<number | undefined>(1);
+
+  const handleRentHoursChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === "") {
+      setRentHours(undefined);
+      return;
+    }
+    if (!Number(event.target.value)) {
+      setRentHours((prev) => prev);
+      return;
+    }
+    setRentHours(Number(event.target.value));
+  };
+
+  const decreaseRentHours = () => {
+    if (rentHours === undefined || rentHours === 1) {
+      return;
+    }
+    // We can use the nullish coalescing operator here because we know that rentHours is not undefined
+    setRentHours((prev) => prev! - 1);
+  };
+
+  const increaseRentHours = () => {
+    if (rentHours === undefined) {
+      setRentHours(1);
+      return;
+    }
+    // We can use the nullish coalescing operator here because we know that rentHours is not undefined
+    setRentHours((prev) => prev! + 1);
+  };
+
+  const calculateTotalValue = () => ((rentHours ?? 0) * (NFT.rentRate ?? 0) + (NFT.collateral ?? 0)).toFixed(2);
+
+  return (
+    <NFTDialogBasis NFT={NFT} borderTone="pink">
+      <NFTRentalKeyInformation NFT={NFT} />
+      <p className="mx-auto py-[1.5vw] text-lg">{"Rent period (hours)"}</p>
+      <div className="mx-auto flex w-[13vw] flex-row items-center justify-between">
+        <IconButton iconType="minus" onClick={decreaseRentHours} />
+        <ShadedBackground className="flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.6vw] border-[0.15vw] bg-black/25 bg-none">
+          <input
+            value={rentHours ?? ""}
+            type={"string"}
+            onChange={handleRentHoursChange}
+            className="w-[3.5vw] bg-transparent text-center font-highlight text-2xl outline-none"
+          />
+        </ShadedBackground>
+        <IconButton iconType="plus" onClick={increaseRentHours} />
+      </div>
+      <FilledInput
+        className="absolute bottom-[5vw] left-0"
+        label="Total Value:"
+        unit="ETH"
+        value={calculateTotalValue()}
+      />
+      <ButtonNFT tone={"pink"} mode="dialog" className="absolute bottom-0 left-[50%] translate-x-[-50%]">
+        RENT
+      </ButtonNFT>
+    </NFTDialogBasis>
+  );
+};
+
+export { NFTDialogOwned, NFTDialogLented, NFTDialogRented, NFTDialogMarketplace };

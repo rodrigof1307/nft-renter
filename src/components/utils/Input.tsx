@@ -1,27 +1,30 @@
-import { SetStateAction } from "react";
-import { Dispatch } from "react";
+import { SetStateAction, Dispatch } from "react";
+import { cn } from "@/utils/utils";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FilledInputProps {
+  label: string;
+  value?: string;
+  unit: string;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}
+
+interface NumericInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   unit: string;
   setterFunction: Dispatch<SetStateAction<number | undefined>>;
 }
 
-const NumericInput = ({ label, unit, setterFunction, ...rest }: InputProps) => {
+const NumericInput = ({ label, unit, setterFunction, ...rest }: NumericInputProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    console.log(Number(event.target.value));
     if (event.target.value === "") {
-      console.log("extra");
       setterFunction(undefined);
       return;
     }
     if (!Number(event.target.value)) {
-      console.log("entrei");
       setterFunction((prev) => prev);
       return;
     }
-    console.log("normal");
     setterFunction(Number(event.target.value));
   };
 
@@ -33,11 +36,26 @@ const NumericInput = ({ label, unit, setterFunction, ...rest }: InputProps) => {
         value={rest.value ? rest.value : ""}
         type={"string"}
         onChange={handleInputChange}
-        className="mx-[0.5vw] w-[3.5vw] border-0 border-b-[0.2vw] bg-transparent pb-[0.1vw] text-center font-highlight outline-none"
+        className={cn(
+          "mx-[0.5vw] w-[3.5vw] border-0 border-b-[0.2vw] bg-transparent pb-[0.1vw] text-center font-highlight outline-none",
+          rest.className
+        )}
       />
       <span className="font-highlight">{unit}</span>
     </p>
   );
 };
 
-export { NumericInput };
+const FilledInput = ({ label, value, unit, size, className }: FilledInputProps) => {
+  if (!value) return <></>;
+
+  return (
+    // eslint-disable-next-line tailwindcss/classnames-order, tailwindcss/no-custom-classname
+    <p className={cn(`my-[0.4vw] text-${size ?? "lg"}`, className)}>
+      {label}
+      <span className="font-highlight">{` ${value} ${unit}`}</span>
+    </p>
+  );
+};
+
+export { NumericInput, FilledInput };

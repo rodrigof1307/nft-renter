@@ -1,5 +1,5 @@
 import { Header1, Header2 } from "@/components/utils/Headers";
-import NFTsDisplayer from "@/components/utils/NFTCards";
+import NFTsDisplayer from "@/components/NFTCardDisplayer";
 
 const Marketplace = () => {
   return (

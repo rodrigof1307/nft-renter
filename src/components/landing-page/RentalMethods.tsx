@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Carousel, { ControlProps } from "nuka-carousel";
-import { NavigationButton } from "../utils/Buttons";
+import { IconButton } from "../utils/Buttons";
 import { Header1, Header2 } from "../utils/Headers";
 import ShadedBackground from "../utils/ShadedBackground";
 
@@ -44,15 +44,15 @@ const RentalMethods = () => {
 
   const topRightControls = (props: ControlProps) => (
     <div className="mr-[4vw] mt-[-4.25vw] flex w-[7vw] flex-row items-center justify-between">
-      <NavigationButton
-        direction={"left"}
+      <IconButton
+        iconType={"chevronLeft"}
         onClick={() => {
           setTitle(toggleTitle);
           props.previousSlide();
         }}
       />
-      <NavigationButton
-        direction={"right"}
+      <IconButton
+        iconType={"chevronRight"}
         onClick={() => {
           setTitle(toggleTitle);
           props.nextSlide();

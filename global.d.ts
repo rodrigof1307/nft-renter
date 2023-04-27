@@ -6,4 +6,10 @@ interface NFTInfo {
   description: string;
   image?: string;
   attributes?: Record<string, any>[];
+  rentRate?: number;
+  collateral?: number;
+  expirationDate?: string;
+  rentPeriod?: number;
 }
+
+type NFTsType = "myCollectionOwned" | "myCollectionLented" | "myCollectionRented" | "marketplace";

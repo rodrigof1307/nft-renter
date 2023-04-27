@@ -1,6 +1,6 @@
-import * as React from "react";
 import { VariantProps, cva } from "class-variance-authority";
-import { ChevronRight, ChevronLeft, ChevronDown, ChevronUp, LucideProps } from "lucide-react";
+import { ChevronRight, ChevronLeft, ChevronDown, ChevronUp, Plus, Minus, LucideProps } from "lucide-react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 
 import { cn } from "../../utils/utils";
 
@@ -32,18 +32,14 @@ const buttonVariants = cva(
   }
 );
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {}
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, tone, roundness, size, ...props }, ref) => (
-    <button className={cn(buttonVariants({ tone, roundness, className, size }))} ref={ref} {...props} />
-  )
-);
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, tone, roundness, size, ...props }, ref) => (
+  <button className={cn(buttonVariants({ tone, roundness, className, size }))} ref={ref} {...props} />
+));
 Button.displayName = "Button";
 
-interface ButtonNFTCardProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface ButtonNFTCardProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   tone: "blue" | "pink";
   mode: "card" | "dialog";
 }
@@ -64,38 +60,42 @@ const ButtonNFT = ({ children, className, tone, mode, ...rest }: ButtonNFTCardPr
   </button>
 );
 
-type Directions = "left" | "right" | "up" | "down";
+type IconType = "chevronLeft" | "chevronRight" | "chevronUp" | "chevronDown" | "plus" | "minus";
 
-interface NavigationButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  direction: Directions;
+interface IconButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+  iconType: IconType;
 }
 
-const NavigationButton = ({ direction, ...rest }: NavigationButtonProps) => (
+const IconButton = ({ iconType, ...rest }: IconButtonProps) => (
   <button
     {...rest}
     className="flex h-[3vw] w-[3vw] items-center justify-center rounded-[0.6vw] border-[0.15vw] border-darkPurple bg-black/25"
   >
-    <Chevron direction={direction} size={"2.2vw"} color="white" />
+    <Icon iconType={iconType} size={"2.2vw"} color="white" />
   </button>
 );
 
-interface ChevronProps extends LucideProps {
-  direction: Directions;
+interface IconProps extends LucideProps {
+  iconType: IconType;
 }
 
-const Chevron = ({ direction, ...rest }: ChevronProps) => {
-  switch (direction) {
-    case "left":
+const Icon = ({ iconType, ...rest }: IconProps) => {
+  switch (iconType) {
+    case "chevronLeft":
       return <ChevronLeft {...rest} />;
-    case "right":
+    case "chevronRight":
       return <ChevronRight {...rest} />;
-    case "up":
+    case "chevronUp":
       return <ChevronUp {...rest} />;
-    case "down":
+    case "chevronDown":
       return <ChevronDown {...rest} />;
+    case "plus":
+      return <Plus {...rest} />;
+    case "minus":
+      return <Minus {...rest} />;
     default:
       return <></>;
   }
 };
 
-export { Button, ButtonNFT, NavigationButton };
+export { Button, ButtonNFT, IconButton };

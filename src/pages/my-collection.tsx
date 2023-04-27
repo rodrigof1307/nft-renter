@@ -4,7 +4,7 @@ import { Header1, Header2 } from "@/components/utils/Headers";
 import { useAccount } from "wagmi";
 
 import axios from "axios";
-import NFTsDisplayer from "@/components/utils/NFTCards";
+import NFTsDisplayer from "@/components/NFTCardDisplayer";
 
 const MyCollection = () => {
   const { address } = useAccount();
