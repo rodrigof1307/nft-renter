@@ -19,9 +19,9 @@ const buttonVariants = cva(
         standard: "rounded-md",
       },
       size: {
-        small: "hover-shadow-sm px-[1vw] py-[0.36vw] text-[0.4vw]",
-        medium: "hover-shadow-md px-[3vw] py-[1.08vw] text-[1.2vw]",
-        large: "hover-shadow-lg px-[4.5vw] py-[1.62vw] text-[1.8vw]",
+        small: "hover-shadow-sm px-[1vw] py-[0.36vw] text-[0.4vw] leading-[0.6vw]",
+        medium: "hover-shadow-md px-[3vw] py-[1.08vw] text-[1.2vw] leading-[1.4vw]",
+        large: "hover-shadow-lg px-[4.5vw] py-[1.62vw] text-[1.8vw] leading-[2vw]",
       },
     },
     defaultVariants: {

@@ -60,6 +60,7 @@ export default function App({ Component, pageProps }: AppProps) {
     document.body.classList.add(lora.variable);
     document.body.classList.add("font-sans");
     document.body.classList.add("text-white");
+    document.body.classList.add("text-md");
   }, []);
 
   return (

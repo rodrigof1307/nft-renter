@@ -2,9 +2,10 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import Image from "next/image";
 import { Header3, Header4 } from "./utils/Headers";
 import { cn } from "@/utils/utils";
-import { X } from "lucide-react";
+import { X, ChevronLeft } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { ButtonNFT } from "./utils/Buttons";
+import { NumericInput } from "./utils/Input";
 
 interface NFTDialogBasisProps {
   children: ReactNode;
@@ -52,7 +53,7 @@ const NFTDialogBasis = ({ NFT, borderTone, children }: NFTDialogBasisProps) => (
         <AlertDialog.Cancel asChild>
           <X size={"2.2vw"} color="white" className="absolute right-0 top-0 hover:cursor-pointer" />
         </AlertDialog.Cancel>
-        {children}
+        <div className="flex h-full w-full flex-col justify-start pt-[2.5vw]">{children}</div>
       </div>
     </AlertDialog.Content>
   </AlertDialog.Portal>
@@ -64,54 +65,85 @@ interface NFTDialogProps {
 
 const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
   const [selectedOption, setSelectedOption] = useState<"collateralized" | "nonCollateralized" | undefined>();
+  const [rentRate, setRentRate] = useState<number | undefined>();
+  const [collateral, setCollateral] = useState<number | undefined>();
 
   return (
     <NFTDialogBasis NFT={NFT} borderTone="blue">
       {!selectedOption && (
-        <div className="flex w-full flex-col justify-start pt-[2.5vw]">
-          <Header4 className="mx-auto mb-[1vw]">Choose your option</Header4>
-          <Header4 className="mx-auto">Collateralized Rental</Header4>
-          <p className="my-[1vw]">
-            On Collaterlized Rentals, the renter pays the rental value but also deposits a collateral value on an escrow
-            smart contract in order to become the NFT owner. At the end of the rental period you are able to collect the
-            rental value. If the renter doesn’t return the NFT before the expiration date you will be able to also
-            collect the collateral.
-          </p>
-          <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("collateralized")}>
-            SELECT
-          </ButtonNFT>
+        <>
+          <Header4 className="mx-auto mb-[1.5vw]">Choose your option</Header4>
+          <div className="flex flex-1 flex-col justify-between">
+            <Header4 className="mx-auto">Collateralized Rental</Header4>
+            <p>
+              On Collaterlized Rentals, the renter pays the rental value but also deposits a collateral value on an
+              escrow smart contract in order to become the NFT owner. At the end of the rental period you are able to
+              collect the rental value. If the renter doesn’t return the NFT before the expiration date you will be able
+              to also collect the collateral.
+            </p>
+            <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("collateralized")}>
+              SELECT
+            </ButtonNFT>
+          </div>
           <div className="my-[1.5vw] h-[0.1vw] w-full bg-brightBlue" />
-          <Header4 className="mx-auto">Non-Collateralized Rental</Header4>
-          <p className="my-[1vw]">
-            On Non-collaterlized Rentals, the renter pays the rental value and receives a wrapped token with the NFT
-            properties. Your NFT remains on an escrow smart contract. Once the rental period ends you can collect the
-            rental value and optionally also withdraw the NFT.
-          </p>
-          <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("nonCollateralized")}>
-            SELECT
-          </ButtonNFT>
-        </div>
+          <div className="flex flex-1 flex-col justify-between">
+            <Header4 className="mx-auto">Non-Collateralized Rental</Header4>
+            <p>
+              On Non-collaterlized Rentals, the renter pays the rental value and receives a wrapped token with the NFT
+              properties. Your NFT remains on an escrow smart contract. Once the rental period ends you can collect the
+              rental value and optionally also withdraw the NFT.
+            </p>
+            <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("nonCollateralized")}>
+              SELECT
+            </ButtonNFT>
+          </div>
+        </>
       )}
       {selectedOption === "collateralized" && (
-        <div className="flex w-full flex-col justify-start pt-[2.5vw]">
-          <Header4 className="mx-auto">Collateralized Rental</Header4>
-          <p className="my-[1vw]">
+        <>
+          <button onClick={() => setSelectedOption(undefined)}>
+            <ChevronLeft size={"2.2vw"} color="white" className="absolute left-0 top-0 hover:cursor-pointer" />
+          </button>
+          <Header4 className="mx-auto mb-[1.5vw]">Collateralized Rental</Header4>
+          <p className="mb-[1.5vw]">
             On Collaterlized Rentals, the renter pays the rental value but also deposits a collateral value on an escrow
             smart contract in order to become the NFT owner. At the end of the rental period you are able to collect the
             rental value. If the renter doesn’t return the NFT before the expiration date you will be able to also
             collect the collateral.
           </p>
-        </div>
+          <NumericInput label="Rent Rate:" unit="ETH/DAY" value={rentRate} setterFunction={setRentRate} />
+          <NumericInput label="Collateral:" unit="ETH" value={collateral} setterFunction={setCollateral} />
+          <ButtonNFT
+            tone={"blue"}
+            mode="dialog"
+            className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+            onClick={() => setSelectedOption("nonCollateralized")}
+          >
+            LENT
+          </ButtonNFT>
+        </>
       )}
       {selectedOption === "nonCollateralized" && (
-        <div className="flex w-full flex-col justify-start pt-[2.5vw]">
-          <Header4 className="mx-auto">Non-Collateralized Rental</Header4>
-          <p className="my-[1vw]">
+        <>
+          <button onClick={() => setSelectedOption(undefined)}>
+            <ChevronLeft size={"2.2vw"} color="white" className="absolute left-0 top-0 hover:cursor-pointer" />
+          </button>
+          <Header4 className="mx-auto mb-[1.5vw]">Non-Collateralized Rental</Header4>
+          <p className="mb-[1.5vw]">
             On Non-collaterlized Rentals, the renter pays the rental value and receives a wrapped token with the NFT
             properties. Your NFT remains on an escrow smart contract. Once the rental period ends you can collect the
             rental value and optionally also withdraw the NFT.
           </p>
-        </div>
+          <NumericInput label="Rent Rate:" unit="ETH/DAY" value={rentRate} setterFunction={setRentRate} />
+          <ButtonNFT
+            tone={"blue"}
+            mode="dialog"
+            className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+            onClick={() => setSelectedOption("nonCollateralized")}
+          >
+            LENT
+          </ButtonNFT>
+        </>
       )}
     </NFTDialogBasis>
   );

@@ -17,7 +17,6 @@ const MyCollection = () => {
   useEffect(() => {
     if (address) {
       axios.get(`/api/fetchOwnedNFTs?address=${address}`).then((res) => {
-        console.log(res);
         setOwnedNFTs({ NFTs: res.data.ownedNFTs, loading: false });
       });
     }
@@ -29,9 +28,9 @@ const MyCollection = () => {
       <Header2 crossed="blue">Your NFTs</Header2>
       <NFTsDisplayer NFTs={ownedNFTs.NFTs} NFTsType="myCollectionOwned" loading={ownedNFTs.loading} />
       <Header2 crossed="blue">On The Marketplace</Header2>
-      <NFTsDisplayer NFTs={[]} NFTsType="myCollectionLented" loading={true} />
+      <NFTsDisplayer NFTs={[]} NFTsType="myCollectionLented" loading={false} />
       <Header2 crossed="pink">Your Rentals</Header2>
-      <NFTsDisplayer NFTs={[]} NFTsType="myCollectionRented" loading={true} />
+      <NFTsDisplayer NFTs={[]} NFTsType="myCollectionRented" loading={false} />
     </div>
   );
 };

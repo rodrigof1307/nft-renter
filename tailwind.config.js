@@ -24,14 +24,14 @@ module.exports = {
         sans: ["var(--font-lora)"],
       },
       fontSize: {
-        sm: ["1vw", { lineHeight: "1vw" }],
-        md: ["1.1vw", { lineHeight: "1.1vw" }],
-        lg: ["1.25vw", { lineHeight: "1.25vw" }],
-        xl: ["1.4vw", { lineHeight: "1.4vw" }],
-        "2xl": ["1.7vw", { lineHeight: "1.7vw" }],
-        "3xl": ["2.1vw", { lineHeight: "2.1vw" }],
-        "4xl": ["2.5vw", { lineHeight: "2.5vw" }],
-        "5xl": ["3vw", { lineHeight: "3vw" }],
+        sm: ["1vw", { lineHeight: "1.2vw" }],
+        md: ["1.1vw", { lineHeight: "1.3vw" }],
+        lg: ["1.25vw", { lineHeight: "1.45vw" }],
+        xl: ["1.4vw", { lineHeight: "1.6vw" }],
+        "2xl": ["1.7vw", { lineHeight: "1.9vw" }],
+        "3xl": ["2.1vw", { lineHeight: "2.3vw" }],
+        "4xl": ["2.5vw", { lineHeight: "2.7vw" }],
+        "5xl": ["3vw", { lineHeight: "3.2vw" }],
       },
       keyframes: {
         overlayShow: {

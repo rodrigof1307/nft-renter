@@ -1,9 +1,10 @@
 import ShadedBackground from "./ShadedBackground";
-import { Header4 } from "./Headers";
+import { Header3, Header4 } from "./Headers";
 import { ButtonNFT } from "./Buttons";
 import Image from "next/image";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { NFTDialogOwned } from "../NFTDialog";
+import { useAccount } from "wagmi";
 
 import { ReactNode } from "react";
 
@@ -104,6 +105,29 @@ interface NFTsDisplayerProps {
 }
 
 const NFTsDisplayer = ({ NFTs, NFTsType, loading }: NFTsDisplayerProps) => {
+  const { address } = useAccount();
+
+  const notAvailableMessage = () => {
+    switch (NFTsType) {
+      case "myCollectionOwned":
+        return "You don't own any NFTs";
+      case "myCollectionLented":
+        return "You haven't lent any NFTs";
+      case "myCollectionRented":
+        return "You haven't rented any NFTs";
+      case "marketplace":
+        return "No NFTs are available for rent";
+    }
+  };
+
+  if (!address && NFTsType !== "marketplace") {
+    return (
+      <div className="flex items-center justify-center py-[11vw]">
+        <Header3>Connect your wallet to see your NFTs</Header3>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <NFTsContainer>
@@ -115,17 +139,19 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading }: NFTsDisplayerProps) => {
     );
   }
 
+  if (NFTs.length === 0) {
+    return (
+      <div className="flex items-center justify-center py-[11vw]">
+        <Header3>{notAvailableMessage()}</Header3>
+      </div>
+    );
+  }
+
   return (
     <NFTsContainer>
-      {NFTs.length === 0 ? (
-        <p>Teste</p>
-      ) : (
-        <>
-          {NFTs.map((NFT) => (
-            <NFTCard NFT={NFT} NFTsType={NFTsType} key={NFT.address + NFT.tokenID} />
-          ))}
-        </>
-      )}
+      {NFTs.map((NFT) => (
+        <NFTCard NFT={NFT} NFTsType={NFTsType} key={NFT.address + NFT.tokenID} />
+      ))}
     </NFTsContainer>
   );
 };
