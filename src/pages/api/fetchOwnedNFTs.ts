@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   try {
     const config = {
-      apiKey: process.env.ALCHEMY_API_KEY,
-      network: Network.ETH_GOERLI,
+      apiKey: process.env.ALCHEMY_API_KEY_SEPOLIA,
+      network: Network.ETH_SEPOLIA,
     };
 
     const alchemy = new Alchemy(config);
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           tokenID: parseFloat(tokenData.tokenId),
           title: tokenData.rawMetadata?.name,
           description: tokenData.rawMetadata?.description,
-          image: tokenData.media[0].thumbnail,
+          image: tokenData.rawMetadata?.image,
           attributes: tokenData.rawMetadata?.attributes,
         } as NFTInfo)
     );

@@ -12,7 +12,7 @@ async function main() {
   const accounts = await hre.ethers.getSigners();
 
   const contract = await (
-    await ethers.getContractAt("CollateralizedRentHolder", "0xaAFeb2331fD01Da16ea4c64a0c94173875c855E0")
+    await ethers.getContractAt("CollateralizedRentHolder", "0xb90616E3a7d8e0c9626d52Ea6b4df3Fef3BAF43D")
   ).connect(accounts[1]);
   const response = await contract.rent(2, { value: ethers.utils.parseEther("0.12") });
   console.log(response);

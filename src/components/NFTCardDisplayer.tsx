@@ -19,7 +19,7 @@ const NFTsContainer = ({ children }: NFTsContainerProps) => (
 );
 
 interface NFTsDisplayerProps {
-  NFTs: NFTInfo[];
+  NFTs?: NFTInfo[];
   NFTsType: NFTsType;
   loading: boolean;
 }
@@ -59,7 +59,7 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading }: NFTsDisplayerProps) => {
     );
   }
 
-  if (NFTs.length === 0) {
+  if (!NFTs || NFTs.length === 0) {
     return (
       <div className="flex items-center justify-center py-[11vw]">
         <Header3>{notAvailableMessage()}</Header3>

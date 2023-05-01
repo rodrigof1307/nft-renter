@@ -1,4 +1,5 @@
 interface NFTInfo {
+  rentSCAddress?: string;
   address: string;
   collectionName?: string;
   tokenID: number;

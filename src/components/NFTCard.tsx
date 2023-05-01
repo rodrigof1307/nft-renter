@@ -5,6 +5,8 @@ import Image from "next/image";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { NFTDialogLented, NFTDialogMarketplace, NFTDialogOwned, NFTDialogRented } from "./NFTDialog";
 import { dateFormater } from "@/utils/utils";
+import { useContractRead, erc721ABI } from "wagmi";
+import { ethers } from "ethers";
 
 import { ReactNode } from "react";
 import { FilledInput } from "./utils/Input";
@@ -29,7 +31,8 @@ interface NFTCardBasisProps {
 }
 
 const NFTCardBasis = ({ NFT, borderTone, children }: NFTCardBasisProps) => {
-  const isWithdrawable = !NFT.expirationDate || new Date().toISOString() > NFT.expirationDate;
+  const showDate =
+    NFT.expirationDate && NFT.expirationDate !== "0" && (NFT.collateral || NFT.expirationDate < Date.now().toString());
 
   return (
     <ShadedBackground borderTone={borderTone} className="relative box-border h-[33vw] w-[20vw] p-[1vw]">
@@ -48,9 +51,7 @@ const NFTCardBasis = ({ NFT, borderTone, children }: NFTCardBasisProps) => {
       <p className="text-sm italic">{NFT.collectionName}</p>
       <FilledInput label="Rent Rate:" value={NFT.rentRate?.toString()} unit="ETH/HOUR" size="sm" />
       <FilledInput label="Collateral:" value={NFT.collateral?.toString()} unit="ETH" size="sm" />
-      {!isWithdrawable && (
-        <FilledInput label="Expires on:" value={dateFormater(NFT.expirationDate)} unit="" size="sm" />
-      )}
+      {showDate && <FilledInput label="Expires on:" value={dateFormater(NFT.expirationDate)} unit="" size="sm" />}
       {children}
     </ShadedBackground>
   );
@@ -74,14 +75,32 @@ const NFTCardOwned = ({ NFT }: NFTCardProps) => (
 );
 
 const NFTCardLented = ({ NFT }: NFTCardProps) => {
-  const isWithdrawable = !NFT.expirationDate || new Date().toISOString() > NFT.expirationDate;
+  const { data: dataERC721 } = useContractRead({
+    address: NFT.address as `0x${string}`,
+    abi: erc721ABI,
+    functionName: "ownerOf",
+    args: [ethers.BigNumber.from(NFT.tokenID)],
+  });
+
+  const actionTitle = () => {
+    if (
+      (NFT.collateral && dataERC721 === NFT.rentSCAddress) ||
+      (!NFT.collateral && Date.now().toString() > (NFT.expirationDate ?? "0"))
+    ) {
+      return "WITHDRAW";
+    }
+    if (NFT.collateral && NFT.expirationDate && Date.now().toString() > NFT.expirationDate) {
+      return "CLAIM";
+    }
+    return "INFO";
+  };
 
   return (
     <NFTCardBasis NFT={NFT} borderTone="blue">
       <AlertDialog.Root>
         <AlertDialog.Trigger asChild>
           <ButtonNFT tone="blue" mode="card">
-            {isWithdrawable ? "WITHDRAW" : "INFO"}
+            {actionTitle()}
           </ButtonNFT>
         </AlertDialog.Trigger>
         <NFTDialogLented NFT={NFT} />

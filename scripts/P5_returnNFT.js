@@ -9,9 +9,16 @@ const hre = require("hardhat");
 const { ethers } = require("hardhat");
 
 async function main() {
-  const contract = await ethers.getContractAt("CollateralizedRentHolder", "0xaAFeb2331fD01Da16ea4c64a0c94173875c855E0");
-  const response = await contract.withdrawNFT();
+  const accounts = await hre.ethers.getSigners();
 
+  const contract = await (
+    await ethers.getContractAt("CollateralizedRentHolder", "0xC8C81f0F7dDA2D7B381BB38903334f0262E96217")
+  ).connect(accounts[1]);
+  const nftContract = (await ethers.getContractAt("ERC721", "0xAdcADdC64E5a4B3E1358dBc85f0E2699226f2c04")).connect(
+    accounts[1]
+  );
+  await nftContract.approve(contract.address, 5);
+  const response = await contract.returnNFT();
   console.log(response);
 }
 

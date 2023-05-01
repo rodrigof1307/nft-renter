@@ -5,8 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const dateFormater = (isoDate?: string) => {
-  if (!isoDate) return "";
-  const date = new Date(isoDate);
+export const dateFormater = (epochs?: string) => {
+  if (!epochs) return "";
+  const date = new Date(parseFloat(epochs));
   return `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 };

@@ -7,12 +7,310 @@ import { ReactNode, useState } from "react";
 import { ButtonNFT, IconButton } from "./utils/Buttons";
 import { FilledInput, NumericInput } from "./utils/Input";
 import ShadedBackground from "./utils/ShadedBackground";
+import { usePrepareContractWrite, useContractWrite, erc721ABI, useContractRead } from "wagmi";
+import { ethers } from "ethers";
+import { useQueryClient } from "react-query";
 
 const collateralizedRentDescription =
   "On Collaterlized Rentals, the renter pays the rental value but also deposits a collateral value on an escrow smart contract in order to become the NFT owner. At the end of the rental period you are able to collect the rental value. If the renter doesn’t return the NFT before the expiration date you will be able to also collect the collateral.";
 
 const nonCollateralizedRentDescription =
   "On Non-collaterlized Rentals, the renter pays the rental value and receives a wrapped token with the NFT properties. Your NFT remains on an escrow smart contract. Once the rental period ends you can collect the rental value and optionally also withdraw the NFT.";
+
+const collateralizedRentHolderSCAbi = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_nftAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_nftID",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_ratePerHour",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_collateralValue",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_newRatePerHour",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_newCollateralValue",
+        type: "uint256",
+      },
+    ],
+    name: "changeRentalValues",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "claimCollateral",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "collateralValue",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "currRentEndDate",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "currRentPeriod",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "currRenter",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "feeCollector",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "feePercentage",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getCurrentNFTOwner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "nftAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "nftId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "nftOwner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "publishNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ratePerHour",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint8",
+        name: "_hours",
+        type: "uint8",
+      },
+    ],
+    name: "rent",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "returnNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "returnRentInfo",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "rentHolderSC",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "nftOwner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "nftAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "nftId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "ratePerHour",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "collateralValue",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "currRenter",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "currRentEndDate",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "currRentPeriod",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct CollateralizedRentHolder.relevantRentInfo",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
+  },
+] as const;
 
 interface NFTDialogBasisProps {
   children: ReactNode;
@@ -67,7 +365,8 @@ const NFTDialogBasis = ({ NFT, borderTone, children }: NFTDialogBasisProps) => (
 );
 
 const NFTRentalKeyInformation = ({ NFT }: NFTDialogProps) => {
-  const isWithdrawable = !NFT.expirationDate || new Date().toISOString() > NFT.expirationDate;
+  const showDate =
+    NFT.expirationDate && NFT.expirationDate !== "0" && (NFT.collateral || NFT.expirationDate < Date.now().toString());
   const isCollateralized = NFT.collateral !== undefined;
 
   return (
@@ -80,12 +379,8 @@ const NFTRentalKeyInformation = ({ NFT }: NFTDialogProps) => {
       </p>
       <FilledInput label="Rent Rate:" value={NFT.rentRate?.toString()} unit="ETH/HOUR" />
       <FilledInput label="Collateral:" value={NFT.collateral?.toString()} unit="ETH" />
-      {!isWithdrawable && (
-        <FilledInput label="Expires on:" value={dateFormater(NFT.expirationDate)} unit="" size="sm" />
-      )}
-      {!isWithdrawable && (
-        <FilledInput label="Total rent period:" value={NFT.rentPeriod?.toString()} unit="DAYS" size="sm" />
-      )}
+      {showDate && <FilledInput label="Expires on:" value={dateFormater(NFT.expirationDate)} unit="" />}
+      {showDate && <FilledInput label="Total rent period:" value={NFT.rentPeriod?.toString()} unit="HOURS" />}
     </>
   );
 };
@@ -162,32 +457,192 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
   );
 };
 
-const NFTDialogLented = ({ NFT }: NFTDialogProps) => {
-  const isWithdrawable = !NFT.expirationDate || new Date().toISOString() > NFT.expirationDate;
+const LentedAction = ({ NFT }: NFTDialogProps) => {
+  const queryClient = useQueryClient();
 
+  const overrideQueries = () => {
+    queryClient.invalidateQueries("ownedNFTs");
+    queryClient.invalidateQueries("lentedNFTs");
+    queryClient.invalidateQueries("rentedNFTs");
+  };
+
+  const { data: dataERC721 } = useContractRead({
+    address: NFT.address as `0x${string}`,
+    abi: erc721ABI,
+    functionName: "ownerOf",
+    args: [ethers.BigNumber.from(NFT.tokenID)],
+  });
+
+  const { config: configWithdraw } = usePrepareContractWrite({
+    address: NFT.rentSCAddress as `0x${string}`,
+    abi: collateralizedRentHolderSCAbi,
+    functionName: "withdrawNFT",
+    onSuccess() {
+      overrideQueries();
+    },
+  });
+  const {
+    isLoading: isLoadingWithdraw,
+    isSuccess: isSuccessWithdraw,
+    write: writeWithdraw,
+  } = useContractWrite(configWithdraw);
+
+  const { config: configClaim } = usePrepareContractWrite({
+    address: NFT.rentSCAddress as `0x${string}`,
+    abi: collateralizedRentHolderSCAbi,
+    functionName: "claimCollateral",
+    onSuccess() {
+      overrideQueries();
+    },
+  });
+  const { isLoading: isLoadingClaim, isSuccess: isSuccessClaim, write: writeClaim } = useContractWrite(configClaim);
+
+  if (
+    (NFT.collateral && dataERC721 === NFT.rentSCAddress) ||
+    (!NFT.collateral && Date.now().toString() > (NFT.expirationDate ?? "0"))
+  ) {
+    const handleWithdraw = () => {
+      if (isLoadingWithdraw || isSuccessWithdraw) return;
+      writeWithdraw?.();
+    };
+
+    const withdrawButtonText = () => {
+      if (isLoadingWithdraw) {
+        return "LOADING";
+      }
+      if (isSuccessWithdraw) {
+        return "DONE!";
+      }
+      return "WITHDRAW";
+    };
+
+    return (
+      <ButtonNFT
+        tone={"blue"}
+        mode="dialog"
+        className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+        onClick={handleWithdraw}
+      >
+        {withdrawButtonText()}
+      </ButtonNFT>
+    );
+  }
+
+  if (NFT.collateral && NFT.expirationDate && Date.now().toString() > NFT.expirationDate) {
+    const handleClaim = () => {
+      if (isLoadingClaim || isSuccessClaim) return;
+      writeClaim?.();
+    };
+
+    const claimButtonText = () => {
+      if (isLoadingClaim) {
+        return "LOADING";
+      }
+      if (isSuccessClaim) {
+        return "DONE!";
+      }
+      return "CLAIM";
+    };
+
+    return (
+      <>
+        <p className="absolute bottom-[5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+          You can claim the collateral since the renter hasn&apos;t returned the NFT yet
+        </p>
+        <ButtonNFT
+          tone={"blue"}
+          mode="dialog"
+          className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+          onClick={handleClaim}
+        >
+          {claimButtonText()}
+        </ButtonNFT>
+      </>
+    );
+  }
+
+  return (
+    <p className="absolute bottom-[1.5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+      Since this NFT is currently rented you are unable to withdraw it
+    </p>
+  );
+};
+
+const NFTDialogLented = ({ NFT }: NFTDialogProps) => {
   return (
     <NFTDialogBasis NFT={NFT} borderTone="blue">
       <NFTRentalKeyInformation NFT={NFT} />
-      {isWithdrawable ? (
-        <ButtonNFT tone={"blue"} mode="dialog" className="absolute bottom-0 left-[50%] translate-x-[-50%]">
-          WITHDRAW
-        </ButtonNFT>
-      ) : (
-        <p className="absolute bottom-[1.5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
-          Since this NFT is currently rented you are unable to withdraw it
-        </p>
-      )}
+      <LentedAction NFT={NFT} />
     </NFTDialogBasis>
   );
 };
 
 const NFTDialogRented = ({ NFT }: NFTDialogProps) => {
+  const queryClient = useQueryClient();
+
+  const overrideQueries = () => {
+    queryClient.invalidateQueries("ownedNFTs");
+    queryClient.invalidateQueries("lentedNFTs");
+    queryClient.invalidateQueries("rentedNFTs");
+  };
+
+  const { config: configERC721 } = usePrepareContractWrite({
+    address: NFT.address as `0x${string}`,
+    abi: erc721ABI,
+    functionName: "approve",
+    args: [NFT.rentSCAddress as `0x${string}`, ethers.BigNumber.from(NFT.tokenID)],
+  });
+  const {
+    isLoading: isLoadingERC721,
+    isSuccess: isSuccessERC721,
+    writeAsync: writeERC721,
+  } = useContractWrite(configERC721);
+
+  const { config: configReturn } = usePrepareContractWrite({
+    address: NFT.rentSCAddress as `0x${string}`,
+    abi: collateralizedRentHolderSCAbi,
+    functionName: "returnNFT",
+    onSuccess() {
+      overrideQueries();
+    },
+  });
+  const {
+    isLoading: isLoadingReturn,
+    isSuccess: isSuccessReturn,
+    writeAsync: writeReturn,
+  } = useContractWrite(configReturn);
+
+  const handleReturnNFT = async () => {
+    if (!writeERC721 || !writeReturn || isLoadingERC721 || isLoadingReturn) return;
+
+    await writeERC721();
+    await writeReturn();
+  };
+
+  const buttonText = () => {
+    if (isLoadingReturn || isLoadingERC721) {
+      return "LOADING";
+    }
+    if (isSuccessERC721) {
+      return "NFT RETURN APPROVED";
+    }
+    if (isSuccessReturn) {
+      return "DONE";
+    }
+    return "RETURN";
+  };
+
   return (
     <NFTDialogBasis NFT={NFT} borderTone="pink">
       <NFTRentalKeyInformation NFT={NFT} />
-      {!NFT.collateral ? (
-        <ButtonNFT tone={"pink"} mode="dialog" className="absolute bottom-0 left-[50%] translate-x-[-50%]">
-          RETURN
+      {NFT.collateral ? (
+        <ButtonNFT
+          tone={"pink"}
+          mode="dialog"
+          className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+          onClick={handleReturnNFT}
+        >
+          {buttonText()}
         </ButtonNFT>
       ) : (
         <p className="absolute bottom-[1.5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
@@ -200,6 +655,32 @@ const NFTDialogRented = ({ NFT }: NFTDialogProps) => {
 
 const NFTDialogMarketplace = ({ NFT }: NFTDialogProps) => {
   const [rentHours, setRentHours] = useState<number | undefined>(1);
+
+  const { config } = usePrepareContractWrite({
+    address: NFT.rentSCAddress as `0x${string}`,
+    abi: collateralizedRentHolderSCAbi,
+    functionName: "rent",
+    args: [rentHours ?? 0],
+    overrides: {
+      value: ethers.utils.parseEther(((NFT.rentRate ?? 0) * (rentHours ?? 0) + (NFT.collateral ?? 0)).toString()),
+    },
+  });
+  const { isLoading, isSuccess, write } = useContractWrite(config);
+
+  const buttonText = () => {
+    if (isLoading) {
+      return "LOADING";
+    }
+    if (isSuccess) {
+      return "DONE!";
+    }
+    return "RENT";
+  };
+
+  const handleRent = () => {
+    if (isLoading || isSuccess) return;
+    write?.();
+  };
 
   const handleRentHoursChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "") {
@@ -254,8 +735,13 @@ const NFTDialogMarketplace = ({ NFT }: NFTDialogProps) => {
         unit="ETH"
         value={calculateTotalValue()}
       />
-      <ButtonNFT tone={"pink"} mode="dialog" className="absolute bottom-0 left-[50%] translate-x-[-50%]">
-        RENT
+      <ButtonNFT
+        tone={"pink"}
+        mode="dialog"
+        className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+        onClick={handleRent}
+      >
+        {buttonText()}
       </ButtonNFT>
     </NFTDialogBasis>
   );

@@ -11,8 +11,10 @@ import Lines from "../../public/lines.svg";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { goerli } from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
+import { sepolia } from "wagmi/chains";
+import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
+
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import { cn } from "@/utils/utils";
 import { useEffect } from "react";
@@ -38,8 +40,14 @@ const lora = Lora({
 });
 
 const { chains, provider } = configureChains(
-  [goerli],
-  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" })]
+  [sepolia],
+  [
+    jsonRpcProvider({
+      rpc: (chain) => ({
+        http: `https://rpc2.sepolia.org`,
+      }),
+    }),
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -63,20 +71,24 @@ export default function App({ Component, pageProps }: AppProps) {
     document.body.classList.add("text-md");
   }, []);
 
+  const queryClient = new QueryClient();
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <main
-          className={cn(
-            "body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw]",
-            Component.name === "Home" && "initial-animation"
-          )}
-        >
-          <Navbar />
-          <Lines className="absolute right-0 top-0" width={"28.34vw"} height={"80vw"} viewBox="0 0 524 1482" />
-          <Component {...pageProps} />
-          <Footer />
-        </main>
+        <QueryClientProvider client={queryClient}>
+          <main
+            className={cn(
+              "body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw]",
+              Component.name === "Home" && "initial-animation"
+            )}
+          >
+            <Navbar />
+            <Lines className="absolute right-0 top-0" width={"28.34vw"} height={"80vw"} viewBox="0 0 524 1482" />
+            <Component {...pageProps} />
+            <Footer />
+          </main>
+        </QueryClientProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );

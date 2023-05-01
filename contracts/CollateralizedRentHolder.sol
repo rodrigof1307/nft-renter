@@ -18,11 +18,13 @@ contract CollateralizedRentHolder {
 
     address public currRenter;
     uint public currRentEndDate;
+    uint8 public currRentPeriod;
 
     address public feeCollector = 0xE2c36ED0DFB0B0abFDb92d500Adcf4ffE81523B5;
     uint public feePercentage = 1;
 
-    address marketplaceAddress = 0x753C915A00Dcb6358B059D2DecB9A1D5BD07D7b9;
+    // address marketplaceAddress = 0xAac20e3fFEB4bDB37E5555CB1f7e68f3F8994105;
+    address marketplaceAddress = 0xdD1545bd495feFDD808A3D3e6a0CC7aFC8fc8100;
 
     struct relevantRentInfo {
         address rentHolderSC;
@@ -34,9 +36,12 @@ contract CollateralizedRentHolder {
 
         address currRenter;
         uint currRentEndDate;
+        uint8 currRentPeriod;
     }
 
     constructor(address _nftAddress, uint _nftID, uint _ratePerHour, uint _collateralValue) {
+        require(_ratePerHour > 0, 'The rate per hour must be greater than 0');
+        require(_collateralValue > 0, 'The collateral value must be greater than 0');
         nftOwner = msg.sender;
         nftAddress = _nftAddress;
         nftId = _nftID;
@@ -55,13 +60,6 @@ contract CollateralizedRentHolder {
     // This modifier is used to make sure that only the owner of the contract can call a function
     modifier onlyOwner() {
         require(msg.sender == nftOwner, 'Only the NFT owner can call this function');
-        _;
-    }
-
-    // This modifier is used to make sure that only the current renter of the contract can call a function. It also checks that the rental period has not ended.
-    modifier onlyCurrRenter() {
-        require(msg.sender == currRenter, 'Only the valid current renter can call this function');
-        require(block.timestamp < currRentEndDate, 'The rental period has ended');
         _;
     }
 
@@ -98,8 +96,8 @@ contract CollateralizedRentHolder {
     // It then transfer the NFT to the renter and calls the processOwnerPayment function to send the rental rate funds to the owner.
     // Finally it then sets the current renter and the current rent end date.
     // The collateral is kept on the contract and is not transfered to the owner at this moment
-    function rent(uint _hours) public payable {
-        require(msg.value == ratePerHour * _hours + collateralValue, 'You must pay the hourly times the number of hours you want to rent for and the collateral value');
+    function rent(uint8 _hours) public payable {
+        require(msg.value >= ratePerHour * _hours + collateralValue, 'You must pay the hourly times the number of hours you want to rent for and the collateral value');
         require(block.timestamp > currRentEndDate, 'This contract is currently rented');
         ERC721 nftContract = ERC721(nftAddress); 
         address currNFTOwner = nftContract.ownerOf(nftId);
@@ -107,17 +105,20 @@ contract CollateralizedRentHolder {
         processOwnerPaymenmt(ratePerHour * _hours);
         currRenter = msg.sender;
         currRentEndDate = block.timestamp + _hours * 1 hours;
+        currRentPeriod = _hours;
         nftContract.transferFrom(address(this), msg.sender, nftId); 
     }
 
     // This function allows the renter to return the NFT and get their collateral back.
-    function returnNFT() external onlyCurrRenter {
+    function returnNFT() external {
+        require(msg.sender == currRenter, 'Only the current renter can call this function');
         require(address(this).balance >= collateralValue, 'The owner has already withdrawn the collateral');
         ERC721 nftContract = ERC721(nftAddress); 
         nftContract.transferFrom(msg.sender, address(this), nftId); 
         payable(currRenter).transfer(collateralValue);
         currRenter = address(0);
         currRentEndDate = 0;
+        currRentPeriod = 0;
     }
 
     // This function allows the owner to withdraw the NFT.
@@ -132,16 +133,18 @@ contract CollateralizedRentHolder {
         marketplace.removeCollateralizedRentSC();
     }
 
-    // This function allows the owner to withdraw the collateral.
+    // This function allows the owner to claim the collateral if the NFT hasn't been returned
     // It checks that the rental period has ended, if the contract doesnt own the NFT and that the collateral has not already been withdrawn.
     // It then transfer the collateral to the owner.
-    function withdrawCollateral() external onlyOwner {
+    function claimCollateral() external onlyOwner {
         require(block.timestamp > currRentEndDate, 'The rental period has not ended yet');
         ERC721 nftContract = ERC721(nftAddress); 
         address currNFTOwner = nftContract.ownerOf(nftId);
         require(currNFTOwner != address(this), 'The NFT is currently owned by the contract');
         require(address(this).balance >= collateralValue, 'The owner has already withdrawn the collateral');
         payable(nftOwner).transfer(collateralValue);
+        IMarketplaceTracker marketplace = IMarketplaceTracker(marketplaceAddress);
+        marketplace.removeCollateralizedRentSC();
     }
 
     // This function gets the current renter of the contract. It returns 0 if the rental period has ended.
@@ -153,7 +156,7 @@ contract CollateralizedRentHolder {
 
     // This returns all information considered important for the marketplace to display
     function returnRentInfo() external view returns(relevantRentInfo memory) {
-        return relevantRentInfo(address(this), nftOwner, nftAddress, nftId, ratePerHour, collateralValue, currRenter, currRentEndDate);
+        return relevantRentInfo(address(this), nftOwner, nftAddress, nftId, ratePerHour, collateralValue, currRenter, currRentEndDate, currRentPeriod);
     }
 }
 

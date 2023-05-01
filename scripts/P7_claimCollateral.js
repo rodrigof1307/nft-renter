@@ -5,15 +5,17 @@
 // Runtime Environment's members available in the global scope.
 // eslint-disable-next-line
 const hre = require("hardhat");
+// eslint-disable-next-line
+const { ethers } = require("hardhat");
 
 async function main() {
-  const marketplace = await hre.ethers.getContractAt(
-    "MarketplaceTracker",
-    "0xdD1545bd495feFDD808A3D3e6a0CC7aFC8fc8100"
-  );
-  const rentSCs = await marketplace.listAllRelevantInfo();
-  console.log("Marketplace rentSCs:", rentSCs);
-  console.log("---");
+  const accounts = await hre.ethers.getSigners();
+
+  const contract = await (
+    await ethers.getContractAt("CollateralizedRentHolder", "0xb90616E3a7d8e0c9626d52Ea6b4df3Fef3BAF43D")
+  ).connect(accounts[0]);
+  const response = await contract.claimCollateral();
+  console.log(response);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

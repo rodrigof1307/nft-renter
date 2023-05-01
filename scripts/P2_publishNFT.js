@@ -12,19 +12,20 @@ async function main() {
   // const accounts = await hre.ethers.getSigners();
   // console.log("Available Accounts:", accounts)
   // console.log("---")
+  // '0xAdcADdC64E5a4B3E1358dBc85f0E2699226f2c04' GOERLI
 
   const CollateralizedRentHolder = await hre.ethers.getContractFactory("CollateralizedRentHolder");
   const collateralizedRentHolder = await CollateralizedRentHolder.deploy(
-    "0xAdcADdC64E5a4B3E1358dBc85f0E2699226f2c04",
-    0,
+    "0x441619F5d94779aa381d7a0dc16944ca11D8D584",
+    3,
     ethers.utils.parseEther("0.01"),
-    ethers.utils.parseEther("0.1")
+    ethers.utils.parseEther("0.05")
   );
   await collateralizedRentHolder.deployed();
   console.log("RentHolder SC deployed to:", collateralizedRentHolder.address);
   console.log("---");
-  const nftContract = await ethers.getContractAt("ERC721", "0xAdcADdC64E5a4B3E1358dBc85f0E2699226f2c04");
-  await nftContract.approve(collateralizedRentHolder.address, 0);
+  const nftContract = await ethers.getContractAt("ERC721", "0x441619F5d94779aa381d7a0dc16944ca11D8D584");
+  await nftContract.approve(collateralizedRentHolder.address, 3);
   await collateralizedRentHolder.publishNFT();
   console.log("NFT Transfered");
   console.log("---");
