@@ -436,9 +436,9 @@ const abi = [
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { address } = req.query;
 
-  if (typeof address !== "string" || address.slice(0, 2) !== "0x") {
-    res.status(400).json({ error: "Invalid address" });
-    return;
+  // For some reason, if the address is not passed it is a string with value "undefined" instead of undefined
+  if (address === "undefined" || typeof address !== "string" || address.slice(0, 2) !== "0x") {
+    return res.status(400).json({ error: "Invalid address" });
   }
 
   try {

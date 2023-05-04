@@ -10,7 +10,8 @@ type Data = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { address } = req.query;
 
-  if (!address || typeof address !== "string") {
+  // For some reason, if the address is not passed it is a string with value "undefined" instead of undefined
+  if (address === "undefined" || typeof address !== "string") {
     return res.status(400).json({ error: "User address is required." });
   }
 

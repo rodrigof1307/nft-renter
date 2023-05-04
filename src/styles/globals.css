@@ -66,11 +66,11 @@ body {
   width: 100%;
 }
 
-.crossed-Subtitle {
+.crossed-subtitle {
   z-index: 0;
 }
 
-.crossed-Subtitle::before {
+.crossed-subtitle::before {
   content: "";
   position: absolute;
   bottom: calc(50% - 0.25vw);
@@ -80,11 +80,11 @@ body {
   z-index: -1;
 }
 
-.crossed-Subtitle--pink::before {
+.crossed-subtitle--pink::before {
   background-color: theme("colors.brightPink");
 }
 
-.crossed-Subtitle--blue::before {
+.crossed-subtitle--blue::before {
   background-color: theme("colors.brightBlue");
 }
 

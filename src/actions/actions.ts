@@ -391,7 +391,7 @@ const performMarketplaceRemoval = async (
 
   const walletClient = createWalletClient({
     chain: sepolia,
-    transport: custom(window.ethereum!),
+    transport: custom(window.ethereum),
   });
 
   const publicClient = createPublicClient({

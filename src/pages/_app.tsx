@@ -71,6 +71,17 @@ export default function App({ Component, pageProps }: AppProps) {
     document.body.classList.add("text-md");
   }, []);
 
+  useEffect(() => {
+    const home = document.getElementById("home");
+    const mainWrapper = document.getElementById("main-wrapper");
+    if (mainWrapper === null) return;
+    if (home !== null) {
+      mainWrapper.classList.add("initial-animation");
+    } else {
+      mainWrapper.classList.remove("initial-animation");
+    }
+  }, [Component]);
+
   const queryClient = new QueryClient();
 
   return (
@@ -78,10 +89,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <RainbowKitProvider chains={chains}>
         <QueryClientProvider client={queryClient}>
           <main
-            className={cn(
-              "body-min-height relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw]",
-              Component.name === "Home" && "initial-animation"
-            )}
+            className={
+              "body-min-height initial-animation relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw]"
+            }
+            id="main-wrapper"
           >
             <Navbar />
             <Lines className="absolute right-0 top-0" width={"28.34vw"} height={"80vw"} viewBox="0 0 524 1482" />

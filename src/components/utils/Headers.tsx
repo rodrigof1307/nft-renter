@@ -8,9 +8,9 @@ const Header1 = ({ children, className, crossed, ...rest }: HeaderProps) => (
   <h2
     className={cn(
       "relative w-fit text-left font-highlight text-5xl font-extrabold ",
-      crossed && "crossed-Subtitle",
-      crossed === "pink" && "crossed-Subtitle--pink",
-      crossed === "blue" && "crossed-Subtitle--blue",
+      crossed && "crossed-subtitle",
+      crossed === "pink" && "crossed-subtitle--pink",
+      crossed === "blue" && "crossed-subtitle--blue",
       className
     )}
     {...rest}
@@ -24,9 +24,9 @@ const Header2 = ({ children, className, crossed, ...rest }: HeaderProps) => {
     <h3
       className={cn(
         "relative w-fit text-left font-highlight text-4xl ",
-        crossed && "crossed-Subtitle",
-        crossed === "pink" && "crossed-Subtitle--pink",
-        crossed === "blue" && "crossed-Subtitle--blue",
+        crossed && "crossed-subtitle",
+        crossed === "pink" && "crossed-subtitle--pink",
+        crossed === "blue" && "crossed-subtitle--blue",
         className
       )}
       {...rest}
@@ -41,9 +41,9 @@ const Header3 = ({ children, className, crossed, ...rest }: HeaderProps) => {
     <h3
       className={cn(
         "relative w-fit max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-highlight text-3xl leading-[2.3vw]",
-        crossed && "crossed-Subtitle",
-        crossed === "pink" && "crossed-Subtitle--pink",
-        crossed === "blue" && "crossed-Subtitle--blue",
+        crossed && "crossed-subtitle",
+        crossed === "pink" && "crossed-subtitle--pink",
+        crossed === "blue" && "crossed-subtitle--blue",
         className
       )}
       {...rest}
@@ -58,9 +58,9 @@ const Header4 = ({ children, className, crossed, ...rest }: HeaderProps) => {
     <h4
       className={cn(
         "relative w-fit max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-left font-highlight text-2xl leading-[1.8vw]",
-        crossed && "crossed-Subtitle",
-        crossed === "pink" && "crossed-Subtitle--pink",
-        crossed === "blue" && "crossed-Subtitle--blue",
+        crossed && "crossed-subtitle",
+        crossed === "pink" && "crossed-subtitle--pink",
+        crossed === "blue" && "crossed-subtitle--blue",
         className
       )}
       {...rest}

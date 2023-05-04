@@ -5,7 +5,7 @@ import RentLendButtonsPanel from "@/components/landing-page/RentLendButtonsPanel
 
 export default function Home() {
   return (
-    <div className="relative mt-[-7vw] pt-[7vw]">
+    <div className="relative mt-[-7vw] pt-[7vw]" id="home">
       <Description />
       <RentLendButtonsPanel />
       <Usecases />

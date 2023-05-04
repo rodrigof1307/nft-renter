@@ -1,16 +1,14 @@
 import { Header1, Header2 } from "@/components/utils/Headers";
 import { useAccount } from "wagmi";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 
 import axios from "axios";
 import NFTsDisplayer from "@/components/NFTCardDisplayer";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 const MyCollection = () => {
   const { address } = useAccount();
   const [isMounted, setIsMounted] = useState(false);
-
-  const queryClient = useQueryClient();
 
   const fetchOwned = ({ queryKey }: any) => {
     const addressParam = queryKey[1];

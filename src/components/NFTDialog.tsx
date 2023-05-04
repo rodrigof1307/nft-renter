@@ -7,7 +7,7 @@ import { ReactNode, useState } from "react";
 import { ButtonNFT, IconButton } from "./utils/Buttons";
 import { FilledInput, NumericInput } from "./utils/Input";
 import ShadedBackground from "./utils/ShadedBackground";
-import { usePrepareContractWrite, useContractWrite, erc721ABI, useContractRead } from "wagmi";
+import { erc721ABI, useContractRead } from "wagmi";
 import { ethers } from "ethers";
 import { useQueryClient } from "react-query";
 import {
