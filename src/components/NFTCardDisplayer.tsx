@@ -37,6 +37,8 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading }: NFTsDisplayerProps) => {
         return "You haven't rented any NFTs";
       case "marketplace":
         return "No NFTs are available for rent";
+      default:
+        return "Error";
     }
   };
 

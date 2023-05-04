@@ -49,7 +49,7 @@ const ButtonNFT = ({ children, className, tone, mode, ...rest }: ButtonNFTCardPr
     className={cn(
       "hover-shadow-sm flex items-center justify-center font-highlight transition-colors disabled:pointer-events-none disabled:opacity-50",
       mode === "card" && "absolute bottom-[1vw] left-[1vw] w-[17.6vw] rounded-[0.6vw] py-[0.8vw] text-lg",
-      mode === "dialog" && "mx-auto w-[22vw] rounded-[0.7vw] py-[0.9vw] text-2xl",
+      mode === "dialog" && "mx-auto w-[31vw] rounded-[0.7vw] py-[0.9vw] text-2xl",
       tone === "pink" && "bg-brightPink shadow-brightPink",
       tone === "blue" && "bg-brightBlue shadow-brightBlue",
       className

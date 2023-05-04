@@ -4,45 +4,57 @@ import { useQuery, useQueryClient } from "react-query";
 
 import axios from "axios";
 import NFTsDisplayer from "@/components/NFTCardDisplayer";
-import { useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const MyCollection = () => {
   const { address } = useAccount();
+  const [isMounted, setIsMounted] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const fetchOwned = () => {
-    return axios.get(`/api/fetchOwnedNFTs?address=${address}`).then((response) => {
+  const fetchOwned = ({ queryKey }: any) => {
+    const addressParam = queryKey[1];
+    return axios.get(`/api/fetchOwnedNFTs?address=${addressParam}`).then((response) => {
       return response.data.ownedNFTs as NFTInfo[];
     });
   };
 
-  const fetchLented = () => {
-    return axios.get(`/api/fetchLentedNFTs?address=${address}`).then((response) => {
+  const fetchLented = ({ queryKey }: any) => {
+    const addressParam = queryKey[1];
+    return axios.get(`/api/fetchLentedNFTs?address=${addressParam}`).then((response) => {
       return response.data.lentedNFTs as NFTInfo[];
     });
   };
 
-  const fetchRented = () => {
-    return axios.get(`/api/fetchRentedNFTs?address=${address}`).then((response) => {
+  const fetchRented = ({ queryKey }: any) => {
+    const addressParam = queryKey[1];
+    return axios.get(`/api/fetchRentedNFTs?address=${addressParam}`).then((response) => {
       return response.data.rentedNFTs as NFTInfo[];
     });
   };
 
   useEffect(() => {
-    if (address) {
-      queryClient.invalidateQueries("ownedNFTs");
-      queryClient.invalidateQueries("lentedNFTs");
-      queryClient.invalidateQueries("rentedNFTs");
-    }
-  }, [address]);
+    setIsMounted(true);
+  }, []);
 
-  const { isLoading: isLoadingOwned, error: errorOwned, data: dataOwned } = useQuery("ownedNFTs", fetchOwned);
-  const { isLoading: isLoadingLented, error: errorLented, data: dataLented } = useQuery("lentedNFTs", fetchLented);
-  const { isLoading: isLoadingRented, error: errorRented, data: dataRented } = useQuery("rentedNFTs", fetchRented);
+  const {
+    isFetching: isLoadingOwned,
+    error: errorOwned,
+    data: dataOwned,
+  } = useQuery({ queryKey: ["ownedNFTs", address], queryFn: fetchOwned, refetchOnWindowFocus: false });
+  const {
+    isFetching: isLoadingLented,
+    error: errorLented,
+    data: dataLented,
+  } = useQuery({ queryKey: ["lentedNFTs", address], queryFn: fetchLented, refetchOnWindowFocus: false });
+  const {
+    isFetching: isLoadingRented,
+    error: errorRented,
+    data: dataRented,
+  } = useQuery({ queryKey: ["rentedNFTs", address], queryFn: fetchRented, refetchOnWindowFocus: false });
 
   const filterOwnedNFTs = (ownedNFTs: NFTInfo[] | undefined, rentedNFTs: NFTInfo[] | undefined) => {
-    if (!ownedNFTs || !rentedNFTs) return [];
+    if (!ownedNFTs || !rentedNFTs) return undefined;
     return ownedNFTs.filter(
       (ownedNFT) =>
         !rentedNFTs.find(
@@ -51,8 +63,10 @@ const MyCollection = () => {
     );
   };
 
+  if (!isMounted) return null;
+
   return (
-    <div className="px-[4vw]" suppressHydrationWarning={true}>
+    <div className="px-[4vw]">
       <Header1 className="mb-[2vw]">My Collection</Header1>
       <Header2 crossed="blue">Your NFTs</Header2>
       <NFTsDisplayer

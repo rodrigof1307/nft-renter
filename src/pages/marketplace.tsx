@@ -1,6 +1,5 @@
 import { Header1, Header2 } from "@/components/utils/Headers";
 import NFTsDisplayer from "@/components/NFTCardDisplayer";
-import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 
@@ -18,8 +17,6 @@ const Marketplace = () => {
   };
 
   const { isLoading, error, data } = useQuery("marketplaceNFTs", fetchMarketplace);
-
-  console.log(data);
 
   return (
     <div className="px-[4vw]">

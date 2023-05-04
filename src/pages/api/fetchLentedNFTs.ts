@@ -445,7 +445,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const [rentHolderSCs] = await readContracts({
       contracts: [
         {
-          address: "0xdD1545bd495feFDD808A3D3e6a0CC7aFC8fc8100",
+          address: "0x90dd4730A104e15c71ED9B82eb025AF801348860",
           abi,
           functionName: "listLentedRelevantInfo",
           args: [address as `0x${string}`],
@@ -492,7 +492,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       error: "",
     });
   } catch (error) {
-    console.error("Error fetching collection NFTs:", error);
-    return res.status(500).json({ error: "Failed to fetch collection NFTs." });
+    console.error("Error fetching lented NFTs:", error);
+    return res.status(500).json({ error: "Failed to fetch lented NFTs." });
   }
 }

@@ -9,7 +9,7 @@ const hre = require("hardhat");
 async function main() {
   const marketplace = await hre.ethers.getContractAt(
     "MarketplaceTracker",
-    "0xdD1545bd495feFDD808A3D3e6a0CC7aFC8fc8100"
+    "0x90dd4730A104e15c71ED9B82eb025AF801348860"
   );
   const rentSCs = await marketplace.listAllRelevantInfo();
   console.log("Marketplace rentSCs:", rentSCs);

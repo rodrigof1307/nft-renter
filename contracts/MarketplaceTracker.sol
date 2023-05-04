@@ -66,13 +66,13 @@ contract MarketplaceTracker {
     }
 
     function listRelevantInfo(bool _collateralized, bool _nonCollateralized, string memory _mode, address _actor) internal view returns(IRentHolder.relevantRentInfo[] memory) {
-        IRentHolder.relevantRentInfo[] memory rentInfoArray = new IRentHolder.relevantRentInfo[](collateralizedRentHolderSCs.length + nonCollateralizedRentHolderSCs.length);
+        IRentHolder.relevantRentInfo[] memory helperRentInfoArray = new IRentHolder.relevantRentInfo[](collateralizedRentHolderSCs.length + nonCollateralizedRentHolderSCs.length);
         uint count = 0;
         if(_collateralized) {
             for(uint i = 0; i < collateralizedRentHolderSCs.length; i++){
                 IRentHolder.relevantRentInfo memory rentInfo = IRentHolder(collateralizedRentHolderSCs[i]).returnRentInfo();
                 if(listRelevantInfoHelperFilter(rentInfo, _mode, true, _actor)) {
-                    rentInfoArray[count] = rentInfo;
+                    helperRentInfoArray[count] = rentInfo;
                     count++;
                 }
             }
@@ -81,13 +81,14 @@ contract MarketplaceTracker {
             for(uint i = 0; i < nonCollateralizedRentHolderSCs.length; i++){
                 IRentHolder.relevantRentInfo memory rentInfo = IRentHolder(nonCollateralizedRentHolderSCs[i]).returnRentInfo();
                 if(listRelevantInfoHelperFilter(rentInfo, _mode, false, _actor)) {
-                    rentInfoArray[count] = rentInfo;
+                    helperRentInfoArray[count] = rentInfo;
                     count++;
                 }
             }
         }
-        if(count == 0) {
-            return new IRentHolder.relevantRentInfo[](0);
+        IRentHolder.relevantRentInfo[] memory rentInfoArray = new IRentHolder.relevantRentInfo[](count);
+        for(uint i = 0; i < count; i++) {
+            rentInfoArray[uint(i)] = helperRentInfoArray[uint(i)];
         }
         return rentInfoArray;
     }

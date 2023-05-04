@@ -23,9 +23,8 @@ contract CollateralizedRentHolder {
     address public feeCollector = 0xE2c36ED0DFB0B0abFDb92d500Adcf4ffE81523B5;
     uint public feePercentage = 1;
 
-    // address marketplaceAddress = 0xAac20e3fFEB4bDB37E5555CB1f7e68f3F8994105;
-    address marketplaceAddress = 0xdD1545bd495feFDD808A3D3e6a0CC7aFC8fc8100;
-
+    // address marketplaceAddress = 0xAac20e3fFEB4bDB37E5555CB1f7e68f3F8994105; Goerli Address
+    address marketplaceAddress = 0x90dd4730A104e15c71ED9B82eb025AF801348860;
     struct relevantRentInfo {
         address rentHolderSC;
         address nftOwner;

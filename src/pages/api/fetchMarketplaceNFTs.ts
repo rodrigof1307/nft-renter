@@ -28,17 +28,6 @@ type Data = {
   error?: string;
 };
 
-type RelevantInfoItem = {
-  rentHolderSC: `0x${string}`;
-  nftOwner: `0x${string}`;
-  nftAddress: `0x${string}`;
-  nftId: ethers.BigNumber;
-  ratePerHour: ethers.BigNumber;
-  collateral?: ethers.BigNumber;
-  currRenter: `0x${string}`;
-  currRentEndDate: ethers.BigNumber;
-};
-
 // To leverage wagmi type-inference I had to add the abi like this
 const abi = [
   {
@@ -450,7 +439,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const [rentHolderSCs] = await readContracts({
       contracts: [
         {
-          address: "0xdD1545bd495feFDD808A3D3e6a0CC7aFC8fc8100",
+          address: "0x90dd4730A104e15c71ED9B82eb025AF801348860",
           abi,
           functionName: "listAllRelevantInfo",
         },
@@ -516,7 +505,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       error: "",
     });
   } catch (error) {
-    console.error("Error fetching collection NFTs:", error);
-    return res.status(500).json({ error: "Failed to fetch collection NFTs." });
+    console.error("Error fetching marketplace NFTs:", error);
+    return res.status(500).json({ error: "Failed to fetch marketplace NFTs." });
   }
 }

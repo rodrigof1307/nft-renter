@@ -14,7 +14,6 @@ const ShadedBackground = ({ children, className, borderTone, ...rest }: ShadedBa
       className
     )}
     {...rest}
-    suppressHydrationWarning={true}
   >
     {children}
   </div>

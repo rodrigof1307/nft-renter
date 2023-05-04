@@ -12,20 +12,12 @@ interface FilledInputProps {
 interface NumericInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   unit: string;
-  setterFunction: Dispatch<SetStateAction<number | undefined>>;
+  setterFunction: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const NumericInput = ({ label, unit, setterFunction, ...rest }: NumericInputProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === "") {
-      setterFunction(undefined);
-      return;
-    }
-    if (!Number(event.target.value)) {
-      setterFunction((prev) => prev);
-      return;
-    }
-    setterFunction(Number(event.target.value));
+    setterFunction(event.target.value);
   };
 
   return (
@@ -37,7 +29,7 @@ const NumericInput = ({ label, unit, setterFunction, ...rest }: NumericInputProp
         type={"string"}
         onChange={handleInputChange}
         className={cn(
-          "mx-[0.5vw] w-[3.5vw] border-0 border-b-[0.2vw] bg-transparent pb-[0.1vw] text-center font-highlight outline-none",
+          "mx-[0.5vw] w-[4vw] border-0 border-b-[0.2vw] bg-transparent pb-[0.1vw] text-center font-highlight outline-none",
           rest.className
         )}
       />

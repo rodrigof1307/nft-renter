@@ -37,6 +37,7 @@
     "tailwindcss-animate": "^1.0.5",
     "typescript": "5.0.4",
     "typewriter-effect": "^2.19.0",
+    "viem": "^0.3.17",
     "wagmi": "0.12.11"
   },
   "devDependencies": {
