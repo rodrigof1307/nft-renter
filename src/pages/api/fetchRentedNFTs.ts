@@ -480,6 +480,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         description: responseNFTMetadata[i].description,
         image: responseNFTMetadata[i].rawMetadata?.image,
         attributes: responseNFTMetadata[i].rawMetadata?.attributes,
+        tokenURI: responseNFTMetadata[i].tokenUri?.raw ?? "",
         rentRate: parseFloat(ethers.utils.formatEther(rentHolderSCs[i].ratePerHour)),
         collateral: parseFloat(ethers.utils.formatEther(rentHolderSCs[i].collateral)),
         expirationDate: (parseFloat(rentHolderSCs[i].currRentEndDate.toString()) * 1000).toString(),

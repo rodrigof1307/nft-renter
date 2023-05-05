@@ -43,6 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           description: tokenData.rawMetadata?.description,
           image: tokenData.rawMetadata?.image,
           attributes: tokenData.rawMetadata?.attributes,
+          tokenURI: tokenData.tokenUri?.raw ?? "",
         } as NFTInfo)
     );
 

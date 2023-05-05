@@ -13,6 +13,7 @@ import { useQueryClient } from "react-query";
 import {
   performClaimCollateral,
   performCollateralizedRentPublish,
+  performNonCollateralizedRentPublish,
   performWithdrawNFT,
   performReturn,
   performRent,
@@ -108,6 +109,8 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
   const [collateralizedButtonText, setCollateralizedButtonText] = useState("RENT");
   const [nonCollateralizedButtonText, setNonCollateralizedButtonText] = useState("RENT");
 
+  const isWrappedToken = NFT.address.toLowerCase() === "0x8C33c4aa7b3848a677b4544c6a589be79A67268e".toLowerCase();
+
   const queryClient = useQueryClient();
 
   const handleCollateralizedRent = async () => {
@@ -116,9 +119,23 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
     performCollateralizedRentPublish(setCollateralizedButtonText, NFT, rentRate, collateral, queryClient);
   };
 
+  const handleNonCollateralizedRent = async () => {
+    if (!rentRate) return;
+
+    performNonCollateralizedRentPublish(setNonCollateralizedButtonText, NFT, rentRate, queryClient);
+  };
+
   return (
     <NFTDialogBasis NFT={NFT} borderTone="blue">
-      {!selectedOption && (
+      {isWrappedToken && (
+        <>
+          <p className="my-auto px-[4vw] text-center">
+            This item is a wrapped NFT that as been minted as part of our non-collateralized rentals and therefore you
+            are not able to rent it in our platform.
+          </p>
+        </>
+      )}
+      {!selectedOption && !isWrappedToken && (
         <>
           <Header4 className="mx-auto mb-[1.5vw]">Choose your option</Header4>
           <div className="flex flex-1 flex-col justify-between">
@@ -165,7 +182,12 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
           <Header4 className="mx-auto mb-[1.5vw]">Non-Collateralized Rental</Header4>
           <p className="mb-[1.5vw]">{nonCollateralizedRentDescription}</p>
           <NumericInput label="Rent Rate:" unit="ETH/HOUR" value={rentRate} setterFunction={setRentRate} />
-          <ButtonNFT tone={"blue"} mode="dialog" className="absolute bottom-0 left-[50%] translate-x-[-50%]">
+          <ButtonNFT
+            tone={"blue"}
+            mode="dialog"
+            className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+            onClick={handleNonCollateralizedRent}
+          >
             {nonCollateralizedButtonText}
           </ButtonNFT>
         </>

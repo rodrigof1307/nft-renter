@@ -39,7 +39,7 @@ const NumericInput = ({ label, unit, setterFunction, ...rest }: NumericInputProp
 };
 
 const FilledInput = ({ label, value, unit, size, className }: FilledInputProps) => {
-  if (!value) return <></>;
+  if (!value || value === "0") return <></>;
 
   return (
     // eslint-disable-next-line tailwindcss/classnames-order, tailwindcss/no-custom-classname

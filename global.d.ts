@@ -7,6 +7,7 @@ interface NFTInfo {
   description: string;
   image?: string;
   attributes?: Record<string, any>[];
+  tokenURI: string;
   rentRate?: number;
   collateral?: number;
   expirationDate?: string;
