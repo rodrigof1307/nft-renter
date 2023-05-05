@@ -22,9 +22,9 @@ const Marketplace = () => {
     <div className="px-[4vw]">
       <Header1 className="mb-[2vw]">Marketplace</Header1>
       <Header2 crossed="pink">Collateralized</Header2>
-      <NFTsDisplayer NFTs={data?.collateralizedRentals} NFTsType="marketplace" loading={isLoading} />
+      <NFTsDisplayer NFTs={data?.collateralizedRentals} NFTsType="marketplace" loading={isLoading} error={error} />
       <Header2 crossed="pink">Non-collateralized</Header2>
-      <NFTsDisplayer NFTs={data?.nonCollateralizedRentals} NFTsType="marketplace" loading={isLoading} />
+      <NFTsDisplayer NFTs={data?.nonCollateralizedRentals} NFTsType="marketplace" loading={isLoading} error={error} />
     </div>
   );
 };

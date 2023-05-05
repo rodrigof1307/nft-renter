@@ -71,11 +71,12 @@ const MyCollection = () => {
         NFTs={filterOwnedNFTs(dataOwned, dataRented)}
         NFTsType="myCollectionOwned"
         loading={isLoadingOwned}
+        error={errorOwned}
       />
       <Header2 crossed="blue">On The Marketplace</Header2>
-      <NFTsDisplayer NFTs={dataLented} NFTsType="myCollectionLented" loading={isLoadingLented} />
+      <NFTsDisplayer NFTs={dataLented} NFTsType="myCollectionLented" loading={isLoadingLented} error={errorLented} />
       <Header2 crossed="pink">Your Rentals</Header2>
-      <NFTsDisplayer NFTs={dataRented} NFTsType="myCollectionRented" loading={isLoadingRented} />
+      <NFTsDisplayer NFTs={dataRented} NFTsType="myCollectionRented" loading={isLoadingRented} error={errorRented} />
     </div>
   );
 };

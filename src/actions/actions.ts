@@ -811,6 +811,29 @@ const performRent = async (
   invalidateQueries(queryClient);
 };
 
+const performBurn = async (setButtonText: (text: string) => void, NFT: NFTInfo, queryClient: QueryClient) => {
+  if (!window.ethereum) return;
+
+  setButtonText("LOADING...");
+
+  const { walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
+
+  const hash = await walletClient.writeContract({
+    account,
+    address: NFT.address as `0x${string}`,
+    abi: erc721ABI,
+    functionName: "transferFrom",
+    args: [account, "0x000000000000000000000000000000000000dEaD", BigInt(NFT.tokenID)],
+    value: BigInt(0),
+  });
+
+  await publicClient.waitForTransactionReceipt({ hash });
+
+  setButtonText("DONE");
+
+  invalidateQueries(queryClient);
+};
+
 export {
   performCollateralizedRentPublish,
   performNonCollateralizedRentPublish,
@@ -818,4 +841,5 @@ export {
   performClaimCollateral,
   performReturn,
   performRent,
+  performBurn,
 };

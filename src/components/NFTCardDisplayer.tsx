@@ -22,9 +22,10 @@ interface NFTsDisplayerProps {
   NFTs?: NFTInfo[];
   NFTsType: NFTsType;
   loading: boolean;
+  error: null | unknown;
 }
 
-const NFTsDisplayer = ({ NFTs, NFTsType, loading }: NFTsDisplayerProps) => {
+const NFTsDisplayer = ({ NFTs, NFTsType, loading, error }: NFTsDisplayerProps) => {
   const { address } = useAccount();
 
   const notAvailableMessage = () => {
@@ -46,6 +47,14 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading }: NFTsDisplayerProps) => {
     return (
       <div className="flex items-center justify-center py-[11vw]">
         <Header3>Connect your wallet to see your NFTs</Header3>
+      </div>
+    );
+  }
+
+  if (typeof error !== "undefined" && error !== null) {
+    return (
+      <div className="flex items-center justify-center py-[11vw]">
+        <Header3>Something went wrong while fetching the NFTs, please try again</Header3>
       </div>
     );
   }
