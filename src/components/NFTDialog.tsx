@@ -539,7 +539,7 @@ const NFTDialogBasis = ({ NFT, borderTone, children }: NFTDialogBasisProps) => (
 
 const NFTRentalKeyInformation = ({ NFT }: NFTDialogProps) => {
   const showDate =
-    NFT.expirationDate && NFT.expirationDate !== "0" && (NFT.collateral || NFT.expirationDate < Date.now().toString());
+    NFT.expirationDate && NFT.expirationDate !== "0" && (NFT.collateral || NFT.expirationDate > Date.now().toString());
   const isCollateralized = NFT.collateral !== undefined;
 
   return (

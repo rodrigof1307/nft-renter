@@ -32,7 +32,7 @@ interface NFTCardBasisProps {
 
 const NFTCardBasis = ({ NFT, borderTone, children }: NFTCardBasisProps) => {
   const showDate =
-    NFT.expirationDate && NFT.expirationDate !== "0" && (NFT.collateral || NFT.expirationDate < Date.now().toString());
+    NFT.expirationDate && NFT.expirationDate !== "0" && (NFT.collateral || NFT.expirationDate > Date.now().toString());
 
   return (
     <ShadedBackground borderTone={borderTone} className="relative box-border h-[33vw] w-[20vw] p-[1vw]">
