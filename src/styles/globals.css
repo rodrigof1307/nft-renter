@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.body-min-height {
+  min-height: max(100vh, 80vw);
+}
+
+.hover-shadow-sm:hover {
+  -webkit-box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
+  -moz-box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
+  box-shadow: 0px 0.075vw 1.4vw -0.275vw var(--tw-shadow-color);
+}
+
+.hover-shadow-md:hover {
+  -webkit-box-shadow: 0px 0.15vw 2.8vw -0.55vw var(--tw-shadow-color);
+  -moz-box-shadow: 0px 0.15vw 2.8vw -0.55vw var(--tw-shadow-color);
+  box-shadow: 0px 0.15vw 2.8vw -0.55vw var(--tw-shadow-color);
+}
+
+.hover-shadow-lg:hover {
+  -webkit-box-shadow: 0px 0.18vw 5.4vw -0.96vw var(--tw-shadow-color);
+  -moz-box-shadow: 0px 0.18vw 5.4vw -0.96vw var(--tw-shadow-color);
+  box-shadow: 0px 0.18vw 5.4vw -0.96vw var(--tw-shadow-color);
+}
+
+.hover-line {
+  position: relative;
+}
+
+.hover-line::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5vw;
+  left: 0;
+  width: 0;
+  height: 0.1vw;
+  background-color: #fff;
+  transition: width 0.3s ease-in-out;
+}
+
+.hover-line:hover::after {
+  width: 100%;
+}
+
+.crossed-subtitle {
+  z-index: 0;
+}
+
+.crossed-subtitle::before {
+  content: "";
+  position: absolute;
+  bottom: calc(50% - 0.25vw);
+  left: -0.8vw;
+  width: calc(100% + 1.6vw);
+  height: 0.5vw;
+  z-index: -1;
+}
+
+.crossed-subtitle--pink::before {
+  background-color: theme("colors.brightPink");
+}
+
+.crossed-subtitle--blue::before {
+  background-color: theme("colors.brightBlue");
+}
+
+.forced-opacity,
+.forced-opacity div,
+.forced-opacity div * {
+  opacity: 1 !important;
+}
+
+.initial-animation * * {
+  opacity: 0;
+  animation: opacity-anim 1s ease-in-out forwards;
+  animation-delay: 2.7s;
+}
+
+@keyframes opacity-anim {
+  100% {
+    opacity: 1;
+  }
+}
