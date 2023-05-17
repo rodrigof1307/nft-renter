@@ -94,7 +94,10 @@ body {
   opacity: 1 !important;
 }
 
-.initial-animation * * {
+.initial-animation > nav > div,
+.initial-animation > div > div,
+.initial-animation > footer > div,
+.initial-animation div > h4 {
   opacity: 0;
   animation: opacity-anim 1s ease-in-out forwards;
   animation-delay: 2.7s;
@@ -103,5 +106,11 @@ body {
 @keyframes opacity-anim {
   100% {
     opacity: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hover-line:hover::after {
+    width: 0%;
   }
 }

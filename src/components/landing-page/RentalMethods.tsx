@@ -43,7 +43,7 @@ const RentalMethods = () => {
     titleState === "Collateralized" ? "Non-Collateralized" : "Collateralized";
 
   const topRightControls = (props: ControlProps) => (
-    <div className="mr-[4vw] mt-[-4.25vw] flex w-[7vw] flex-row items-center justify-between">
+    <div className="mr-[4vw] mt-[-8.5vw] flex w-[14vw] flex-row items-center justify-between md:mt-[-4.25vw] md:w-[7vw]">
       <IconButton
         iconType={"chevronLeft"}
         onClick={() => {
@@ -63,8 +63,8 @@ const RentalMethods = () => {
 
   return (
     <div>
-      <Header1 className="mb-[1.5vw] ml-[4vw] mt-[4vw]">How It Works</Header1>
-      <Header2 className="mb-[1.5vw] ml-[4vw]">{title}</Header2>
+      <Header1 className="mb-[3vw] ml-[4vw] mt-[5vh] md:mb-[1.5vw] md:mt-[4vw]">How It Works</Header1>
+      <Header2 className="mb-[3vw] ml-[4vw] md:mb-[1.5vw]">{title}</Header2>
       <Carousel
         wrapAround
         renderCenterLeftControls={null}
@@ -87,12 +87,12 @@ interface RentalMethodProps {
 }
 
 const RentalMethod = ({ description, steps, advantages, disadvantages }: RentalMethodProps) => (
-  <ShadedBackground className="mx-auto flex w-[92vw] flex-col justify-start p-[2.25vw]">
-    <p className="mb-[1.5vw] text-lg font-medium ">{description}</p>
+  <ShadedBackground className="mx-auto flex w-[92vw] flex-col justify-start px-[3vw] py-[4vw] md:p-[2.25vw]">
+    <p className="mb-[3vw] text-mb-lg font-medium md:mb-[1.5vw] md:text-lg ">{description}</p>
     {steps.map((step, index) => (
       <div key={step}>
-        <h5 className="mb-[0.75vw] font-highlight text-xl ">{`Step ${index + 1}`}</h5>
-        <p className="mb-[1.5vw] text-lg font-medium ">{step}</p>
+        <h5 className="mb-[1.5vw] font-highlight text-mb-xl md:mb-[0.75vw] md:text-xl ">{`Step ${index + 1}`}</h5>
+        <p className="mb-[3vw] text-mb-lg font-medium md:mb-[1.5vw] md:text-lg ">{step}</p>
       </div>
     ))}
     <div className="flex flex-row items-start justify-around">
@@ -109,9 +109,9 @@ interface CharacteristicsProps {
 
 const Characteristics = ({ title, items }: CharacteristicsProps) => (
   <div className="w-[37.5vw]">
-    <h4 className="mb-[0.75vw] text-center font-highlight text-2xl ">{title}</h4>
+    <h4 className="mb-[1.5vw] text-center font-highlight text-mb-2xl md:mb-[0.75vw] md:text-2xl ">{title}</h4>
     {items.map((item) => (
-      <p className="mb-[1vw] text-lg font-medium " key={item}>
+      <p className="mb-[2vw] text-mb-lg font-medium md:mb-[1vw] md:text-lg " key={item}>
         {item}
       </p>
     ))}

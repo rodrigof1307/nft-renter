@@ -15,7 +15,9 @@ interface NFTsContainerProps {
 }
 
 const NFTsContainer = ({ children }: NFTsContainerProps) => (
-  <div className="mb-[3vw] mt-[2vw] grid w-full grid-cols-4 gap-y-[2.5vw]">{children}</div>
+  <div className="mb-[4.5vw] mt-[3vw] grid w-full grid-cols-3 gap-x-[calc((92vw-3*28.4vw)/2)] gap-y-[2.5vw] md:mb-[3vw] md:mt-[2vw] md:grid-cols-4 md:gap-x-[calc((92vw-4*20.4vw)/3)]">
+    {children}
+  </div>
 );
 
 interface NFTsDisplayerProps {
@@ -46,7 +48,9 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading, error }: NFTsDisplayerProps) =
   if (!address && NFTsType !== "marketplace") {
     return (
       <div className="flex items-center justify-center py-[11vw]">
-        <Header3>Connect your wallet to see your NFTs</Header3>
+        <Header3 className="overflow-auto text-clip whitespace-normal text-center md:truncate">
+          Connect your wallet to see your NFTs
+        </Header3>
       </div>
     );
   }
@@ -54,7 +58,9 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading, error }: NFTsDisplayerProps) =
   if (typeof error !== "undefined" && error !== null) {
     return (
       <div className="flex items-center justify-center py-[11vw]">
-        <Header3>Something went wrong while fetching the NFTs, please try again</Header3>
+        <Header3 className="overflow-auto text-clip whitespace-normal text-center md:truncate">
+          Something went wrong while fetching the NFTs, please try again
+        </Header3>
       </div>
     );
   }

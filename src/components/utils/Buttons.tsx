@@ -19,9 +19,9 @@ const buttonVariants = cva(
         standard: "rounded-md",
       },
       size: {
-        small: "hover-shadow-sm px-[1vw] py-[0.36vw] text-[0.4vw] leading-[0.6vw]",
-        medium: "hover-shadow-md px-[3vw] py-[1.08vw] text-[1.2vw] leading-[1.4vw]",
-        large: "hover-shadow-lg px-[4.5vw] py-[1.62vw] text-[1.8vw] leading-[2vw]",
+        small: "hover-shadow-sm px-[2vw] py-[0.7vw] text-mb-sm md:px-[1vw] md:py-[0.35vw] md:text-sm",
+        medium: "hover-shadow-md px-[6vw] py-[2.1vw] text-mb-lg md:px-[3vw] md:py-[1.05vw] md:text-lg",
+        large: "hover-shadow-lg px-[9vw] py-[3.15vw] text-mb-2xl md:px-[4.5vw] md:py-[1.575vw] md:text-2xl",
       },
     },
     defaultVariants: {
@@ -48,8 +48,10 @@ const ButtonNFT = ({ children, className, tone, mode, ...rest }: ButtonNFTCardPr
   <button
     className={cn(
       "hover-shadow-sm flex items-center justify-center font-highlight transition-colors disabled:pointer-events-none disabled:opacity-50",
-      mode === "card" && "absolute bottom-[1vw] left-[1vw] w-[17.6vw] rounded-[0.6vw] py-[0.8vw] text-lg",
-      mode === "dialog" && "mx-auto w-[31vw] rounded-[0.7vw] py-[0.9vw] text-2xl",
+      mode === "card" &&
+        "absolute bottom-[1.2vw] left-[1.2vw] w-[27.2vw] rounded-[0.84vw] py-[1.1vw] text-mb-md md:bottom-[1vw] md:left-[1vw] md:w-[17.6vw] md:rounded-[0.6vw] md:py-[0.8vw] md:text-lg",
+      mode === "dialog" &&
+        "mx-auto w-[83vw] rounded-[1.4vw] py-[1.8vw] text-mb-xl md:w-[31vw] md:rounded-[0.7vw] md:py-[0.9vw] md:text-2xl",
       tone === "pink" && "bg-brightPink shadow-brightPink",
       tone === "blue" && "bg-brightBlue shadow-brightBlue",
       className
@@ -69,9 +71,9 @@ interface IconButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 const IconButton = ({ iconType, ...rest }: IconButtonProps) => (
   <button
     {...rest}
-    className="flex h-[3vw] w-[3vw] items-center justify-center rounded-[0.6vw] border-[0.15vw] border-darkPurple bg-black/25"
+    className="flex h-[6vw] w-[6vw] items-center justify-center rounded-[1.2vw] border-[0.3vw] border-darkPurple bg-black/25 md:h-[3vw] md:w-[3vw] md:rounded-[0.6vw] md:border-[0.15vw]"
   >
-    <Icon iconType={iconType} size={"2.2vw"} color="white" />
+    <Icon iconType={iconType} className="h-[4.4vw] w-[4.4vw] md:h-[2.2vw] md:w-[2.2vw]" color="white" />
   </button>
 );
 

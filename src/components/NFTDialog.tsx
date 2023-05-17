@@ -496,13 +496,13 @@ const NFTDialogBasis = ({ NFT, borderTone, children }: NFTDialogBasisProps) => (
     <AlertDialog.Overlay className="fixed inset-0 z-30 bg-black/80 data-[state=open]:animate-overlayShow" />
     <AlertDialog.Content
       className={cn(
-        "fixed left-[50%] top-[50%] z-40 flex h-[46vw] max-h-[85vh] w-[68vw] translate-x-[-50%] translate-y-[-50%] flex-row justify-between rounded-[1.5vw] border-[0.2vw] bg-gradient-to-br from-shadedBackgroundPurple1 via-shadedBackgroundPurple2 to-shadedBackgroundPurple3 p-[1.5vw] focus:outline-none data-[state=open]:animate-contentShow",
+        "fixed left-[50%] top-[50%] z-40 flex max-h-[85vh] w-[90vw] translate-x-[-50%] translate-y-[-50%] flex-col justify-between rounded-[2vw] border-[0.4vw] bg-gradient-to-br from-shadedBackgroundPurple1 via-shadedBackgroundPurple2 to-shadedBackgroundPurple3 p-[1.5vw] focus:outline-none data-[state=open]:animate-contentShow md:h-[46vw] md:w-[68vw] md:flex-row md:rounded-[1.5vw] md:border-[0.2vw]",
         borderTone === "pink" && "border-brightPink",
         borderTone === "blue" && "border-brightBlue"
       )}
     >
-      <div className="w-1/2">
-        <div className="relative mx-auto h-[21vw] w-[21vw]">
+      <div className="flex flex-row justify-start md:w-1/2 md:flex-col">
+        <div className="relative mx-auto h-[35vw] w-[35vw] md:h-[21vw] md:w-[21vw]">
           <Image
             fill
             style={{ objectFit: "contain" }}
@@ -513,25 +513,32 @@ const NFTDialogBasis = ({ NFT, borderTone, children }: NFTDialogBasisProps) => (
             className="rounded-[1vw]"
           />
         </div>
-        <Header3 className="mb-[0.4vw] mt-[0.9vw] whitespace-normal">{NFT.title}</Header3>
-        <p className="text-lg italic">{NFT.collectionName}</p>
-        <p className="mt-[1.4vw] text-sm">{NFT.description}</p>
-        {NFT.attributes && (
-          <>
-            <Header4 className="mt-[1.4vw]">Traits</Header4>
-            {NFT.attributes.map((attribute, index) => (
-              <p key={index} className="my-[0.6vw] text-sm">
-                {attribute.trait_type}: <span className="font-medium">{attribute.value}</span>
-              </p>
-            ))}
-          </>
-        )}
+        <div className="m-auto text-center md:m-0 md:text-left">
+          <Header3 className="mx-auto mb-[0.4vh] mt-[1vh] md:mx-0 md:mb-[0.4vw] md:mt-[0.9vw] md:whitespace-normal">
+            {NFT.title}
+          </Header3>
+          <p className="text-mb-lg italic md:text-lg">{NFT.collectionName}</p>
+          <p className="mt-[1.4vw] text-mb-md md:text-sm">{NFT.description}</p>
+          {NFT.attributes && (
+            <>
+              <Header4 className="mx-auto mt-[1.4vh] md:mx-0 md:mt-[1.4vw]">Traits</Header4>
+              {NFT.attributes.map((attribute, index) => (
+                <p key={index} className="my-[0.6vw] text-mb-md md:text-sm">
+                  {attribute.trait_type}: <span className="font-medium">{attribute.value}</span>
+                </p>
+              ))}
+            </>
+          )}
+        </div>
       </div>
-      <div className="relative w-1/2">
+      <div className="md:relative md:w-1/2">
         <AlertDialog.Cancel asChild>
-          <X size={"2.2vw"} color="white" className="absolute right-0 top-0 hover:cursor-pointer" />
+          <X
+            color="white"
+            className="absolute right-[1vw] top-[1vw] hover:cursor-pointer md:right-0 md:top-0 md:h-[2.2vw] md:w-[2.2vw]"
+          />
         </AlertDialog.Cancel>
-        <div className="flex h-full w-full flex-col justify-start pt-[2.5vw]">{children}</div>
+        <div className="flex h-full w-full flex-col justify-start px-[2vw] pt-[2.5vw] md:px-0">{children}</div>
       </div>
     </AlertDialog.Content>
   </AlertDialog.Portal>
@@ -547,7 +554,7 @@ const NFTRentalKeyInformation = ({ NFT }: NFTDialogProps) => {
       <Header4 className="mx-auto mb-[1.5vw]">
         {isCollateralized ? "Collateralized Rental" : "Non-Collateralized Rental"}
       </Header4>
-      <p className="mb-[1.5vw]">
+      <p className="mb-[1.5vw] text-mb-md md:text-md">
         {isCollateralized ? collateralizedRentDescription : nonCollateralizedRentDescription}
       </p>
       <FilledInput label="Rent Rate:" value={NFT.rentRate?.toString()} unit="ETH/HOUR" />
@@ -580,13 +587,13 @@ const WrappedTokenAction = ({ NFT }: NFTDialogProps) => {
 
   return (
     <>
-      <p className="my-auto px-[4vw] text-center text-lg font-medium">
+      <p className="my-auto px-[4vw] text-center text-mb-lg font-medium md:text-lg">
         This item is a wrapped NFT that as been minted as part of our non-collateralized rentals and therefore you are
         not able to rent it in our platform.
       </p>
       {data === false && (
         <>
-          <p className="absolute bottom-[5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+          <p className="absolute bottom-[5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-mb-lg font-medium md:text-lg">
             This rent isn&apos;t valid anymore. do you want to burn the wrapped NFT?
           </p>
           <ButtonNFT
@@ -634,16 +641,26 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
           <Header4 className="mx-auto mb-[1.5vw]">Choose your option</Header4>
           <div className="flex flex-1 flex-col justify-between">
             <Header4 className="mx-auto">Collateralized Rental</Header4>
-            <p>{collateralizedRentDescription}</p>
-            <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("collateralized")}>
+            <p className="py-[1.5vh] text-mb-md md:py-0 md:text-md">{collateralizedRentDescription}</p>
+            <ButtonNFT
+              className="my-[0.5vh] md:my-0"
+              tone={"blue"}
+              mode="dialog"
+              onClick={() => setSelectedOption("collateralized")}
+            >
               SELECT
             </ButtonNFT>
           </div>
           <div className="my-[1.5vw] h-[0.1vw] w-full bg-brightBlue" />
           <div className="flex flex-1 flex-col justify-between">
             <Header4 className="mx-auto">Non-Collateralized Rental</Header4>
-            <p>{nonCollateralizedRentDescription}</p>
-            <ButtonNFT tone={"blue"} mode="dialog" onClick={() => setSelectedOption("nonCollateralized")}>
+            <p className="py-[1.5vh] text-mb-md md:py-0 md:text-md">{nonCollateralizedRentDescription}</p>
+            <ButtonNFT
+              className="my-[0.5vh] md:my-0"
+              tone={"blue"}
+              mode="dialog"
+              onClick={() => setSelectedOption("nonCollateralized")}
+            >
               SELECT
             </ButtonNFT>
           </div>
@@ -652,16 +669,19 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
       {selectedOption === "collateralized" && (
         <>
           <button onClick={() => setSelectedOption(undefined)}>
-            <ChevronLeft size={"2.2vw"} color="white" className="absolute left-0 top-0 hover:cursor-pointer" />
+            <ChevronLeft
+              color="white"
+              className="absolute left-[1vw] top-[1vw] hover:cursor-pointer md:right-0 md:top-0 md:h-[2.2vw] md:w-[2.2vw]"
+            />
           </button>
           <Header4 className="mx-auto mb-[1.5vw]">Collateralized Rental</Header4>
-          <p className="mb-[1.5vw]">{collateralizedRentDescription}</p>
+          <p className="mb-[1.5vw] py-[1.5vh] text-mb-md md:py-0 md:text-md">{collateralizedRentDescription}</p>
           <NumericInput label="Rent Rate:" unit="ETH/HOUR" value={rentRate} setterFunction={setRentRate} />
           <NumericInput label="Collateral:" unit="ETH" value={collateral} setterFunction={setCollateral} />
           <ButtonNFT
             tone={"blue"}
             mode="dialog"
-            className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+            className="mb-[0.5vh] mt-[1.5vh] md:absolute md:bottom-0 md:left-[50%] md:translate-x-[-50%]"
             onClick={handleCollateralizedRent}
           >
             {collateralizedButtonText}
@@ -671,15 +691,18 @@ const NFTDialogOwned = ({ NFT }: NFTDialogProps) => {
       {selectedOption === "nonCollateralized" && (
         <>
           <button onClick={() => setSelectedOption(undefined)}>
-            <ChevronLeft size={"2.2vw"} color="white" className="absolute left-0 top-0 hover:cursor-pointer" />
+            <ChevronLeft
+              color="white"
+              className="absolute left-[1vw] top-[1vw] hover:cursor-pointer md:right-0 md:top-0 md:h-[2.2vw] md:w-[2.2vw]"
+            />
           </button>
           <Header4 className="mx-auto mb-[1.5vw]">Non-Collateralized Rental</Header4>
-          <p className="mb-[1.5vw]">{nonCollateralizedRentDescription}</p>
+          <p className="mb-[1.5vw] py-[1.5vh] text-mb-md md:py-0 md:text-md">{nonCollateralizedRentDescription}</p>
           <NumericInput label="Rent Rate:" unit="ETH/HOUR" value={rentRate} setterFunction={setRentRate} />
           <ButtonNFT
             tone={"blue"}
             mode="dialog"
-            className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+            className="mb-[0.5vh] mt-[1.5vh] md:absolute md:bottom-0 md:left-[50%] md:translate-x-[-50%]"
             onClick={handleNonCollateralizedRent}
           >
             {nonCollateralizedButtonText}
@@ -716,7 +739,7 @@ const LentedAction = ({ NFT }: NFTDialogProps) => {
       <ButtonNFT
         tone={"blue"}
         mode="dialog"
-        className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+        className="mb-[0.5vh] mt-[1.5vh] md:absolute md:bottom-0 md:left-[50%] md:translate-x-[-50%]"
         onClick={handleWithdraw}
       >
         {buttonText || "WITHDRAW"}
@@ -733,13 +756,13 @@ const LentedAction = ({ NFT }: NFTDialogProps) => {
 
     return (
       <>
-        <p className="absolute bottom-[5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+        <p className="py-[1.5vh] text-center text-mb-lg font-medium md:absolute md:bottom-[5vw] md:left-[50%] md:translate-x-[-50%] md:py-0 md:text-lg">
           You can claim the collateral since the renter hasn&apos;t returned the NFT yet
         </p>
         <ButtonNFT
           tone={"blue"}
           mode="dialog"
-          className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+          className="mb-[0.5vh] mt-[0vh] md:absolute md:bottom-0 md:left-[50%] md:translate-x-[-50%]"
           onClick={handleClaim}
         >
           {buttonText || "CLAIM"}
@@ -750,7 +773,7 @@ const LentedAction = ({ NFT }: NFTDialogProps) => {
 
   // If the NFT rental is still valid and therefore it's not withdrawable nor claimable
   return (
-    <p className="absolute bottom-[1.5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+    <p className="py-[1.5vh] text-center text-mb-lg font-medium md:absolute md:bottom-[1.5vw] md:left-[50%] md:translate-x-[-50%] md:py-0 md:text-lg">
       Since this NFT is currently rented you are unable to withdraw it
     </p>
   );
@@ -782,13 +805,13 @@ const NFTDialogRented = ({ NFT }: NFTDialogProps) => {
         <ButtonNFT
           tone={"pink"}
           mode="dialog"
-          className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+          className="mb-[0.5vh] mt-[1.5vh] md:absolute md:bottom-0 md:left-[50%] md:translate-x-[-50%]"
           onClick={handleReturnNFT}
         >
           {buttonText}
         </ButtonNFT>
       ) : (
-        <p className="absolute bottom-[1.5vw] left-[50%] w-4/5 translate-x-[-50%] text-center text-lg font-medium">
+        <p className="py-[1.5vh] text-center text-mb-lg font-medium md:absolute md:bottom-[1.5vw] md:left-[50%] md:w-4/5 md:translate-x-[-50%] md:py-0 md:text-lg">
           Once the rental period is over your wrapped token will become automatically invalid
         </p>
       )}
@@ -841,21 +864,21 @@ const NFTDialogMarketplace = ({ NFT }: NFTDialogProps) => {
   return (
     <NFTDialogBasis NFT={NFT} borderTone="pink">
       <NFTRentalKeyInformation NFT={NFT} />
-      <p className="mx-auto py-[1.5vw] text-lg">{"Rent period (hours)"}</p>
-      <div className="mx-auto flex w-[13vw] flex-row items-center justify-between">
+      <p className="mx-auto py-[1.5vh] text-mb-lg md:py-[1.5vw] md:text-lg">{"Rent period (hours)"}</p>
+      <div className="mx-auto flex w-[25vw] flex-row items-center justify-between md:w-[13vw]">
         <IconButton iconType="minus" onClick={decreaseRentHours} />
-        <ShadedBackground className="flex h-[4vw] w-[4vw] items-center justify-center rounded-[0.6vw] border-[0.15vw] bg-black/25 bg-none">
+        <ShadedBackground className="flex h-[8vw] w-[8vw] items-center justify-center rounded-[1.2vw] border-[0.3vw] bg-black/25 bg-none md:h-[4vw] md:w-[4vw] md:rounded-[0.6vw] md:border-[0.15vw]">
           <input
             value={rentHours ?? ""}
             type={"string"}
             onChange={handleRentHoursChange}
-            className="w-[3.5vw] bg-transparent text-center font-highlight text-2xl outline-none"
+            className="w-[7vw] bg-transparent text-center font-highlight text-mb-2xl outline-none md:w-[3.5vw] md:text-2xl"
           />
         </ShadedBackground>
         <IconButton iconType="plus" onClick={increaseRentHours} />
       </div>
       <FilledInput
-        className="absolute bottom-[5vw] left-0"
+        className="pb-[0.5vh] pt-[1vh] md:absolute md:bottom-[5vw] md:left-0 md:py-0"
         label="Total Value:"
         unit="ETH"
         value={calculateTotalValue()}
@@ -863,7 +886,7 @@ const NFTDialogMarketplace = ({ NFT }: NFTDialogProps) => {
       <ButtonNFT
         tone={"pink"}
         mode="dialog"
-        className="absolute bottom-0 left-[50%] translate-x-[-50%]"
+        className="my-[1vh] md:absolute md:bottom-0 md:left-[50%] md:my-0 md:translate-x-[-50%]"
         onClick={handleRent}
       >
         {buttonText}
