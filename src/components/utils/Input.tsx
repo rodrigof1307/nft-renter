@@ -38,12 +38,12 @@ const NumericInput = ({ label, unit, setterFunction, ...rest }: NumericInputProp
   );
 };
 
-const FilledInput = ({ label, value, unit, size, className }: FilledInputProps) => {
+const FilledInput = ({ label, value, unit, size = "lg", className }: FilledInputProps) => {
   if (!value || value === "0") return <></>;
 
   return (
     // eslint-disable-next-line tailwindcss/classnames-order, tailwindcss/no-custom-classname
-    <p className={cn(`my-[0.4vw] text-${size ?? "lg"}`, className)}>
+    <p className={cn(`my-[0.4vw] text-mb-${size} md:text-${size}`, className)}>
       {label}
       <span className="font-highlight">{` ${value} ${unit}`}</span>
     </p>

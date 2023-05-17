@@ -19,18 +19,19 @@ const Description = () => {
   const typewriterOptions = {
     delay: 65,
     cursorClassName: "hidden",
-    wrapperClassName: "font-highlight font-extrabold text-[6vw] leading-[6vw] py-[1.5vh]",
+    wrapperClassName:
+      "font-highlight font-extrabold text-[10.5vw] leading-[10.9vw] md:text-[6vw] md:leading-[6.2vw] py-[2.25vh] md:py-[1.5vh]",
   };
 
   return (
     <div
       className={cn(
-        "forced-opacity h-[calc(63vh-7vw)] max-h-[30vw] min-h-[25vw] px-[4vw] pt-[1vh]",
+        "forced-opacity mb-[4vh] px-[4vw] md:mb-0 md:h-[calc(63vh-7vw)] md:max-h-[30vw] md:min-h-[25vw] md:pt-[1vh]",
         !typewriterFinished && "title-typing"
       )}
     >
       <Typewriter onInit={renderTypewriter} options={typewriterOptions} />
-      <h4 className="mt-[2.5vh] text-xl leading-[1.4vw] ">
+      <h4 className="mt-[1.5vh] w-full text-mb-2xl md:mt-[2.5vh] md:text-xl">
         The NFT Renter Protocol provides a rental solution for every renter and lenter.
         <br />
         <br />

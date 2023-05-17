@@ -16,7 +16,10 @@ interface NFTLoadingCardProps {
 }
 
 const NFTLoadingCard = ({ borderTone }: NFTLoadingCardProps) => (
-  <ShadedBackground borderTone={borderTone} className="relative box-border h-[32vw] w-[20vw] animate-pulse p-[1vw]">
+  <ShadedBackground
+    borderTone={borderTone}
+    className="relative box-border h-[46.2vw] w-[30vw] animate-pulse p-[1.4vw] md:h-[33vw] md:w-[20vw] md:p-[1vw]"
+  >
     <div className="relative h-[17.6vw] w-[17.6vw] rounded-[1vw] bg-black/25" />
     <div className="relative mb-[0.4vw] mt-[0.9vw] h-[1.7vw] w-[17.6vw] rounded-[0.25vw] bg-black/25" />
     <div className="relative h-[1vw] w-[17.6vw] rounded-[0.25vw] bg-black/25" />
@@ -35,8 +38,11 @@ const NFTCardBasis = ({ NFT, borderTone, children }: NFTCardBasisProps) => {
     NFT.expirationDate && NFT.expirationDate !== "0" && (NFT.collateral || NFT.expirationDate > Date.now().toString());
 
   return (
-    <ShadedBackground borderTone={borderTone} className="relative box-border h-[33vw] w-[20vw] p-[1vw]">
-      <div className="relative h-[17.6vw] w-[17.6vw]">
+    <ShadedBackground
+      borderTone={borderTone}
+      className="relative box-border h-[46.2vw] w-[30vw] p-[1.4vw] md:h-[33vw] md:w-[20vw] md:p-[1vw]"
+    >
+      <div className="relative mx-auto h-[22vw] w-[22vw] md:h-[17.6vw] md:w-[17.6vw]">
         <Image
           fill
           style={{ objectFit: "contain" }}
@@ -47,11 +53,25 @@ const NFTCardBasis = ({ NFT, borderTone, children }: NFTCardBasisProps) => {
           className="rounded-[1vw]"
         />
       </div>
-      <Header4 className="mb-[0.4vw] mt-[0.9vw]">{NFT.title}</Header4>
-      <p className="text-sm italic">{NFT.collectionName}</p>
-      <FilledInput label="Rent Rate:" value={NFT.rentRate?.toString()} unit="ETH/HOUR" size="sm" />
-      <FilledInput label="Collateral:" value={NFT.collateral?.toString()} unit="ETH" size="sm" />
-      {showDate && <FilledInput label="Expires on:" value={dateFormater(NFT.expirationDate)} unit="" size="sm" />}
+      <Header4 className="mb-[0.5vw] mt-[1.1vw] md:mb-[0.4vw] md:mt-[0.9vw]">{NFT.title}</Header4>
+      <p className="text-mb-sm italic md:text-sm">{NFT.collectionName}</p>
+      <FilledInput
+        label="Rent Rate:"
+        value={NFT.rentRate?.toString()}
+        unit="ETH/HOUR"
+        size="sm"
+        className="text-mb-xs"
+      />
+      <FilledInput label="Collateral:" value={NFT.collateral?.toString()} unit="ETH" size="sm" className="text-mb-xs" />
+      {showDate && (
+        <FilledInput
+          label="Expires on:"
+          value={dateFormater(NFT.expirationDate)}
+          unit=""
+          size="sm"
+          className="text-mb-xs"
+        />
+      )}
       {children}
     </ShadedBackground>
   );

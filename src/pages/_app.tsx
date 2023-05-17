@@ -90,7 +90,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <main
             className={
-              "body-min-height initial-animation relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[5vw]"
+              "body-min-height initial-animation relative bg-gradient-to-br from-backgroundPurple1 via-backgroundPurple2 to-backgroundPurple3 pb-[3vh] md:pb-[5vw]"
             }
             id="main-wrapper"
           >
