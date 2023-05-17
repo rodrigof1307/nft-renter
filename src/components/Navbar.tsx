@@ -12,19 +12,19 @@ type NavbarLinksProps = {
 
 const NavbarLinks = ({ className }: NavbarLinksProps) => (
   <ul className={cn("flex w-full flex-col justify-between text-mb-3xl md:w-1/3 md:flex-row md:text-xl", className)}>
-    <li className="md:hover-line py-[1vh] md:block md:py-0">
+    <li className="hover-line py-[1vh] md:py-0">
       <Link className="flex flex-row items-center justify-between" href="/">
         Home
         <ChevronRight className="block h-6 w-6 md:hidden" />
       </Link>
     </li>
-    <li className="md:hover-line py-[1vh] md:py-0">
+    <li className="hover-line py-[1vh] md:py-0">
       <Link className="flex flex-row items-center justify-between" href="/marketplace">
         Marketplace
         <ChevronRight className="block h-6 w-6 md:hidden" />
       </Link>
     </li>
-    <li className="md:hover-line py-[1vh] md:py-0">
+    <li className="hover-line py-[1vh] md:py-0">
       <Link className="flex flex-row items-center justify-between" href="/my-collection">
         My Collection
         <ChevronRight className="block h-6 w-6 md:hidden" />

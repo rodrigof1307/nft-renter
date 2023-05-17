@@ -108,3 +108,9 @@ body {
     opacity: 1;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .hover-line:hover::after {
+    width: 0%;
+  }
+}

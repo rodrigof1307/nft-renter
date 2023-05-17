@@ -21,7 +21,7 @@ const NumericInput = ({ label, unit, setterFunction, ...rest }: NumericInputProp
   };
 
   return (
-    <p className="my-[0.5vw] text-lg">
+    <p className="my-[0.5vh] text-mb-lg md:my-[0.5vw] md:text-lg">
       {label}
       <input
         {...rest}
@@ -29,7 +29,7 @@ const NumericInput = ({ label, unit, setterFunction, ...rest }: NumericInputProp
         type={"string"}
         onChange={handleInputChange}
         className={cn(
-          "mx-[0.5vw] w-[4vw] border-0 border-b-[0.2vw] bg-transparent pb-[0.1vw] text-center font-highlight outline-none",
+          "mx-[1vw] w-[10vw] rounded-[1vw] border-[0.3vw] bg-transparent py-[0.8vw] text-center font-highlight outline-none md:mx-[0.5vw] md:w-[4vw] md:rounded-none md:border-0 md:border-b-[0.2vw] md:pb-[0.1vw]",
           rest.className
         )}
       />
