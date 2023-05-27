@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@adraffy/ens-normalize@1.9.0", "@adraffy/ens-normalize@https://github.com/ricmoo/ens-normalize.js":
+"@adraffy/ens-normalize@1.9.0", "@adraffy/ens-normalize@git+https://github.com/ricmoo/ens-normalize.js.git":
   version "1.9.0"
-  resolved "https://github.com/ricmoo/ens-normalize.js#2d040533e57e4f25f9a7cc4715e219658ad454b5"
+  resolved "git+https://github.com/ricmoo/ens-normalize.js.git#2d040533e57e4f25f9a7cc4715e219658ad454b5"
 
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
@@ -2204,10 +2204,10 @@
     mcl-wasm "^0.7.1"
     rustbn.js "~0.2.0"
 
-"@nomicfoundation/hardhat-chai-matchers@^1.0.0":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-chai-matchers/-/hardhat-chai-matchers-1.0.6.tgz#72a2e312e1504ee5dd73fe302932736432ba96bc"
-  integrity sha512-f5ZMNmabZeZegEfuxn/0kW+mm7+yV7VNDxLpMOMGXWFJ2l/Ct3QShujzDRF9cOkK9Ui/hbDeOWGZqyQALDXVCQ==
+"@nomicfoundation/hardhat-chai-matchers@^2.0.0-beta.0":
+  version "2.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-chai-matchers/-/hardhat-chai-matchers-2.0.0-beta.0.tgz#9aa69787c93af1530625a63e61c95b28a70785a8"
+  integrity sha512-eFpa9T5dFilPC0jS9DN4S3bcl+0Xc/xIV17Uz6p0kNWzatEYXcSKSx0zQNHlKM0zxe8g1WIf0Gqdb63zkQeycw==
   dependencies:
     "@ethersproject/abi" "^5.1.2"
     "@types/chai-as-promised" "^7.1.3"
@@ -2215,7 +2215,7 @@
     deep-eql "^4.0.1"
     ordinal "^1.0.3"
 
-"@nomicfoundation/hardhat-network-helpers@^1.0.0":
+"@nomicfoundation/hardhat-network-helpers@^1.0.8":
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-network-helpers/-/hardhat-network-helpers-1.0.8.tgz#e4fe1be93e8a65508c46d73c41fa26c7e9f84931"
   integrity sha512-MNqQbzUJZnCMIYvlniC3U+kcavz/PhhQSsY90tbEtUyMj/IQqsLwIRZa4ctjABh3Bz0KCh9OXUZ7Yk/d9hr45Q==
@@ -2293,10 +2293,10 @@
     "@nomicfoundation/solidity-analyzer-win32-ia32-msvc" "0.1.1"
     "@nomicfoundation/solidity-analyzer-win32-x64-msvc" "0.1.1"
 
-"@nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers":
-  version "0.3.0-beta.13"
-  resolved "https://registry.yarnpkg.com/hardhat-deploy-ethers/-/hardhat-deploy-ethers-0.3.0-beta.13.tgz#b96086ff768ddf69928984d5eb0a8d78cfca9366"
-  integrity sha512-PdWVcKB9coqWV1L7JTpfXRCI91Cgwsm7KLmBcwZ8f0COSm1xtABHZTyz3fvF6p42cTnz1VM0QnfDvMFlIRkSNw==
+"@nomiclabs/hardhat-ethers@^3.0.0-beta.0":
+  version "3.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-ethers/-/hardhat-ethers-3.0.0-beta.0.tgz#0ab529b9977e8354dd8e29d750f9cb5109948d5e"
+  integrity sha512-oV0PZ+UPFiLjV2wVKxYP/OXCJhcqGMTvoVQG2di4EE/2pqgEGDGXdPNfDiRemv6UfK8aGvtvsmU+hM+OrPR7fQ==
 
 "@nomiclabs/hardhat-etherscan@^3.1.7":
   version "3.1.7"
@@ -3163,10 +3163,10 @@
     lodash "^4.17.15"
     ts-essentials "^7.0.1"
 
-"@typechain/ethers-v5@^11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@typechain/ethers-v5/-/ethers-v5-11.0.0.tgz#8a11b34a386a30eed34375d05a09f893f7df838f"
-  integrity sha512-JDAvOjtzGuEQukgArIEseHznS2+v+vG3TpfODjNj4tu1kgmVu66G9gk7THOO04HJ5q+OJSLx9b46lc3GRGPIVA==
+"@typechain/ethers-v6@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@typechain/ethers-v6/-/ethers-v6-0.3.3.tgz#c703b2f880026e6eaeaf146b1782cb70da7087c0"
+  integrity sha512-0kKntHjadOOeT4C74FMmf4chpTMStre2cZuhIGUcezEiDFWd70UgNUAS3hzBDX+YsH91NERTiuwB3UfoP7OALA==
   dependencies:
     lodash "^4.17.15"
     ts-essentials "^7.0.1"
@@ -7285,6 +7285,19 @@ ethereumjs-util@^7.1.0, ethereumjs-util@^7.1.1, ethereumjs-util@^7.1.3, ethereum
     ethereum-cryptography "^0.1.3"
     rlp "^2.2.4"
 
+ethers@6:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.4.0.tgz#82c230a3a018a2627593d24ec4b9c20e9681c341"
+  integrity sha512-nksaMCwX+BOdV2NQ1/57OehSD2JtujbhrdC2+Fb9VpvBO0WO6h+WWwu3oMMw7aUiTa5lvQcWX1vl4aOy7Q3CTg==
+  dependencies:
+    "@adraffy/ens-normalize" "https://github.com/ricmoo/ens-normalize.js"
+    "@noble/hashes" "1.1.2"
+    "@noble/secp256k1" "1.7.1"
+    "@types/node" "18.15.13"
+    aes-js "4.0.0-beta.5"
+    tslib "2.4.0"
+    ws "8.5.0"
+
 ethers@^4.0.40:
   version "4.0.49"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-4.0.49.tgz#0eb0e9161a0c8b4761be547396bbe2fb121a8894"
@@ -7335,19 +7348,6 @@ ethers@^5.5.3, ethers@^5.7.1, ethers@^5.7.2:
     "@ethersproject/wallet" "5.7.0"
     "@ethersproject/web" "5.7.1"
     "@ethersproject/wordlists" "5.7.0"
-
-ethers@^6.4.0:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.4.0.tgz#82c230a3a018a2627593d24ec4b9c20e9681c341"
-  integrity sha512-nksaMCwX+BOdV2NQ1/57OehSD2JtujbhrdC2+Fb9VpvBO0WO6h+WWwu3oMMw7aUiTa5lvQcWX1vl4aOy7Q3CTg==
-  dependencies:
-    "@adraffy/ens-normalize" "https://github.com/ricmoo/ens-normalize.js"
-    "@noble/hashes" "1.1.2"
-    "@noble/secp256k1" "1.7.1"
-    "@types/node" "18.15.13"
-    aes-js "4.0.0-beta.5"
-    tslib "2.4.0"
-    ws "8.5.0"
 
 ethjs-unit@0.1.6:
   version "0.1.6"
