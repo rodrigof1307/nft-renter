@@ -16,7 +16,6 @@ import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { cn } from "@/utils/utils";
 import { useEffect } from "react";
 
 const monumentExtended = localFont({

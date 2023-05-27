@@ -457,7 +457,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     const config = {
-      apiKey: process.env.ALCHEMY_API_KEY_SEPOLIA,
+      apiKey: process.env.NEXT_PUBLIC_SEPOLIA_API_KEY,
       network: Network.ETH_SEPOLIA,
     };
 
