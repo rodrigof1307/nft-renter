@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   try {
     const config = {
-      apiKey: process.env.ALCHEMY_API_KEY_SEPOLIA,
+      apiKey: process.env.SEPOLIA_API_KEY,
       network: Network.ETH_SEPOLIA,
     };
 

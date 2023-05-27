@@ -18,8 +18,8 @@ async function main() {
   const collateralizedRentHolder = await CollateralizedRentHolder.deploy(
     "0x441619F5d94779aa381d7a0dc16944ca11D8D584",
     3,
-    ethers.utils.parseEther("0.01"),
-    ethers.utils.parseEther("0.05")
+    ethers.parseEther("0.01"),
+    ethers.parseEther("0.05")
   );
   await collateralizedRentHolder.deployed();
   console.log("RentHolder SC deployed to:", collateralizedRentHolder.address);

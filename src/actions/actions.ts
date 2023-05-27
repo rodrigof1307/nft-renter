@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { erc721ABI } from "wagmi";
 import CollateralizedRentHolderArtifact from "../consts/CollateralizedRentHolderArtifact.json";
 import NonCollateralizedRentHolderArtifact from "../consts/NonCollateralizedRentHolderArtifact.json";
-import { Ethereum } from "@wagmi/core";
+import { EthereumProvider } from "hardhat/types";
 
 const collateralizedRentHolderSCAbi = [
   {
@@ -572,7 +572,7 @@ const nonCollateralizedRentHolderSCAbi = [
   },
 ] as const;
 
-const settingUpClientsAndAccount = async (ethereum: Ethereum) => {
+const settingUpClientsAndAccount = async (ethereum: EthereumProvider) => {
   const walletClient = createWalletClient({
     chain: sepolia,
     transport: custom(ethereum),
@@ -636,15 +636,15 @@ const performRentPublish = async (
         args: [
           NFT.address as `0x${string}`,
           BigInt(NFT.tokenID),
-          BigInt(ethers.utils.parseEther(rentRate).toString()),
-          BigInt(ethers.utils.parseEther(collateral).toString()),
+          BigInt(ethers.parseEther(rentRate).toString()),
+          BigInt(ethers.parseEther(collateral).toString()),
         ],
         bytecode: CollateralizedRentHolderArtifact.bytecode as `0x${string}`,
       })
     : walletClient.deployContract({
         abi: nonCollateralizedRentHolderSCAbi,
         account,
-        args: [NFT.address as `0x${string}`, BigInt(NFT.tokenID), BigInt(ethers.utils.parseEther(rentRate).toString())],
+        args: [NFT.address as `0x${string}`, BigInt(NFT.tokenID), BigInt(ethers.parseEther(rentRate).toString())],
         bytecode: NonCollateralizedRentHolderArtifact.bytecode as `0x${string}`,
       }));
 
@@ -793,7 +793,7 @@ const performRent = async (
         abi: collateralizedRentHolderSCAbi,
         functionName: "rent",
         args: [rentHours],
-        value: ethers.utils.parseEther(((NFT.rentRate ?? 0) * rentHours + (NFT.collateral ?? 0)).toString()).toBigInt(),
+        value: ethers.parseEther(((NFT.rentRate ?? 0) * rentHours + (NFT.collateral ?? 0)).toString()),
       })
     : walletClient.writeContract({
         account,
@@ -801,7 +801,7 @@ const performRent = async (
         abi: nonCollateralizedRentHolderSCAbi,
         functionName: "rent",
         args: [rentHours],
-        value: ethers.utils.parseEther(((NFT.rentRate ?? 0) * rentHours).toString()).toBigInt(),
+        value: ethers.parseEther(((NFT.rentRate ?? 0) * rentHours).toString()),
       }));
 
   await publicClient.waitForTransactionReceipt({ hash });

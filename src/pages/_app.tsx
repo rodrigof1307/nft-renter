@@ -10,13 +10,12 @@ import Footer from "@/components/Footer";
 import Lines from "../../public/lines.svg";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
-import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { cn } from "@/utils/utils";
 import { useEffect } from "react";
 
 const monumentExtended = localFont({
@@ -39,15 +38,9 @@ const lora = Lora({
   variable: "--font-lora",
 });
 
-const { chains, provider } = configureChains(
+const { chains, publicClient } = configureChains(
   [sepolia],
-  [
-    jsonRpcProvider({
-      rpc: (chain) => ({
-        http: `https://rpc2.sepolia.org`,
-      }),
-    }),
-  ]
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_SEPOLIA_API_KEY ?? "" })]
 );
 
 const { connectors } = getDefaultWallets({
@@ -55,10 +48,10 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-const wagmiClient = createClient({
+const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
-  provider,
+  publicClient,
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -85,7 +78,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
 
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <QueryClientProvider client={queryClient}>
           <main

@@ -15,3 +15,9 @@ interface NFTInfo {
 }
 
 type NFTsType = "myCollectionOwned" | "myCollectionLented" | "myCollectionRented" | "marketplace";
+
+type EthereumProvider = import("hardhat/types").EthereumProvider;
+
+interface Window {
+  ethereum: EthereumProvider;
+}

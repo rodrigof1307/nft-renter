@@ -1,25 +1,19 @@
-import { createClient, configureChains, sepolia } from "@wagmi/core";
+import { createConfig, configureChains, sepolia } from "@wagmi/core";
 import { readContracts } from "@wagmi/core";
-import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 import { Alchemy, Network } from "alchemy-sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
 
-const { provider, webSocketProvider } = configureChains(
+const { publicClient, webSocketPublicClient } = configureChains(
   [sepolia],
-  [
-    jsonRpcProvider({
-      rpc: (chain) => ({
-        http: `https://rpc2.sepolia.org`,
-      }),
-    }),
-  ]
+  [alchemyProvider({ apiKey: process.env.SEPOLIA_API_KEY ?? "" })]
 );
 
-const client = createClient({
+const config = createConfig({
   autoConnect: true,
-  provider,
-  webSocketProvider,
+  publicClient,
+  webSocketPublicClient,
 });
 
 type Data = {
@@ -436,7 +430,7 @@ const abi = [
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   try {
-    const [rentHolderSCs] = await readContracts({
+    const [response] = await readContracts({
       contracts: [
         {
           address: "0x90dd4730A104e15c71ED9B82eb025AF801348860",
@@ -446,18 +440,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       ],
     });
 
+    const rentHolderSCs = response.result ?? [];
+
     const rawRentHolderSCs = [];
 
     const currentDate = new Date().getTime() / 1000;
 
     for (const rentHolderSC of rentHolderSCs) {
-      if (rentHolderSC.currRentEndDate.toNumber() < currentDate) {
+      if (parseFloat(rentHolderSC.currRentEndDate.toString()) < currentDate) {
         rawRentHolderSCs.push(rentHolderSC);
       }
     }
 
     const config = {
-      apiKey: process.env.ALCHEMY_API_KEY_SEPOLIA,
+      apiKey: process.env.SEPOLIA_API_KEY,
       network: Network.ETH_SEPOLIA,
     };
 
@@ -487,13 +483,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         image: responseNFTMetadata[i].rawMetadata?.image,
         attributes: responseNFTMetadata[i].rawMetadata?.attributes,
         tokenURI: responseNFTMetadata[i].tokenUri?.raw ?? "",
-        rentRate: parseFloat(ethers.utils.formatEther(rawRentHolderSCs[i].ratePerHour)),
-        collateral: parseFloat(ethers.utils.formatEther(rawRentHolderSCs[i].collateral)),
+        rentRate: parseFloat(ethers.formatEther(rawRentHolderSCs[i].ratePerHour)),
+        collateral: parseFloat(ethers.formatEther(rawRentHolderSCs[i].collateral)),
         expirationDate: (parseFloat(rentHolderSCs[i].currRentEndDate.toString()) * 1000).toString(),
-        rentPeriod: rawRentHolderSCs[i].currRentPeriod.toNumber(),
+        rentPeriod: parseFloat(rawRentHolderSCs[i].currRentPeriod.toString()),
       };
 
-      if (parseFloat(ethers.utils.formatEther(rawRentHolderSCs[i].collateral)) > 0) {
+      if (parseFloat(ethers.formatEther(rawRentHolderSCs[i].collateral)) > 0) {
         collateralizedRentals.push(filteredItem);
       } else {
         nonCollateralizedRentals.push(filteredItem);

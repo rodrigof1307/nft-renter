@@ -6,7 +6,6 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { NFTDialogLented, NFTDialogMarketplace, NFTDialogOwned, NFTDialogRented } from "./NFTDialog";
 import { dateFormater } from "@/utils/utils";
 import { useContractRead, erc721ABI } from "wagmi";
-import { ethers } from "ethers";
 
 import { ReactNode } from "react";
 import { FilledInput } from "./utils/Input";
@@ -99,7 +98,7 @@ const NFTCardLented = ({ NFT }: NFTCardProps) => {
     address: NFT.address as `0x${string}`,
     abi: erc721ABI,
     functionName: "ownerOf",
-    args: [ethers.BigNumber.from(NFT.tokenID)],
+    args: [BigInt(NFT.tokenID)],
   });
 
   const actionTitle = () => {

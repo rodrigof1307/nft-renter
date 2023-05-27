@@ -574,7 +574,7 @@ const WrappedTokenAction = ({ NFT }: NFTDialogProps) => {
     address: NFT.address as `0x${string}`,
     abi: wrappedTokenABI,
     functionName: "isTokenIDOwnerValid",
-    args: [ethers.BigNumber.from(NFT.tokenID)],
+    args: [BigInt(NFT.tokenID)],
   });
 
   const queryClient = useQueryClient();
@@ -722,7 +722,7 @@ const LentedAction = ({ NFT }: NFTDialogProps) => {
     address: NFT.address as `0x${string}`,
     abi: erc721ABI,
     functionName: "ownerOf",
-    args: [ethers.BigNumber.from(NFT.tokenID)],
+    args: [BigInt(NFT.tokenID)],
   });
 
   // If the NFT is withdrawable
