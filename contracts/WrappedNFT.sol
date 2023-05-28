@@ -5,29 +5,19 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-
-interface IRentHolder {
-  struct currRenterInfo {
-    address currRenter;
-    uint currRentEndDate;
-  }
-
-  function returnCurrRenterInfo() external view returns (currRenterInfo memory);
-}
+import "./GenericRentHolder.sol";
 
 contract WrappedNFT is ERC721, ERC721URIStorage, Ownable {
   using Counters for Counters.Counter;
 
+  // State variables
   Counters.Counter private _tokenIdCounter;
-
   mapping(uint256 => address) public tokenIDtoRentHolderSC;
 
+  // Constructor
   constructor() ERC721("Wrapped NFT - NFT Renter", "NFTR") {}
 
-  function _baseURI() internal pure override returns (string memory) {
-    return "";
-  }
-
+  // External functions
   function safeMint(address to, string memory uri) external {
     uint256 tokenId = _tokenIdCounter.current();
     _tokenIdCounter.increment();
@@ -36,26 +26,31 @@ contract WrappedNFT is ERC721, ERC721URIStorage, Ownable {
     tokenIDtoRentHolderSC[tokenId] = msg.sender;
   }
 
-  // The following functions are overrides required by Solidity.
-  function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-    super._burn(tokenId);
-  }
-
   function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
     return super.tokenURI(tokenId);
   }
 
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721URIStorage) returns (bool) {
+    return super.supportsInterface(interfaceId);
+  }
+
+  // Public functions
   function count() public view returns (uint256) {
     return _tokenIdCounter.current();
   }
 
   function isTokenIDOwnerValid(uint256 tokenId) public view returns (bool) {
-    IRentHolder.currRenterInfo memory _currRenterInfo = IRentHolder(tokenIDtoRentHolderSC[tokenId])
-      .returnCurrRenterInfo();
+    GenericRentHolder.CurrRenterInfo memory _currRenterInfo = GenericRentHolder(payable(tokenIDtoRentHolderSC[tokenId]))
+      .getCurrRenterInfo();
     return _currRenterInfo.currRenter == ownerOf(tokenId) && _currRenterInfo.currRentEndDate > block.timestamp;
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721URIStorage) returns (bool) {
-    return super.supportsInterface(interfaceId);
+  // Internal functions
+  function _baseURI() internal pure override returns (string memory) {
+    return "";
+  }
+
+  function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    super._burn(tokenId);
   }
 }
