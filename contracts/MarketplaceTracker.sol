@@ -1,126 +1,140 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
-interface IRentHolder {
-  struct relevantRentInfo {
-    address rentHolderSC;
-    address nftOwner;
-    address nftAddress;
-    uint nftId;
-    uint ratePerHour;
-    uint collateral;
-    address currRenter;
-    uint currRentEndDate;
-    uint currRentPeriod;
-  }
+import "./GenericRentHolder.sol";
 
-  function returnRentInfo() external view returns (relevantRentInfo memory);
-}
-
-// This Smart contract keeps track of all the rent holder smart contracts
 contract MarketplaceTracker {
-  address[] public collateralizedRentHolderSCs;
-  address[] public nonCollateralizedRentHolderSCs;
+  // State Variables
+  address private immutable i_feeCollector;
+  uint private immutable i_feePercentage;
+  address private immutable i_wrappedCollectionAddress;
 
-  function addCollateralizedRentHolderSC() external {
-    collateralizedRentHolderSCs.push(msg.sender);
+  address[] private s_collateralizedRentHolderSCs;
+  address[] private s_nonCollateralizedRentHolderSCs;
+
+  // Constructor
+  constructor(uint _feePercentage, address _wrappedCollectionAddress) {
+    i_feeCollector = msg.sender;
+    i_feePercentage = _feePercentage;
+    i_wrappedCollectionAddress = _wrappedCollectionAddress;
   }
 
-  function addNonCollateralizedRentHolderSC() external {
-    nonCollateralizedRentHolderSCs.push(msg.sender);
-  }
-
-  function _removeRentHolder(address[] storage rentHolderSCs) private {
-    for (uint i = 0; i < rentHolderSCs.length; i++) {
-      if (rentHolderSCs[i] == msg.sender) {
-        rentHolderSCs[i] = rentHolderSCs[rentHolderSCs.length - 1];
-        rentHolderSCs.pop();
+  // Internal & Private Functions
+  function _removeRentHolder(address[] storage _rentHolderSCs) internal {
+    uint length = _rentHolderSCs.length;
+    for (uint i = 0; i < length; i++) {
+      if (_rentHolderSCs[i] == msg.sender) {
+        _rentHolderSCs[i] = _rentHolderSCs[length - 1];
+        _rentHolderSCs.pop();
         break;
       }
     }
   }
 
-  function removeCollateralizedRentSC() external {
-    _removeRentHolder(collateralizedRentHolderSCs);
+  function _compareStrings(string memory _a, string memory _b) internal pure returns (bool) {
+    return (keccak256(abi.encodePacked((_a))) == keccak256(abi.encodePacked((_b))));
   }
 
-  function removeNonCollateralizedRentSC() external {
-    _removeRentHolder(nonCollateralizedRentHolderSCs);
-  }
-
-  function compareStrings(string memory a, string memory b) public pure returns (bool) {
-    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
-  }
-
-  function listRelevantInfoHelperFilter(
-    IRentHolder.relevantRentInfo memory _rentInfo,
+  function _listRelevantInfoHelperFilter(
+    GenericRentHolder.RelevantRentInfo memory _rentInfo,
     string memory _mode,
-    bool collateralized,
+    bool _collateralized,
     address _actor
   ) internal view returns (bool) {
-    if (compareStrings(_mode, "lented")) {
+    if (_compareStrings(_mode, "lented")) {
       return _rentInfo.nftOwner == _actor;
-    } else if (compareStrings(_mode, "rented") && !collateralized) {
+    } else if (_compareStrings(_mode, "rented") && !_collateralized) {
       return _rentInfo.currRenter == _actor && _rentInfo.currRentEndDate > block.timestamp;
-    } else if (compareStrings(_mode, "rented") && collateralized) {
+    } else if (_compareStrings(_mode, "rented") && _collateralized) {
       return _rentInfo.currRenter == _actor;
     } else {
       return true;
     }
   }
 
-  function listRelevantInfo(
+  function _listRelevantInfo(
     bool _collateralized,
     bool _nonCollateralized,
     string memory _mode,
     address _actor
-  ) internal view returns (IRentHolder.relevantRentInfo[] memory) {
-    IRentHolder.relevantRentInfo[] memory helperRentInfoArray = new IRentHolder.relevantRentInfo[](
-      collateralizedRentHolderSCs.length + nonCollateralizedRentHolderSCs.length
+  ) internal view returns (GenericRentHolder.RelevantRentInfo[] memory) {
+    GenericRentHolder.RelevantRentInfo[] memory helperRentInfoArray = new GenericRentHolder.RelevantRentInfo[](
+      s_collateralizedRentHolderSCs.length + s_nonCollateralizedRentHolderSCs.length
     );
     uint count = 0;
     if (_collateralized) {
-      for (uint i = 0; i < collateralizedRentHolderSCs.length; i++) {
-        IRentHolder.relevantRentInfo memory rentInfo = IRentHolder(collateralizedRentHolderSCs[i]).returnRentInfo();
-        if (listRelevantInfoHelperFilter(rentInfo, _mode, true, _actor)) {
+      uint collateralizedLength = s_collateralizedRentHolderSCs.length;
+      for (uint i = 0; i < collateralizedLength; i++) {
+        GenericRentHolder.RelevantRentInfo memory rentInfo = GenericRentHolder(
+          payable(s_collateralizedRentHolderSCs[i])
+        ).getRentInfo();
+        if (_listRelevantInfoHelperFilter(rentInfo, _mode, true, _actor)) {
           helperRentInfoArray[count] = rentInfo;
           count++;
         }
       }
     }
     if (_nonCollateralized) {
-      for (uint i = 0; i < nonCollateralizedRentHolderSCs.length; i++) {
-        IRentHolder.relevantRentInfo memory rentInfo = IRentHolder(nonCollateralizedRentHolderSCs[i]).returnRentInfo();
-        if (listRelevantInfoHelperFilter(rentInfo, _mode, false, _actor)) {
+      uint nonCollateralizedLength = s_nonCollateralizedRentHolderSCs.length;
+      for (uint i = 0; i < nonCollateralizedLength; i++) {
+        GenericRentHolder.RelevantRentInfo memory rentInfo = GenericRentHolder(
+          payable(s_nonCollateralizedRentHolderSCs[i])
+        ).getRentInfo();
+        if (_listRelevantInfoHelperFilter(rentInfo, _mode, false, _actor)) {
           helperRentInfoArray[count] = rentInfo;
           count++;
         }
       }
     }
-    IRentHolder.relevantRentInfo[] memory rentInfoArray = new IRentHolder.relevantRentInfo[](count);
+    GenericRentHolder.RelevantRentInfo[] memory rentInfoArray = new GenericRentHolder.RelevantRentInfo[](count);
     for (uint i = 0; i < count; i++) {
-      rentInfoArray[uint(i)] = helperRentInfoArray[uint(i)];
+      rentInfoArray[i] = helperRentInfoArray[i];
     }
     return rentInfoArray;
   }
 
-  function listLentedRelevantInfo(address _lenter) external view returns (IRentHolder.relevantRentInfo[] memory) {
-    return listRelevantInfo(true, true, "lented", _lenter);
+  // External & Public Functions
+  function getFeeInfo() external view returns (address, uint) {
+    return (i_feeCollector, i_feePercentage);
   }
 
-  function listRentedRelevantInfo(address _renter) external view returns (IRentHolder.relevantRentInfo[] memory) {
-    return listRelevantInfo(true, true, "rented", _renter);
+  function getWrappedCollectionAddress() external view returns (address) {
+    return i_wrappedCollectionAddress;
   }
 
-  function listAllCollateralizedRelevantInfo() external view returns (IRentHolder.relevantRentInfo[] memory) {
-    return listRelevantInfo(true, false, "none", address(0));
+  function addCollateralizedRentHolderSC() external {
+    s_collateralizedRentHolderSCs.push(msg.sender);
   }
 
-  function listAllNonCollateralizedRelevantInfo() external view returns (IRentHolder.relevantRentInfo[] memory) {
-    return listRelevantInfo(false, true, "none", address(0));
+  function addNonCollateralizedRentHolderSC() external {
+    s_nonCollateralizedRentHolderSCs.push(msg.sender);
   }
 
-  function listAllRelevantInfo() external view returns (IRentHolder.relevantRentInfo[] memory) {
-    return listRelevantInfo(true, true, "none", address(0));
+  function removeCollateralizedRentSC() external {
+    _removeRentHolder(s_collateralizedRentHolderSCs);
+  }
+
+  function removeNonCollateralizedRentSC() external {
+    _removeRentHolder(s_nonCollateralizedRentHolderSCs);
+  }
+
+  function listLentedRelevantInfo(address _lenter) external view returns (GenericRentHolder.RelevantRentInfo[] memory) {
+    return _listRelevantInfo(true, true, "lented", _lenter);
+  }
+
+  function listRentedRelevantInfo(address _renter) external view returns (GenericRentHolder.RelevantRentInfo[] memory) {
+    return _listRelevantInfo(true, true, "rented", _renter);
+  }
+
+  function listAllCollateralizedRelevantInfo() external view returns (GenericRentHolder.RelevantRentInfo[] memory) {
+    return _listRelevantInfo(true, false, "none", address(0));
+  }
+
+  function listAllNonCollateralizedRelevantInfo() external view returns (GenericRentHolder.RelevantRentInfo[] memory) {
+    return _listRelevantInfo(false, true, "none", address(0));
+  }
+
+  function listAllRelevantInfo() external view returns (GenericRentHolder.RelevantRentInfo[] memory) {
+    return _listRelevantInfo(true, true, "none", address(0));
   }
 }
