@@ -46,7 +46,6 @@ const config: HardhatUserConfig = {
     // npx hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
     apiKey: {
       sepolia: ETHERSCAN_API_KEY,
-      mumbai: POLYGONSCAN_API_KEY,
     },
   },
   gasReporter: {

@@ -11,8 +11,8 @@ import Lines from "../../public/lines.svg";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { sepolia } from "wagmi/chains";
-import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
+import { hardhat, sepolia } from "wagmi/chains";
+import { publicProvider } from "wagmi/providers/public";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -38,16 +38,7 @@ const lora = Lora({
   variable: "--font-lora",
 });
 
-const { chains, provider } = configureChains(
-  [sepolia],
-  [
-    jsonRpcProvider({
-      rpc: (chain) => ({
-        http: `https://rpc2.sepolia.org`,
-      }),
-    }),
-  ]
-);
+const { chains, provider } = configureChains([sepolia, hardhat], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
   appName: "NFT Renter dApp",

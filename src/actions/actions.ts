@@ -1,591 +1,44 @@
 import { QueryClient } from "react-query";
-import { createWalletClient, custom, http, createPublicClient } from "viem";
-import { sepolia } from "viem/chains";
+import { createWalletClient, custom, http, createPublicClient, fromHex } from "viem";
+import { hardhat, sepolia } from "viem/chains";
 import { ethers } from "ethers";
 import { erc721ABI } from "wagmi";
-import CollateralizedRentHolderArtifact from "../consts/CollateralizedRentHolderArtifact.json";
-import NonCollateralizedRentHolderArtifact from "../consts/NonCollateralizedRentHolderArtifact.json";
 import { Ethereum } from "@wagmi/core";
+import {
+  collateralizedRentHolderABI,
+  collateralizedRentHolderBytecode,
+  nonCollateralizedRentHolderABI,
+  nonCollateralizedRentHolderBytecode,
+} from "@/consts";
+import * as addresses from "@/../addresses.json";
 
-const collateralizedRentHolderSCAbi = [
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_nftAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_nftID",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_ratePerHour",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_collateralValue",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_newRatePerHour",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_newCollateralValue",
-        type: "uint256",
-      },
-    ],
-    name: "changeRentalValues",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "claimCollateral",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "collateralValue",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currRentEndDate",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currRentPeriod",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currRenter",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "feeCollector",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "feePercentage",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getCurrentNFTOwner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "nftAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "nftId",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "nftOwner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "publishNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "ratePerHour",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint8",
-        name: "_hours",
-        type: "uint8",
-      },
-    ],
-    name: "rent",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "returnNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "returnRentInfo",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "rentHolderSC",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "nftOwner",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "nftAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "nftId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "ratePerHour",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "collateralValue",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "currRenter",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "currRentEndDate",
-            type: "uint256",
-          },
-          {
-            internalType: "uint8",
-            name: "currRentPeriod",
-            type: "uint8",
-          },
-        ],
-        internalType: "struct CollateralizedRentHolder.relevantRentInfo",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "withdrawNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    stateMutability: "payable",
-    type: "receive",
-  },
-] as const;
-
-const nonCollateralizedRentHolderSCAbi = [
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_nftAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_nftID",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_ratePerHour",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_newRatePerHour",
-        type: "uint256",
-      },
-    ],
-    name: "changeRentalValues",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currRentEndDate",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currRentPeriod",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currRenter",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "feeCollector",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "feePercentage",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "nftAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "nftId",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "nftOwner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "publishNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "ratePerHour",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint8",
-        name: "_hours",
-        type: "uint8",
-      },
-    ],
-    name: "rent",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "returnCurrRenterInfo",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "currRenter",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "currRentEndDate",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct NonCollateralizedRentHolder.currRenterInfo",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "returnRentInfo",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "rentHolderSC",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "nftOwner",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "nftAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "nftId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "ratePerHour",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "collateralValue",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "currRenter",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "currRentEndDate",
-            type: "uint256",
-          },
-          {
-            internalType: "uint8",
-            name: "currRentPeriod",
-            type: "uint8",
-          },
-        ],
-        internalType: "struct NonCollateralizedRentHolder.relevantRentInfo",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "withdrawNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    stateMutability: "payable",
-    type: "receive",
-  },
-] as const;
+const chains = {
+  "31337": hardhat,
+  "1337": hardhat,
+  "11155111": sepolia,
+};
 
 const settingUpClientsAndAccount = async (ethereum: Ethereum) => {
+  const chainID = fromHex(
+    (await ethereum.request({ method: "eth_chainId" })) as `0x${string}`,
+    "number"
+  ).toString() as keyof typeof chains;
+
+  const chain = chains[chainID];
+
   const walletClient = createWalletClient({
-    chain: sepolia,
+    chain,
     transport: custom(ethereum),
   });
 
   const publicClient = createPublicClient({
-    chain: sepolia,
-    transport: http(),
+    chain,
+    transport: http(chainID === "11155111" ? undefined : "http://127.0.0.1:8545/"),
   });
 
   const [account] = await walletClient.getAddresses();
 
-  return { walletClient, publicClient, account };
+  return { chainID, walletClient, publicClient, account };
 };
 
 const invalidateQueries = (queryClient: QueryClient) => {
@@ -627,25 +80,33 @@ const performRentPublish = async (
 
   setButtonText("DEPLOYING...");
 
-  const { walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
+  const { chainID, walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
 
   const hashDeployment = await (collateral
     ? walletClient.deployContract({
-        abi: collateralizedRentHolderSCAbi,
+        abi: collateralizedRentHolderABI,
         account,
         args: [
           NFT.address as `0x${string}`,
           BigInt(NFT.tokenID),
           BigInt(ethers.utils.parseEther(rentRate).toString()),
           BigInt(ethers.utils.parseEther(collateral).toString()),
+          addresses[chainID].MarketplaceTracker as `0x${string}`,
         ],
-        bytecode: CollateralizedRentHolderArtifact.bytecode as `0x${string}`,
+        bytecode: collateralizedRentHolderBytecode as `0x${string}`,
+        chain: chains[chainID],
       })
     : walletClient.deployContract({
-        abi: nonCollateralizedRentHolderSCAbi,
+        abi: nonCollateralizedRentHolderABI,
         account,
-        args: [NFT.address as `0x${string}`, BigInt(NFT.tokenID), BigInt(ethers.utils.parseEther(rentRate).toString())],
-        bytecode: NonCollateralizedRentHolderArtifact.bytecode as `0x${string}`,
+        args: [
+          NFT.address as `0x${string}`,
+          BigInt(NFT.tokenID),
+          BigInt(ethers.utils.parseEther(rentRate).toString()),
+          addresses[chainID].MarketplaceTracker as `0x${string}`,
+        ],
+        bytecode: nonCollateralizedRentHolderBytecode as `0x${string}`,
+        chain: chains[chainID],
       }));
 
   const { contractAddress } = await publicClient.waitForTransactionReceipt({ hash: hashDeployment });
@@ -671,14 +132,16 @@ const performRentPublish = async (
     ? walletClient.writeContract({
         account,
         address: contractAddress as `0x${string}`,
-        abi: collateralizedRentHolderSCAbi,
+        abi: collateralizedRentHolderABI,
         functionName: "publishNFT",
+        chain: chains[chainID],
       })
     : walletClient.writeContract({
         account,
         address: contractAddress as `0x${string}`,
-        abi: nonCollateralizedRentHolderSCAbi,
+        abi: nonCollateralizedRentHolderABI,
         functionName: "publishNFT",
+        chain: chains[chainID],
       }));
 
   await publicClient.waitForTransactionReceipt({ hash: hashPublish });
@@ -700,7 +163,7 @@ const performMarketplaceRemoval = async (
 ) => {
   if (!window.ethereum) return;
 
-  const { walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
+  const { chainID, walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
 
   setButtonText("LOADING...");
 
@@ -708,14 +171,16 @@ const performMarketplaceRemoval = async (
     ? walletClient.writeContract({
         account,
         address: NFT.rentSCAddress as `0x${string}`,
-        abi: collateralizedRentHolderSCAbi,
+        abi: collateralizedRentHolderABI,
         functionName: mode,
+        chain: chains[chainID],
       })
     : walletClient.writeContract({
         account,
         address: NFT.rentSCAddress as `0x${string}`,
-        abi: nonCollateralizedRentHolderSCAbi,
+        abi: nonCollateralizedRentHolderABI,
         functionName: "withdrawNFT",
+        chain: chains[chainID],
       }));
 
   await publicClient.waitForTransactionReceipt({ hash: hashWithdraw });
@@ -745,7 +210,7 @@ const performReturn = async (setButtonText: (text: string) => void, NFT: NFTInfo
 
   setButtonText("APPROVING TRANSFER...");
 
-  const { walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
+  const { chainID, walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
 
   const hashApproval = await walletClient.writeContract({
     account,
@@ -754,6 +219,7 @@ const performReturn = async (setButtonText: (text: string) => void, NFT: NFTInfo
     functionName: "approve",
     args: [NFT.rentSCAddress as `0x${string}`, BigInt(NFT.tokenID)],
     value: BigInt(0),
+    chain: chains[chainID],
   });
 
   await publicClient.waitForTransactionReceipt({ hash: hashApproval });
@@ -763,8 +229,9 @@ const performReturn = async (setButtonText: (text: string) => void, NFT: NFTInfo
   const hashReturn = await walletClient.writeContract({
     account,
     address: NFT.rentSCAddress as `0x${string}`,
-    abi: collateralizedRentHolderSCAbi,
+    abi: collateralizedRentHolderABI,
     functionName: "returnNFT",
+    chain: chains[chainID],
   });
 
   await publicClient.waitForTransactionReceipt({ hash: hashReturn });
@@ -784,24 +251,26 @@ const performRent = async (
 
   setButtonText("LOADING...");
 
-  const { walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
+  const { chainID, walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
 
   const hash = await (NFT.collateral
     ? walletClient.writeContract({
         account,
         address: NFT.rentSCAddress as `0x${string}`,
-        abi: collateralizedRentHolderSCAbi,
+        abi: collateralizedRentHolderABI,
         functionName: "rent",
         args: [rentHours],
         value: ethers.utils.parseEther(((NFT.rentRate ?? 0) * rentHours + (NFT.collateral ?? 0)).toString()).toBigInt(),
+        chain: chains[chainID],
       })
     : walletClient.writeContract({
         account,
         address: NFT.rentSCAddress as `0x${string}`,
-        abi: nonCollateralizedRentHolderSCAbi,
+        abi: nonCollateralizedRentHolderABI,
         functionName: "rent",
         args: [rentHours],
         value: ethers.utils.parseEther(((NFT.rentRate ?? 0) * rentHours).toString()).toBigInt(),
+        chain: chains[chainID],
       }));
 
   await publicClient.waitForTransactionReceipt({ hash });
@@ -816,7 +285,7 @@ const performBurn = async (setButtonText: (text: string) => void, NFT: NFTInfo, 
 
   setButtonText("LOADING...");
 
-  const { walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
+  const { chainID, walletClient, publicClient, account } = await settingUpClientsAndAccount(window.ethereum);
 
   const hash = await walletClient.writeContract({
     account,
@@ -824,6 +293,7 @@ const performBurn = async (setButtonText: (text: string) => void, NFT: NFTInfo, 
     abi: erc721ABI,
     functionName: "transferFrom",
     args: [account, "0x000000000000000000000000000000000000dEaD", BigInt(NFT.tokenID)],
+    chain: chains[chainID],
     value: BigInt(0),
   });
 

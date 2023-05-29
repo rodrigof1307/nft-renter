@@ -2,10 +2,14 @@ import { Header1, Header2 } from "@/components/utils/Headers";
 import NFTsDisplayer from "@/components/NFTCardDisplayer";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useChainId } from "wagmi";
 
 const Marketplace = () => {
-  const fetchMarketplace = () => {
-    return axios.get(`/api/fetchMarketplaceNFTs`).then((res) => {
+  const chainID = useChainId();
+
+  const fetchMarketplace = ({ queryKey }: any) => {
+    const chainIDParam = queryKey[1].toString();
+    return axios.get(`/api/fetchMarketplaceNFTs?chainID=${chainIDParam}`).then((res) => {
       return {
         collateralizedRentals: res.data.collateralizedRentals,
         nonCollateralizedRentals: res.data.nonCollateralizedRentals,
@@ -16,7 +20,7 @@ const Marketplace = () => {
     });
   };
 
-  const { isLoading, error, data } = useQuery("marketplaceNFTs", fetchMarketplace);
+  const { isLoading, error, data } = useQuery({ queryKey: ["marketplaceNFTs", chainID], queryFn: fetchMarketplace });
 
   return (
     <div className="px-[4vw]">

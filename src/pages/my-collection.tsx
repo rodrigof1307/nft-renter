@@ -1,5 +1,5 @@
 import { Header1, Header2 } from "@/components/utils/Headers";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { useQuery } from "react-query";
 
 import axios from "axios";
@@ -8,25 +8,29 @@ import { useState, useEffect } from "react";
 
 const MyCollection = () => {
   const { address } = useAccount();
+  const chainID = useChainId();
   const [isMounted, setIsMounted] = useState(false);
 
   const fetchOwned = ({ queryKey }: any) => {
     const addressParam = queryKey[1];
-    return axios.get(`/api/fetchOwnedNFTs?address=${addressParam}`).then((response) => {
+    const chainIDParam = queryKey[2].toString();
+    return axios.get(`/api/fetchOwnedNFTs?address=${addressParam}&chainID=${chainIDParam}`).then((response) => {
       return response.data.ownedNFTs as NFTInfo[];
     });
   };
 
   const fetchLented = ({ queryKey }: any) => {
     const addressParam = queryKey[1];
-    return axios.get(`/api/fetchLentedNFTs?address=${addressParam}`).then((response) => {
+    const chainIDParam = queryKey[2].toString();
+    return axios.get(`/api/fetchLentedNFTs?address=${addressParam}&chainID=${chainIDParam}`).then((response) => {
       return response.data.lentedNFTs as NFTInfo[];
     });
   };
 
   const fetchRented = ({ queryKey }: any) => {
     const addressParam = queryKey[1];
-    return axios.get(`/api/fetchRentedNFTs?address=${addressParam}`).then((response) => {
+    const chainIDParam = queryKey[2].toString();
+    return axios.get(`/api/fetchRentedNFTs?address=${addressParam}&chainID=${chainIDParam}`).then((response) => {
       return response.data.rentedNFTs as NFTInfo[];
     });
   };
@@ -39,17 +43,17 @@ const MyCollection = () => {
     isFetching: isLoadingOwned,
     error: errorOwned,
     data: dataOwned,
-  } = useQuery({ queryKey: ["ownedNFTs", address], queryFn: fetchOwned, refetchOnWindowFocus: false });
+  } = useQuery({ queryKey: ["ownedNFTs", address, chainID], queryFn: fetchOwned, refetchOnWindowFocus: false });
   const {
     isFetching: isLoadingLented,
     error: errorLented,
     data: dataLented,
-  } = useQuery({ queryKey: ["lentedNFTs", address], queryFn: fetchLented, refetchOnWindowFocus: false });
+  } = useQuery({ queryKey: ["lentedNFTs", address, chainID], queryFn: fetchLented, refetchOnWindowFocus: false });
   const {
     isFetching: isLoadingRented,
     error: errorRented,
     data: dataRented,
-  } = useQuery({ queryKey: ["rentedNFTs", address], queryFn: fetchRented, refetchOnWindowFocus: false });
+  } = useQuery({ queryKey: ["rentedNFTs", address, chainID], queryFn: fetchRented, refetchOnWindowFocus: false });
 
   const filterOwnedNFTs = (ownedNFTs: NFTInfo[] | undefined, rentedNFTs: NFTInfo[] | undefined) => {
     if (!ownedNFTs || !rentedNFTs) return undefined;
