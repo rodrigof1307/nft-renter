@@ -28,7 +28,7 @@ async function mintAndList() {
 
   console.log("Minting NFT...");
   const mintTx = await counterStrikeNFT.payToMint(nftOwner.address, { value: MINT_PRICE });
-  const mintTxReceipt = await mintTx.wait(1);
+  const mintTxReceipt = await mintTx.wait();
   const tokenId = mintTxReceipt?.events?.[0].args?.tokenId;
   console.log(`Minted NFT with tokenId ${tokenId}`);
   console.log("Deploying Rent Holder SC...");

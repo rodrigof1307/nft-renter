@@ -14,6 +14,7 @@ async function mintAndList() {
   }
 
   const nftOwner = (await ethers.getSigners())[0];
+  console.log(nftOwner.address);
 
   const counterStrikeNFT = (
     await ethers.getContractAt("CounterStrikeNFT", addresses[chainId as keyof typeof addresses]["CounterStrikeNFT"])

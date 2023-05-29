@@ -8,11 +8,20 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  const { address } = req.query;
+  const { address, chainID } = req.query;
 
   // For some reason, if the address is not passed it is a string with value "undefined" instead of undefined
   if (address === "undefined" || typeof address !== "string") {
     return res.status(400).json({ error: "User address is required." });
+  }
+
+  // For some reason, if the chainID is not passed it is a string with value "undefined" instead of undefined
+  if (chainID === "undefined" || typeof chainID !== "string") {
+    return res.status(400).json({ error: "Invalid chainID" });
+  }
+
+  if (chainID !== "11155111") {
+    return res.status(200).json({ ownedNFTs: [] as NFTInfo[] });
   }
 
   try {

@@ -11,8 +11,8 @@ async function getBalances() {
   const nftOwner = (await ethers.getSigners())[0];
   const nftRenter = (await ethers.getSigners())[1];
 
-  console.log("NFT Owner Balance ", (await nftOwner.getBalance()).toString());
-  console.log("NFT Renter Balance ", (await nftRenter.getBalance()).toString());
+  console.log("NFT Owner ", await nftOwner.getAddress(), " Balance ", (await nftOwner.getBalance()).toString());
+  console.log("NFT Renter ", await nftRenter.getAddress(), " Balance ", (await nftRenter.getBalance()).toString());
 }
 
 getBalances()
