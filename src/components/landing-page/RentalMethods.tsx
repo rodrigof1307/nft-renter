@@ -9,18 +9,18 @@ const RentalMethods = () => {
 
   const collateralized = {
     description:
-      "On collateralized loans, the renter is able to own the NFT by paying the rental price and putting up collateral to safeguard the lenter if he doesn’t return the NFT.",
+      "On collateralized loans, the renter is able to own the NFT by paying the rental price and putting up collateral to safeguard the lender if he doesn’t return the NFT.",
     steps: [
-      "The lenter transfers his NFT to an escrow smart contract where the collateral value and the rental rate are also defined.",
+      "The lender transfers his NFT to an escrow smart contract where the collateral value and the rental rate are also defined.",
       "The renter transfers the collateral value and the rental value associated with the rental period to the escrow smart contract. The renter will then receive ownership of the NFT",
-      "Once the rental period ends, the lenter is able to claim the rental value while the renter must return te NFT to the escrow smart contract. If the NFT hasn’t been returned, the lenter is able to claim the collateral value as well.",
+      "Once the rental period ends, the lender is able to claim the rental value while the renter must return te NFT to the escrow smart contract. If the NFT hasn’t been returned, the lender is able to claim the collateral value as well.",
     ],
     advantages: [
       "By actually owning the NFT, the renter can access all of its utility regardless of support for rental protocols",
     ],
     disadvantages: [
       "There is a high financial entry barrier for the renter",
-      "The lenter risks losing the NFT, which can be specially damaging if the NFT price surges ahead of the collateral",
+      "The lender risks losing the NFT, which can be specially damaging if the NFT price surges ahead of the collateral",
     ],
   };
 
@@ -28,12 +28,12 @@ const RentalMethods = () => {
     description:
       "On non-collateralized loans, the renter pays the rental price and receives a wrapped token with the same properties as the NFT. The NFT remains on an escrow smart contract which can be accessed by the owner.",
     steps: [
-      "The lenter transfers his NFT to an escrow smart contract where the rental rate is also defined.",
+      "The lender transfers his NFT to an escrow smart contract where the rental rate is also defined.",
       "The renter transfer the rental value associated with the rental period to the escrow smart contract. The renter will then receive a wrapped token representing the NFT",
-      "Once the rental period ends, the lenter is able to claim the rental value as well as its NFT while the renter becomes unable to use the wrapped token. If the lenter wishes he can leave the NFT on the smart contract for others to rent it using the same dynamic.",
+      "Once the rental period ends, the lender is able to claim the rental value as well as its NFT while the renter becomes unable to use the wrapped token. If the lender wishes he can leave the NFT on the smart contract for others to rent it using the same dynamic.",
     ],
     advantages: [
-      "The lenter remains in control of the NFT",
+      "The lender remains in control of the NFT",
       "The renter becomes automatically unable to use the NFT once the rental period ends",
     ],
     disadvantages: ["The ecosystem will have to adopt the standard in order to become usable"],
