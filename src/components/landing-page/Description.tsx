@@ -32,7 +32,7 @@ const Description = () => {
     >
       <Typewriter onInit={renderTypewriter} options={typewriterOptions} />
       <h4 className="mt-[1.5vh] w-full text-mb-2xl md:mt-[2.5vh] md:text-xl">
-        The NFT Renter Protocol provides a rental solution for every renter and lenter.
+        The NFT Renter Protocol provides a rental solution for every renter and lender.
         <br />
         <br />
         Explore our collateralized and non collaterlized options and find what fits you!
