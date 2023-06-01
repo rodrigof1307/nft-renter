@@ -2,6 +2,7 @@ import { Header3 } from "./utils/Headers";
 import { NFTCard, NFTLoadingCard } from "./NFTCard";
 import { useAccount } from "wagmi";
 import { ReactNode } from "react";
+import ImportDemoAccount from "./ImportDemoAccount";
 
 enum NFTsTypeColor {
   myCollectionOwned = "blue",
@@ -47,10 +48,12 @@ const NFTsDisplayer = ({ NFTs, NFTsType, loading, error }: NFTsDisplayerProps) =
 
   if (!address && NFTsType !== "marketplace") {
     return (
-      <div className="flex items-center justify-center py-[11vw]">
-        <Header3 className="overflow-auto text-clip whitespace-normal text-center md:truncate">
+      <div className="flex h-[46.2vw] flex-col items-center justify-center gap-[2.5vw] md:h-[33vw]">
+        <Header3 className="overflow-hidden text-clip whitespace-normal text-center text-mb-2xl md:truncate">
           Connect your wallet to see your NFTs
         </Header3>
+        <Header3 className="text-center text-mb-2xl">Or</Header3>
+        <ImportDemoAccount />
       </div>
     );
   }

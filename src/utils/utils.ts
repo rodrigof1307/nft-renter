@@ -21,3 +21,13 @@ export const dateFormater = (epochs?: string) => {
 
   return `${hours}:${minutes} ${day}/${month}/${year}`;
 };
+
+// This function is used to shorten a hash to the first 6 and last 4 characters
+export function shortenHash(address?: string) {
+  if (!address) return undefined;
+
+  const prefix = address.slice(0, 6);
+  const suffix = address.slice(-6);
+
+  return `${prefix}...${suffix}`;
+}
