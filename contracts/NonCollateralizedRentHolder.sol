@@ -7,6 +7,11 @@ import "./GenericRentHolder.sol";
 error NonCollateralizedRentHolder__UnsufficientValue(uint _paidValue, uint _hours, uint _ratePerHour);
 error NonCollateralizedRentHolder__RentalPeriodNotOver(uint _blockTimestamp, uint _currRentEndDate);
 
+/**
+ * @title An escrow contract for non-collateralized rents of NFTs
+ * @author Rodrigo Fernandes
+ * @notice This contract holds and manages the non-collateralized rental of NFTs, supporting rental and withdrawal functionalities
+ */
 contract NonCollateralizedRentHolder is GenericRentHolder {
   // Constructor
   constructor(
@@ -17,6 +22,10 @@ contract NonCollateralizedRentHolder is GenericRentHolder {
   ) GenericRentHolder(_nftAddress, _nftID, _ratePerHour, 0, _marketplaceAddress) {}
 
   // External & Public Functions
+  /**
+   * @notice This function handles the rental of the NFT for a given amount of hours. It generates a WrappedNFT and mints it to the renter
+   * @param _hours The amount of hours the NFT will be rented for
+   */
   function rent(uint8 _hours) external payable override {
     if (msg.value < s_ratePerHour * _hours) {
       revert NonCollateralizedRentHolder__UnsufficientValue(msg.value, _hours, s_ratePerHour);
